@@ -1,0 +1,9 @@
+
+test -f ~/.bashrc && source ~/.bashrc
+test -f ~/.emacs.d/exwm/Xresources && xrdb ~/.emacs.d/exwm/Xresources
+
+#emacs --maximized --debug-init --daemon -l ~/.emacs.d/desktop.el
+
+xscreensaver --no-splash &
+
+exec emacs --maximized --debug-init -l ~/.emacs.d/init-exwm.el
