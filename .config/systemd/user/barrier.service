@@ -1,0 +1,14 @@
+[Unit]
+Description=Barrier - mouse sharing utility
+#Documentation=man:emacs(1) info:Emacs
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/barrier
+ExecStop=killall barrier
+Restart=on-failure
+Environment=DISPLAY=:0
+TimeoutStartSec=10
+
+[Install]
+WantedBy=default.target

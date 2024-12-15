@@ -1,0 +1,15 @@
+[Unit]
+Description=Keymap for Emacs key bindings
+
+[Service]
+Type=simple
+#User=
+#Group=
+ExecStart=%h/Google/bin/keymap -t
+Restart=always
+StandardOutput=journal
+#StandardOutput=file:/tmp/xremap-log-%h
+RuntimeMaxSec=10m
+
+[Install]
+WantedBy=default.target
