@@ -118,6 +118,14 @@ There are two things you can do about this warning:
 
 (keymap-global-set "C-c C-c" 'comment-line)
 
+(defun use-least-recent-window (orig-fun &rest args)
+  (let ((display-buffer-alist '((".*" display-buffer-use-least-recent-window))))
+    (apply orig-fun args)))
+
+(advice-add 'switch-to-buffer-other-window :around #'use-least-recent-window)
+
+;;If at any point you want to get rid of the advice, then evaluate the following:
+;;(advice-remove 'switch-to-buffer-other-window  #'use-least-recent-window)
 
 ;(windmove-find-other-window 'right)
 

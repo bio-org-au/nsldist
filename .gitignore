@@ -2,6 +2,9 @@
 *
 
 !.gitignore
+!.bashrc
+!.bash_profile
+!.exwm
 
 !.emacs.d/
 .emacs.d/*
@@ -29,5 +32,3 @@
 !.config/systemd/user/barrier*service
 !.config/systemd/user/keymap*service
 
-!.bashrc
-!.bash_profile

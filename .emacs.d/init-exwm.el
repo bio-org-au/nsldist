@@ -29,12 +29,13 @@
 (defun cc/exwm-randr-screen-change ()
   (setq cc/screen-list (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
-  (setq exwm-workspace-number (car (car (last exwm-randr-workspace-monitor-alist))))
+;  (setq exwm-workspace-number (+ 1 (car (car (last exwm-randr-workspace-monitor-alist)))))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
   (let ((first (car cc/screen-list))
 	(rest (cdr cc/screen-list)))
     (dolist (screen rest)
-      (start-process-shell-command "xrandr" nil (format "xrandr --output %s --left-of %s --auto" screen first)))))
+      (start-process-shell-command "xrandr" nil (format "xrandr --output %s --left-of %s --auto" screen first))))
+  (exwm-randr-refresh))
 
 ; multi monitor support
 (add-hook 'exwm-randr-screen-change-hook #'cc/exwm-randr-screen-change)
@@ -117,8 +118,8 @@
         ([?\M-v] . [prior])
         ([?\C-v] . [next])
 	;; beginning and end of file
-	([?\M-<] . [home])
-	([?\M->] . [end])
+	([?\M-<] . [C-home])
+	([?\M->] . [C-end])
         ;; cut/paste.
         ([?\C-w] . [C-x])
         ([?\M-w] . [C-c])
@@ -134,8 +135,8 @@
 	;; change case
 	([?\C-r] . [S-F3])
 	;; search and replace
-	([?\M-%] . [C-h])))
-	;; ([?\C-x ?\C-h] . [C-a])
+	([?\M-%] . [C-h])
+	((kbd "C-x h") . [C-a])))
 	;; ([?\C-x h] . [C-home C-a])
 	;; ([?\C-x f] . [C-o])
 	;; ([?\C-x C-s] . [C-s])
@@ -307,3 +308,29 @@ buffer (=minimizing in other WM/DE)"
   ;; (efs/kill-panel)
   ;; (setq efs/polybar-process (start-process-shell-command "polybar" nil "polybar panel")
   ;; (set-process-query-on-exit-flag efs/polybar-process nil)))
+
+(defun prot/keyboard-quit-dwim ()
+  "Do-What-I-Mean behaviour for a general `keyboard-quit'.
+
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it.
+
+The DWIM behaviour of this command is as follows:
+
+- When the region is active, disable it.
+- When a minibuffer is open, but not focused, close the minibuffer.
+- When the Completions buffer is selected, close it.
+- In every other case use the regular `keyboard-quit'."
+  (interactive)
+  (cond
+   ((region-active-p)
+    (keyboard-quit))
+   ((derived-mode-p 'completion-list-mode)
+    (delete-completion-window))
+   ((> (minibuffer-depth) 0)
+    (abort-recursive-edit))
+   (t
+    (keyboard-quit))))
+
+(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
