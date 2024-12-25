@@ -14,6 +14,10 @@
 .emacs.d/xkeysnail/*
 !.emacs.d/xkeysnail/*.py
 
+!.emacs.d/exwm/
+.emacs.d/exwm/*
+!.emacs.d/exwm/*.desktop
+
 !.emacs.d/xremap/
 .emacs.d/xremap/*
 !.emacs.d/xreemap/*.yml
