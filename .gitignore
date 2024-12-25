@@ -37,3 +37,6 @@
 !.config/systemd/user/barrier*service
 !.config/systemd/user/keymap*service
 
+!bin/
+bin/*
+!bin/*
