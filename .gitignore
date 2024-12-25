@@ -17,6 +17,7 @@
 !.emacs.d/exwm/
 .emacs.d/exwm/*
 !.emacs.d/exwm/*.desktop
+!.emacs.d/exwm/emacs-wm
 
 !.emacs.d/xremap/
 .emacs.d/xremap/*

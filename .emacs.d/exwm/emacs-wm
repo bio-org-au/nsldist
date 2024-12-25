@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if test -x ~/.exwm 
+then
+  exec ~/.exwm
+else 
+  exec emacs
+fi 
+~
+~
