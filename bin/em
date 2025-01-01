@@ -1,0 +1,34 @@
+#!/bin/sh
+[ "$1" ] || { echo "$0 [-w] [-s] [-k] [-v]" 1>&2 ; exit 1 ; }
+
+EDITOR="${EDITOR:-emacs -nw}"
+
+while getopts "wskvlzd" opt; do
+  case "$opt" in
+      w)
+	  EDITOR="emacsclient -a emacs -r -n"
+	  ;;
+      s)
+	  systemctl --user restart emacsd ; exit
+	  ;;
+      k)
+	  systemctl --user stop emacsd ; exit
+	  ;;
+      v)
+	  EDITOR="sudo journalctl --user-unit emacsd -f"
+	  ;;
+      l)
+	  EDITOR="systemctl status --user emacsd"
+	  ;;
+      z)
+	  set -- $opt $0
+	  ;;
+      d)
+	  $EDITOR ~/.config/systemd/user/emacsd.service
+	  ;;
+  esac
+done
+
+shift $((OPTIND-1))
+$EDITOR "$@"
+

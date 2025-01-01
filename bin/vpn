@@ -1,0 +1,32 @@
+#!/bin/sh
+
+while getopts "klvsz" opt; do
+  case "$opt" in
+    k)
+      sudo systemctl stop openvpn-client@client
+      ;;
+    l)
+      sudo systemctl status openvpn-client@client
+      ;;
+    v)
+      sudo journalctl -u openvpn-client@client
+      ;;
+    s)
+      sudo systemctl start openvpn-client@client
+      ;;
+    z)
+      emacs -nw $0
+      ;;
+  esac
+done
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+ffmpeg -y -i received_281832474853452.mp4 -vf drawtext=fontfile=/tmp/UbuntuMono-B.ttf:
+                            fontsize=12:fontcolor=yellow:
+                            box=1:boxcolor=black@0.4:
+                            text='%{pts\:gmtime\:1700334138}' output.mp4
