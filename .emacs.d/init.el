@@ -126,7 +126,7 @@ There are two things you can do about this warning:
     (apply orig-fun args)))
 
 (advice-add 'switch-to-buffer-other-window :around #'use-least-recent-window)
-(tab-bar-mod)e
+(tab-bar-mode)
 
 
 ;;If at any point you want to get rid of the advice, then evaluate the following:
@@ -294,13 +294,13 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
     (centaur-tabs--create-new-empty-buffer))))
 
 
-(defun vz/shell-inside-p (&optional buffer)
-  "Return t if the current \"active\" process is a shell.
-If BUFFER is nil, the current buffer is used instead."
-  (let ((it (process-running-child-p (get-buffer-process (or buffer (current-buffer))))))
-    (or (null it)
-        (equal (alist-get 'comm (process-attributes it))
-               (file-name-base explicit-shell-file-name)))))
+;; (defun vz/shell-inside-p (&optional buffer)
+  ;; "Return t if the current \"active\" process is a shell.
+;; If BUFFER is nil, the current buffer is used instead."
+  ;; (let ((it (process-running-child-p (get-buffer-process (or buffer (current-buffer))))))
+    ;; (or (null it)
+        ;; (equal (alist-get 'comm (process-attributes it))
+               ;; (file-name-base explicit-shell-file-name)))))
 
 (defun my/vterm-better-kill (orig-fun &rest args)
   "Override kill-buffer for vterm: kill without confirmation when vterm is idle."
@@ -323,4 +323,5 @@ If BUFFER is nil, the current buffer is used instead."
 
 (advice-add 'kill-buffer :around #'my/vterm-better-kill)
 
+(require 'vterm)
 (define-key vterm-mode-map (kbd "C-`") #'(lambda () (interactive) (kill-buffer (current-buffer))))
