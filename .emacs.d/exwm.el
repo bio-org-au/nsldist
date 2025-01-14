@@ -1,9 +1,6 @@
 (setenv "_JAVA_AWT_WM_NONREPARENTING" "1")
 (require 'exwm)
 (require 'exwm-systemtray)
-(defun efs/run-in-background (command)
-  (let ((command-parts (split-string command "[ ]+")))
-    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
 
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/exwm")
@@ -23,6 +20,22 @@
    (if (cdr l)
        (cc/build-workspaces (cdr l) (+ n 1))
      nil)))
+
+;; (setq exwm-input-prefix-keys
+;;     '(?\C-x
+;;       ?\C-u
+;;       ?\C-h
+;;       ?\M-x
+;;       ?\M-`
+;;       ?\M-&
+;;       ?\M-:
+;;       (kbd "<f2>")
+;;       f2
+;;       [f2]
+;;       ?\C-\M-j  ;; Buffer list
+;;       ?\C-\ ))  ;; Ctrl+Space
+
+;(push (kbd "<f2>") exwm-input-prefix-keys)
 
 ;; Set the initial workspace number.
 
@@ -76,7 +89,9 @@
    ((string= "net-sourceforge-squirrel_sql-client-Main" exwm-class-name)
     (exwm-workspace-rename-buffer "Squirrelsql"))
    ((string= exwm-class-name "Google-chrome")
-    (exwm-workspace-rename-buffer (format "Chrome | %s" exwm-title)))
+    (exwm-workspace-rename-buffer (format "C | %s" exwm-title)))
+   ((string= exwm-class-name "firefox")
+    (exwm-workspace-rename-buffer (format "F | %s" exwm-title)))
    ((or (string= exwm-class-name "com-jetbrains-toolbox-entry-ToolboxEntry")
 	(string= exwm-class-name "jetbrains-toolbox"))
      (exwm-workspace-rename-buffer "Jetbrains Toolbox"))
@@ -86,16 +101,41 @@
 
 (add-hook 'exwm-update-title-hook #'cc/exwm-update-title)
 
+(defun my/toggle-line-char ()
+  "If on a EXWM buffer, toggle 'line' or 'char'"
+  (interactive)
+  (if exwm-window-type
+      ;; (cl-case exwm--input-mode
+        ;; (line-mode
+	 ;; (progn (exwm-input-release-keyboard) (message "char-mode")))
+        ;; (char-mode
+          ;; (progn (exwm-reset) (message "line-mode"))))
 
-;; Global keybindings.
+
+      (if (equal exwm--input-mode 'line-mode) 
+          (exwm-input-release-keyboard)
+;;          (progn (exwm-input-release-keyboard) (message "char-mode")) ; switch to char mode
+         (exwm-reset))
+;;          (progn (exwm-reset) (message "line-mode"))) ; switch to line mode
+      (message "Not on a EXWM window")))
+
+ ;; Global keybindings.
 (setq exwm-input-global-keys
-      `(([?\s-r] . exwm-reset) ;; s-r: Reset (to line-mode).
+      `(([?\s-r] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
         ([?\s-a] . (lambda () (interactive) (cc/exwm-toggle-show-all-buffers)))
-        ([?\s-k] . exwm-input-release-keyboard) ;; s-w: (to char-mode)
+        ;; ([?\s-k] . (lambda () (interactive) (exwm-input-release-keyboard) (message "char-mode")))
+        ([?\s-k] . exwm-input-release-keyboard)
         ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
         ([?\s-&] . (lambda (cmd) ;; s-&: Launch application. 
                      (interactive (list (read-shell-command "$ ")))
                      (start-process-shell-command cmd nil cmd)))
+;	([f2] . (lambda () (interactive) (exwm-input-toggle-keyboard)))
+	([f2] . (lambda () (interactive) (my/toggle-line-char)))
+	([?\s-z] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
+	([?\s-p] . (lambda () (interactive) (message (symbol-name exwm--input-mode))))
+	([?\s-o] . my/toggle-line-char) ;; s-r: Reset (to line-mode).
+	;; ([?\s-z] . exwm-reset)
+	;; ([?\s-p] . (lambda () (interactive) (my/toggle-line-char)))
 	([?\s-s] . (lambda () (interactive) (efs/run-in-background "xscreensaver-command --activate")))
 	([?\s-l] . (lambda () (interactive) (efs/run-in-background "xscreensaver-command --lock")))
 ;	([?\s-l] . (lambda () (interactive) (start-process "xscreensaver-command", nil, "xscreensaver-command --lock")))
@@ -112,6 +152,7 @@
                         (interactive)
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))))
+(exwm-input--update-global-prefix-keys) ;; not necessary on startup, but maybe later
 
 
 ;; To add a key binding only available in line-mode, simply define it in
@@ -151,8 +192,8 @@
 	;; change case
 	([?\C-r] . [S-F3])
 	;; search and replace
-	([?\M-%] . [C-h])
-	((kbd "C-x h") . [C-a])))
+	([?\M-%] . [C-h])))
+	;; ((kbd "C-x h") . [C-a])))
 	;; ([?\C-x h] . [C-home C-a])
 	;; ([?\C-x f] . [C-o])
 	;; ([?\C-x C-s] . [C-s])
@@ -194,7 +235,7 @@
        ;; ((string= exwm-class-name "jetbrains-idea")
 	;; (exwm-input-set-local-simulation-keys sim-key-idea))
        ((or (string= exwm-class-name "Google-chrome")
-	    (string= exwm-class-name "Firefox"))
+	    (string= exwm-class-name "firefox"))
 	(exwm-input-set-local-simulation-keys sim-key-browser))
        ;; ((or (string= exwm-class-name "jetbrains-toolbox"))
 	;; (exwm-floating-toggle-floating)
@@ -272,7 +313,7 @@
 (exwm-enable)
 ;(exwm-config-example)
 
-;(print (kbd "<F1>"))cv
+;(print (kbd "<F1>"))
 
 ;(efs/run-in-background "jetbrains-toolbox")
 
@@ -350,3 +391,67 @@ The DWIM behaviour of this command is as follows:
     (keyboard-quit))))
 
 (define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
+
+;; (after! exwm
+  (defun exwm-layout--show (id &optional window)
+    "Show window ID exactly fit in the Emacs window WINDOW."
+    (exwm--log "Show #x%x in %s" id window)
+    (let* ((edges (window-inside-absolute-pixel-edges window))
+           (x (pop edges))
+           (y (pop edges))
+           (width (- (pop edges) x))
+           (height (- (pop edges) y))
+           frame-x frame-y frame-width frame-height)
+      (with-current-buffer (exwm--id->buffer id)
+        (when exwm--floating-frame
+          (setq frame-width (frame-pixel-width exwm--floating-frame)
+                frame-height (+ (frame-pixel-height exwm--floating-frame)
+                                ;; Use `frame-outer-height' in the future.
+                                exwm-workspace--frame-y-offset))
+          (when exwm--floating-frame-position
+            (setq frame-x (elt exwm--floating-frame-position 0)
+                  frame-y (elt exwm--floating-frame-position 1)
+                  x (+ x frame-x (- exwm-layout--floating-hidden-position))
+                  y (+ y frame-y (- exwm-layout--floating-hidden-position)))
+            (setq exwm--floating-frame-position nil))
+          (exwm--set-geometry (frame-parameter exwm--floating-frame
+                                               'exwm-container)
+                              frame-x frame-y frame-width frame-height))
+        (when (exwm-layout--fullscreen-p)
+          (with-slots ((x* x)
+                       (y* y)
+                       (width* width)
+                       (height* height))
+              (exwm-workspace--get-geometry exwm--frame)
+            (setq x x*
+                  y y*
+                  width width*
+                  height height*)))
+        ;; edited here
+        (when
+            (and (not (bound-and-true-p centaur-tabs-local-mode))
+                 (not (exwm-layout--fullscreen-p))
+                 (or (bound-and-true-p centaur-tabs-mode)
+                     (bound-and-true-p tab-line-mode)))
+          (setq y (+ y centaur-tabs-height)))
+        ;; edited here
+        (exwm--set-geometry id x y width height)
+        (xcb:+request exwm--connection (make-instance 'xcb:MapWindow :window id))
+        (exwm-layout--set-state id xcb:icccm:WM_STATE:NormalState)
+        (setq exwm--ewmh-state
+              (delq xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state))
+        (exwm-layout--set-ewmh-state id)
+        (exwm-layout--auto-iconify)))
+    (xcb:flush exwm--connection))
+;; )
+
+
+
+
+
+
+
+
+
+
+

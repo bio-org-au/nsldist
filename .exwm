@@ -6,4 +6,4 @@ test -f ~/.emacs.d/exwm/Xresources && xrdb ~/.emacs.d/exwm/Xresources
 
 xscreensaver --no-splash &
 
-exec emacs --maximized --debug-init -l ~/.emacs.d/init-exwm.el
+exec emacs --maximized --debug-init -l ~/.emacs.d/exwm.el

@@ -3,6 +3,9 @@
 ;(setq debug-on-message "Package cl is deprecated")
 
 (global-set-key "\C-x\C-b" 'buffer-menu)
+(defun efs/run-in-background (command)
+  (let ((command-parts (split-string command "[ ]+")))
+    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
 
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -123,6 +126,8 @@ There are two things you can do about this warning:
     (apply orig-fun args)))
 
 (advice-add 'switch-to-buffer-other-window :around #'use-least-recent-window)
+(tab-bar-mod)e
+
 
 ;;If at any point you want to get rid of the advice, then evaluate the following:
 ;;(advice-remove 'switch-to-buffer-other-window  #'use-least-recent-window)
@@ -198,49 +203,124 @@ There are two things you can do about this warning:
 		   ;; (t
 		    ;; :inherit highlight))))
 
-;; (use-package centaur-tabs
-  ;; :demand
-  ;; :config
-  ;; (centaur-tabs-mode t)
-  ;; :bind
-  ;; ("C-<prior>" . centaur-tabs-backward)
-  ;; ("C-<next>" . centaur-tabs-forward))
+(use-package centaur-tabs
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  (setq centaur-tabs-style "rounded")
+  (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-icon-type 'all-the-icons)
+  (setq centaur-tabs-set-bar 'left)
+  (setq centaur-tabs-set-modified-marker t)
+  (setq centaur-tabs-show-new-tab-button t)
+  (setq centaur-tabs-new-tab-text " + ")
+  (setq centaur-tabs-height 40)
+  (centaur-tabs-change-fonts "arial" 120)
+;  :hook
+;  (exwm-mode . centaur-tabs-local-mode) ;; ????? crap? 
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward))
 
-;; (defun centaur-tabs-buffer-groups ()
-;;   "`centaur-tabs-buffer-groups' control buffers' group rules.
+(defun centaur-tabs-hide-tab (x)
+  nil)
 
-;; Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-;; All buffer name start with * will group to \"Emacs\".
-;; Other buffer group by `centaur-tabs-get-group-name' with project name."
-;;   (list
-;;    (cond
-;;     ((or (string-equal "*" (substring (buffer-name) 0 1))
-;;          (memq major-mode '(magit-process-mode
-;;                             magit-status-mode
-;;                             magit-diff-mode
-;;                             magit-log-mode
-;;                             magit-file-mode
-;;                             magit-blob-mode
-;;                             magit-blame-mode
-;;                             )))
-;;      "Emacs")
-;;     ((derived-mode-p 'prog-mode)
-;;      "Editing")
-;;     ((derived-mode-p 'dired-mode)
-;;      "Dired")
-;;     ((memq major-mode '(helpful-mode
-;;                         help-mode))
-;;      "Help")
-;;     ((memq major-mode '(org-mode
-;;                         org-agenda-clockreport-mode
-;;                         org-src-mode
-;;                         org-agenda-mode
-;;                         org-beamer-mode
-;;                         org-indent-mode
-;;                         org-bullets-mode
-;;                         org-cdlatex-mode
-;;                         org-agenda-log-mode
-;;                         diary-mode))
-;;      "OrgMode")
-;;     (t
-;;      (centaur-tabs-get-group-name (current-buffer))))))
+(defun centaur-tabs-buffer-groups ()
+  "`centaur-tabs-buffer-groups' control buffers' group rules.
+Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+All buffer name start with * will group to \"Emacs\".
+Other buffer group by `centaur-tabs-get-group-name' with project name."
+(list
+ (cond
+  ((when-let* ((project-name (centaur-tabs-project-name)))
+     project-name))
+  ((memq major-mode '(exwm-mode))
+   (cond
+    ((string= exwm-title "Messenger") exwm-title)
+    (t exwm-class-name)))
+  ((memq major-mode '(vterm-mode
+                      ))
+   "Terminal")
+    ((memq major-mode '( magit-process-mode
+                         magit-status-mode
+                         magit-diff-mode
+                         magit-log-mode
+                         magit-file-mode
+                         magit-blob-mode
+                         magit-blame-mode))
+     "Magit")
+    ((derived-mode-p 'shell-mode) "Shell")
+    ((derived-mode-p 'eshell-mode) "EShell")
+    ((derived-mode-p 'dired-mode) "Dired")
+    ((derived-mode-p 'prog-mode)
+     "Editing")
+    ((derived-mode-p 'emacs-lisp-mode) "Elisp")
+    ((memq major-mode '(helpful-mode
+			help-mode))
+     "Help")
+    ((memq major-mode '(org-mode
+			org-agenda-clockreport-mode
+			org-src-mode
+			org-agenda-mode
+			org-beamer-mode
+			org-indent-mode
+			org-bullets-mode
+			org-cdlatex-mode
+			org-agenda-log-mode
+			diary-mode))
+     "OrgMode")
+    (t
+     (centaur-tabs-get-group-name (current-buffer))))))
+
+(defun centaur-tabs--create-new-tab ()
+  "Create a context-aware new tab."
+  (interactive)
+  (cond
+   ((memq major-mode '(exwm-mode))
+    (cond
+     ;; ((string= exwm-class-name  "firefox")
+      ;; exwm-title)
+     (t (efs/run-in-background (format "%s" exwm-class-name)))))
+   ((eq major-mode 'eshell-mode)
+    (eshell t))
+   ((eq major-mode 'vterm-mode)
+    (vterm t))
+   ((eq major-mode 'term-mode)
+    (ansi-term "/bin/bash"))
+   ((derived-mode-p 'eww-mode)
+    (let ((current-prefix-arg 4))
+      (call-interactively #'eww)))
+   (t
+    (centaur-tabs--create-new-empty-buffer))))
+
+
+(defun vz/shell-inside-p (&optional buffer)
+  "Return t if the current \"active\" process is a shell.
+If BUFFER is nil, the current buffer is used instead."
+  (let ((it (process-running-child-p (get-buffer-process (or buffer (current-buffer))))))
+    (or (null it)
+        (equal (alist-get 'comm (process-attributes it))
+               (file-name-base explicit-shell-file-name)))))
+
+(defun my/vterm-better-kill (orig-fun &rest args)
+  "Override kill-buffer for vterm: kill without confirmation when vterm is idle."
+  (if (eq major-mode 'vterm-mode) 
+      (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil))
+      ;; (let ((process (get-buffer-process (current-buffer))))
+	;; (if (and (vz/shell-inside-p) (vterm--at-prompt-p))
+            ;; (set-process-query-on-exit-flag process nil)
+          ;; (set-process-query-on-exit-flag process t))))
+  (apply orig-fun args))
+;; (defun my/vterm-better-kill (orig-fun &rest args)
+  ;; "Override kill-buffer for vterm: kill without confirmation when vterm is idle."
+  ;; (if (eq major-mode 'vterm-mode)
+      ;; (let ((process (get-buffer-process (current-buffer))))
+        ;; (when process
+          ;; (if (vterm--at-prompt-p)
+              ;; (set-process-query-on-exit-flag process nil)
+            ;; (set-process-query-on-exit-flag process t)))))
+  ;; (apply orig-fun args))
+
+(advice-add 'kill-buffer :around #'my/vterm-better-kill)
+
+(define-key vterm-mode-map (kbd "C-`") #'(lambda () (interactive) (kill-buffer (current-buffer))))
