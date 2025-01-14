@@ -41,5 +41,8 @@
 bin/*
 !bin/*
 
+!.root-bak/
+.root-bak/**
+!.root-bak/**
 
 *~

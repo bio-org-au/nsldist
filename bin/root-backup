@@ -1,0 +1,6 @@
+
+ROOTBAK=$HOME/.root-bak
+OPENVPN=/etc/openvpn/client
+mkdir -p $ROOTBAK$OPENVPN
+sudo cp $OPENVPN/{client.conf,pass.txt} $ROOTBAK$OPENVPN
+sudo chown -R chris:chris $ROOTBAK
