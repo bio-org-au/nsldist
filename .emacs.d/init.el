@@ -214,7 +214,9 @@ There are two things you can do about this warning:
   (setq centaur-tabs-set-modified-marker t)
   (setq centaur-tabs-show-new-tab-button t)
   (setq centaur-tabs-new-tab-text " + ")
+  (setq centaur-tabs-show-navigation-buttons t)
   (setq centaur-tabs-height 40)
+  (setq centaur-tabs-cycle-scope 'tabs)
   (centaur-tabs-change-fonts "arial" 120)
 ;  :hook
 ;  (exwm-mode . centaur-tabs-local-mode) ;; ????? crap? 
@@ -222,8 +224,8 @@ There are two things you can do about this warning:
   ("C-<prior>" . centaur-tabs-backward)
   ("C-<next>" . centaur-tabs-forward))
 
-(defun centaur-tabs-hide-tab (x)
-  nil)
+;; (defun centaur-tabs-hide-tab (x)
+;;   nil)
 
 (defun centaur-tabs-buffer-groups ()
   "`centaur-tabs-buffer-groups' control buffers' group rules.
