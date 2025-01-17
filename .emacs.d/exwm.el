@@ -63,6 +63,7 @@
 ;; (add-hook 'exwm-update-class-hook
           ;; (lambda ()
             ;; (exwm-workspace-rename-buffer exwm-class-name)))
+(defun my/first-n-words (s n) (mapconcat (lambda (i) i) (seq-take (split-string s " ") n) " "))
 
 (defun cc/exwm-update-title ()
   (cond
@@ -89,9 +90,10 @@
    ((string= "net-sourceforge-squirrel_sql-client-Main" exwm-class-name)
     (exwm-workspace-rename-buffer "Squirrelsql"))
    ((string= exwm-class-name "Google-chrome")
-    (exwm-workspace-rename-buffer (format "C | %s" exwm-title)))
+    (exwm-workspace-rename-buffer (format "C | %s" (my/first-n-words exwm-title 3))))
+    ;; (exwm-workspace-rename-buffer (format "C | %s" exwm-title)))
    ((string= exwm-class-name "firefox")
-    (exwm-workspace-rename-buffer (format "F | %s" exwm-title)))
+    (exwm-workspace-rename-buffer (format "F | %s" (my/first-n-words exwm-title 3))))
    ((or (string= exwm-class-name "com-jetbrains-toolbox-entry-ToolboxEntry")
 	(string= exwm-class-name "jetbrains-toolbox"))
      (exwm-workspace-rename-buffer "Jetbrains Toolbox"))

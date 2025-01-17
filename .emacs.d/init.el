@@ -278,10 +278,12 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
   "Create a context-aware new tab."
   (interactive)
   (cond
-   ((memq major-mode '(exwm-mode))
+   ((eq major-mode 'exwm-mode)
     (cond
-     ;; ((string= exwm-class-name  "firefox")
-      ;; exwm-title)
+     ((string= exwm-class-name "Google-chrome")
+      (efs/run-in-background "google-chrome-stable"))
+     ((string= exwm-class-name "net-sourceforge-squirrel_sql-client-Main")
+      (efs/run-in-background "squirrel-sql"))
      (t (efs/run-in-background (format "%s" exwm-class-name)))))
    ((eq major-mode 'eshell-mode)
     (eshell t))
