@@ -260,12 +260,13 @@
 (defun cc/exwm-init ()
   (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   (efs/run-in-background "nm-applet")
-  (efs/run-in-background "insync start"))
+  (efs/run-in-background "insync start")
+  (efs/run-in-background "blueman-applet")
+  (efs/run-in-background "udiskie --tray"))
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)
 
 ;;  (efs/run-in-background "pavucontrol")
-;;  (efs/run-in-background "blueman-applet")))b
 			    
 ;; Enable EXWM
 					;(require 'exwm-config)

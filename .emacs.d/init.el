@@ -285,6 +285,7 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
      ((string= exwm-class-name "net-sourceforge-squirrel_sql-client-Main")
       (efs/run-in-background "squirrel-sql"))
      (t (efs/run-in-background (format "%s" exwm-class-name)))))
+     ;; (t nil)))
    ((eq major-mode 'eshell-mode)
     (eshell t))
    ((eq major-mode 'vterm-mode)

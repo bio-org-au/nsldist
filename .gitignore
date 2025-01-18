@@ -30,7 +30,10 @@
 !.config/
 .config/*
 !.config/systemd/
+!.config/polybar/
 .config/systemd/*
+.config/polybar/*
+!.config/polybar/*.ini
 !.config/systemd/user/
 .config/systemd/user/*
 !.config/systemd/user/emacs*service
