@@ -262,7 +262,8 @@
   (efs/run-in-background "nm-applet")
   (efs/run-in-background "insync start")
   (efs/run-in-background "blueman-applet")
-  (efs/run-in-background "udiskie --tray"))
+  (efs/run-in-background "udiskie --tray")
+  (efs/run-in-background "~/.config/polybar/launch.sh"))
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)
 

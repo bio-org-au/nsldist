@@ -227,6 +227,23 @@ There are two things you can do about this warning:
 ;; (defun centaur-tabs-hide-tab (x)
 ;;   nil)
 
+(setq basic-titles
+   '(("Gmail" . "Gmail")
+     ("Google" . "Keep")
+     ("YouTube" . "YouTube")
+     ("Google" . "Translate")
+     ("Google" . "Contacts")
+     ("Slack" . "Slack")
+     ("KeePassXC" . "KeePassXC")
+     ("Messenger" . "Messenger")
+     ("YouTube" . "YouTube")
+     ("Gmail" . "Gmail")))
+
+(setq basic-names
+      '(("Slack" . "Slack")
+	("KeePassXC" . "KeePassXC")))
+
+
 (defun centaur-tabs-buffer-groups ()
   "`centaur-tabs-buffer-groups' control buffers' group rules.
 Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
@@ -237,9 +254,12 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
   ((when-let* ((project-name (centaur-tabs-project-name)))
      project-name))
   ((memq major-mode '(exwm-mode))
-   (cond
-    ((string= exwm-title "Messenger") exwm-title)
-    (t exwm-class-name)))
+    (let ((title (seq-find (lambda (x) (string-match-p (car x) exwm-title)) basic-titles))
+	  (name (seq-find (lambda (x) (string-match-p (car x) exwm-class-name)) basic-names)))
+      (cond
+       (title (cdr title))
+       (name (cdr name))
+       (t exwm-class-name))))
   ((memq major-mode '(vterm-mode
                       ))
    "Terminal")
@@ -274,17 +294,22 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
     (t
      (centaur-tabs-get-group-name (current-buffer))))))
 
+
 (defun centaur-tabs--create-new-tab ()
   "Create a context-aware new tab."
   (interactive)
   (cond
    ((eq major-mode 'exwm-mode)
-    (cond
-     ((string= exwm-class-name "Google-chrome")
-      (efs/run-in-background "google-chrome-stable"))
-     ((string= exwm-class-name "net-sourceforge-squirrel_sql-client-Main")
-      (efs/run-in-background "squirrel-sql"))
-     (t (efs/run-in-background (format "%s" exwm-class-name)))))
+    (let ((title (seq-find (lambda (x) (string-match-p (car x) exwm-title)) basic-titles))
+	  (name (seq-find (lambda (x) (string-match-p (car x) exwm-class-name)) basic-names)))
+      (cond
+       (title nil)
+       (name nil)
+       ((string= exwm-class-name "Google-chrome")
+	(efs/run-in-background "google-chrome-stable"))
+       ((string= exwm-class-name "net-sourceforge-squirrel_sql-client-Main")
+	(efs/run-in-background "squirrel-sql"))
+       (t (efs/run-in-background (format "%s" exwm-class-name))))))
      ;; (t nil)))
    ((eq major-mode 'eshell-mode)
     (eshell t))
