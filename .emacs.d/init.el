@@ -215,9 +215,9 @@ There are two things you can do about this warning:
   (setq centaur-tabs-show-new-tab-button t)
   (setq centaur-tabs-new-tab-text " + ")
   (setq centaur-tabs-show-navigation-buttons t)
-  (setq centaur-tabs-height 40)
+  (setq centaur-tabs-height 36)
   (setq centaur-tabs-cycle-scope 'tabs)
-  (centaur-tabs-change-fonts "arial" 120)
+  (centaur-tabs-change-fonts "arial" 100)
 ;  :hook
 ;  (exwm-mode . centaur-tabs-local-mode) ;; ????? crap? 
   :bind
@@ -229,10 +229,11 @@ There are two things you can do about this warning:
 
 (setq basic-titles
    '(("Gmail" . "Gmail")
-     ("Google" . "Keep")
+     ("Google Keep" . "Keep")
+     ("Google Calendar" . "Calendar")
      ("YouTube" . "YouTube")
-     ("Google" . "Translate")
-     ("Google" . "Contacts")
+     ("Google Translate" . "Translate")
+     ("Google Contacts" . "Contacts")
      ("Slack" . "Slack")
      ("KeePassXC" . "KeePassXC")
      ("Messenger" . "Messenger")

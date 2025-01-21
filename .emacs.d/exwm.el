@@ -131,6 +131,7 @@
         ([?\s-&] . (lambda (cmd) ;; s-&: Launch application. 
                      (interactive (list (read-shell-command "$ ")))
                      (start-process-shell-command cmd nil cmd)))
+	([?\s-v] . exwm-input-toggle-keyboard)
 ;	([f2] . (lambda () (interactive) (exwm-input-toggle-keyboard)))
 	([f2] . (lambda () (interactive) (my/toggle-line-char)))
 	([?\s-z] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
