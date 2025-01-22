@@ -215,9 +215,9 @@ There are two things you can do about this warning:
   (setq centaur-tabs-show-new-tab-button t)
   (setq centaur-tabs-new-tab-text " + ")
   (setq centaur-tabs-show-navigation-buttons t)
-  (setq centaur-tabs-height 36)
+  (setq centaur-tabs-height 30)
   (setq centaur-tabs-cycle-scope 'tabs)
-  (centaur-tabs-change-fonts "arial" 100)
+  (centaur-tabs-change-fonts "arial" 90)
 ;  :hook
 ;  (exwm-mode . centaur-tabs-local-mode) ;; ????? crap? 
   :bind

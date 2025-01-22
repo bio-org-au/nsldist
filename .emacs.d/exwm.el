@@ -314,7 +314,7 @@
 
 (exwm-randr-mode 1)
 
-(exwm-systemtray-mode 1)
+;(exwm-systemtray-mode 1)
 (exwm-enable)
 ;(exwm-config-example)
 
