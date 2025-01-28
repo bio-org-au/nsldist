@@ -29,17 +29,27 @@
 
 !.config/
 .config/*
+
 !.config/systemd/
-!.config/polybar/
 .config/systemd/*
-.config/polybar/*
-!.config/polybar/*.ini
-!.config/polybar/*.sh
 !.config/systemd/user/
 .config/systemd/user/*
 !.config/systemd/user/emacs*service
 !.config/systemd/user/barrier*service
 !.config/systemd/user/keymap*service
+
+!.config/polybar/
+.config/polybar/*
+!.config/polybar/*.ini
+!.config/polybar/*.sh
+
+!.config/plank/
+.config/plank/*
+!.config/plank/*/
+.config/plank/*/*
+!.config/plank/*/*/
+.config/plank/*/*/*
+!.config/plank/*/*/*.dockitem
 
 !bin/
 bin/*

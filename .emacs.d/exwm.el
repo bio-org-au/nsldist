@@ -266,7 +266,10 @@
   (efs/run-in-background "blueman-applet")
   (efs/run-in-background "udiskie --tray")
   (efs/run-in-background "indicator-sound-switcher")
-  (efs/run-in-background "~/.config/polybar/launch.sh"))
+  (efs/run-in-background "jetbrains-toolbox")
+  (efs/run-in-background "~/.config/polybar/launch.sh")
+  (efs/run-in-background "picom") ; composite manager, plank prefers it
+  (efs/run-in-background "plank"))
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)
 
