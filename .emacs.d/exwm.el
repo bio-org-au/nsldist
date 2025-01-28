@@ -141,6 +141,7 @@
 	;; ([?\s-p] . (lambda () (interactive) (my/toggle-line-char)))
 	([?\s-s] . (lambda () (interactive) (efs/run-in-background "xscreensaver-command --activate")))
 	([?\s-l] . (lambda () (interactive) (efs/run-in-background "xscreensaver-command --lock")))
+	([?\s- ] . (lambda () (interactive) (efs/run-in-background "rofi -show combi")))
 ;	([?\s-l] . (lambda () (interactive) (start-process "xscreensaver-command", nil, "xscreensaver-command --lock")))
 	([?\s-h] . exwm-floating-hide)
 	([?\s-f] . exwm-floating-toggle-floating)
@@ -264,6 +265,7 @@
   (efs/run-in-background "insync start")
   (efs/run-in-background "blueman-applet")
   (efs/run-in-background "udiskie --tray")
+  (efs/run-in-background "indicator-sound-switcher")
   (efs/run-in-background "~/.config/polybar/launch.sh"))
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)
@@ -278,7 +280,7 @@
 
 
 ;(counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-(exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
+;(exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
 ;; (exwm-input-set-key (kbd "s-f") 'exwm-layout-toggle-fullscreen)
 
 
