@@ -44,6 +44,10 @@
 !.config/polybar/*.ini
 !.config/polybar/*.sh
 
+!.config/rofi/
+.config/rofi/*
+!.config/rofi/*.rasi
+
 !.config/plank/
 .config/plank/*
 !.config/plank/*/
