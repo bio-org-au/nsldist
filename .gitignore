@@ -52,6 +52,7 @@
 .config/plank/*
 !.config/plank/*/
 .config/plank/*/*
+!.config/plank/*.ini
 !.config/plank/*/*/
 .config/plank/*/*/*
 !.config/plank/*/*/*.dockitem
