@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec curl --no-progress-meter --cookie sessionid=62tttimozrf6lwcpixtkoiw9siomqcz2 --location http://www.deadmansswitch.net/ | sed -n -e 's/.*(as of \(.*\))\./\1/p'
