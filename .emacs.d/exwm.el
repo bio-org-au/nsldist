@@ -40,7 +40,7 @@
 ;; Set the initial workspace number.
 
 (defun cc/exwm-randr-screen-change ()
-  (setq cc/screen-list (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
+  (setq cc/screen-list (nreverse (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected .*:\\1:p'")))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
 ;  (setq exwm-workspace-number (+ 1 (car (car (last exwm-randr-workspace-monitor-alist)))))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
@@ -90,10 +90,11 @@
    ((string= "net-sourceforge-squirrel_sql-client-Main" exwm-class-name)
     (exwm-workspace-rename-buffer "Squirrelsql"))
    ((string= exwm-class-name "Google-chrome")
-    (exwm-workspace-rename-buffer (format "C | %s" (my/first-n-words exwm-title 3))))
-    ;; (exwm-workspace-rename-buffer (format "C | %s" exwm-title)))
+    ;; (exwm-workspace-rename-buffer (format "C | %s" (my/first-n-words exwm-title 3))))
+    (exwm-workspace-rename-buffer (format "C | %s" exwm-title)))
    ((string= exwm-class-name "firefox")
-    (exwm-workspace-rename-buffer (format "F | %s" (my/first-n-words exwm-title 3))))
+    ;; (exwm-workspace-rename-buffer (format "F | %s" (my/first-n-words exwm-title 3))))
+    (exwm-workspace-rename-buffer (format "F | %s" exwm-title)))
    ((or (string= exwm-class-name "com-jetbrains-toolbox-entry-ToolboxEntry")
 	(string= exwm-class-name "jetbrains-toolbox"))
      (exwm-workspace-rename-buffer "Jetbrains Toolbox"))
@@ -269,7 +270,7 @@
 ;  (efs/run-in-background "jetbrains-toolbox")
   (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "picom") ; composite manager, plank prefers it
-  (efs/run-in-background "plank"))
+  (efs/run-in-background "plank -n dock1"))
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)
 

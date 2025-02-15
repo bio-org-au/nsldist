@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=Google Drive
+Exec=firefox https://drive.google.com/drive/u/0/my-drive
+Icon=Drive
+StartupWMClass=Drive

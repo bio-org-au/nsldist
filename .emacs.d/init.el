@@ -35,9 +35,9 @@ There are two things you can do about this warning:
    ["#21252B" "#E06C75" "#98C379" "#E5C07B" "#61AFEF" "#C678DD" "#56B6C2" "#ABB2BF"])
  '(custom-enabled-themes '(manoj-dark))
  '(custom-safe-themes
-   '("24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6" default))
+   '("b23f3067e27a9940a563f1fb3bf455aabd0450cb02c3fa4ad43f75a583311216" "24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6" default))
  '(package-selected-packages
-   '(treemacs-magit melpa-upstream-visit magit exwm counsel list-utils fancy-battery ace-jump-mode backlight fontawesome list-utils dmenu centaur-tabs lsp-javacomp company helm-lsp lsp-ivy lsp-ui dap-mode lsp-treemacs lsp-mode lsp-groovy yaml-mode xah-get-thing vterm simple-httpd mark-thing-at lsp-java hide-comnt groovy-mode groovy-imports find-things-fast fancy-battery exwm elgrep desktop-environment counsel arjen-grey-theme arc-dark-theme)))
+   '(winner-mode-enable treemacs direx filetree treesit-auto projectile dirtree-prosjekt dirtree dired-sidebar dir-treeview-themes dir-treeview neotree treemacs-magit melpa-upstream-visit magit exwm counsel list-utils fancy-battery ace-jump-mode backlight fontawesome list-utils dmenu centaur-tabs lsp-javacomp company helm-lsp lsp-ivy lsp-ui dap-mode lsp-treemacs lsp-mode lsp-groovy yaml-mode xah-get-thing vterm simple-httpd mark-thing-at lsp-java hide-comnt groovy-mode groovy-imports find-things-fast fancy-battery exwm elgrep desktop-environment counsel arjen-grey-theme arc-dark-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -46,11 +46,13 @@ There are two things you can do about this warning:
  '(default ((t (:family "Courier New" :foundry "outline" :slant normal :weight normal :height 120 :width normal))))
  '(mode-line ((t (:background "#330000" :foreground "white" :box (:line-width (1 . -1) :style released-button) :height 0.9))))
  '(mode-line-buffer-id ((t (:background "black" :distant-foreground "gold" :foreground "white" :weight bold :height 0.9))))
- '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9)))))
+ '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9))))
+ '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "light gray")))))
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+(add-to-list 'load-path "~/.emacs.d/lisp/treemacs/")
 
 (setq *win32* (eq system-type 'windows-nt) )
 ;(if window-system (color-scheme-blah))
@@ -65,8 +67,18 @@ There are two things you can do about this warning:
 ;(require 'thing-cmds)
 ;(thgcmd-bind-keys)
 
-;(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-;(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+(global-set-key (kbd "C-:") 'avy-goto-char)
+(global-set-key (kbd "C-'") 'avy-goto-char-2)
+(global-set-key (kbd "M-g f") 'avy-goto-line)
+(global-set-key (kbd "M-g w") 'avy-goto-word-1)
+(global-set-key (kbd "M-g e") 'avy-goto-word-0)
+(avy-setup-default)
+(global-set-key (kbd "C-c C-j") 'avy-resume)
+(global-set-key (kbd "C-c C-s") 'avy-goto-char-timer) ;; isearch-forward
+(setq avy-background t)
+
+;; (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+;; (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
 
 ; To disable the menu bar, place the following line in your .emacs file:
@@ -217,6 +229,7 @@ There are two things you can do about this warning:
   (setq centaur-tabs-show-navigation-buttons t)
   (setq centaur-tabs-height 24)
   (setq centaur-tabs-cycle-scope 'tabs)
+  (setq centaur-tabs-label-fixed-length 20)
   (centaur-tabs-change-fonts "arial" 100)
 ;  :hook
 ;  (exwm-mode . centaur-tabs-local-mode) ;; ????? crap? 
@@ -244,13 +257,11 @@ There are two things you can do about this warning:
       '(("Slack" . "Slack")
 	("KeePassXC" . "KeePassXC")))
 
+(defvar mycentaur-t ()
+  "(BUFFER-OR-NAME . group-name)")
+(defvar mycentaur-groups (make-hash-table :test 'equal))
 
-(defun centaur-tabs-buffer-groups ()
-  "`centaur-tabs-buffer-groups' control buffers' group rules.
-Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-All buffer name start with * will group to \"Emacs\".
-Other buffer group by `centaur-tabs-get-group-name' with project name."
-(list
+(defun mycentaur-tabs-buffer-group-default ()
  (cond
   ((when-let* ((project-name (centaur-tabs-project-name)))
      project-name))
@@ -261,9 +272,8 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
        (title (cdr title))
        (name (cdr name))
        (t exwm-class-name))))
-  ((memq major-mode '(vterm-mode
-                      ))
-   "Terminal")
+  ((memq major-mode '(vterm-mode)) "Terminal")
+  ((memq major-mode '(treemacs-mode)) "Treemacs")
     ((memq major-mode '( magit-process-mode
                          magit-status-mode
                          magit-diff-mode
@@ -275,6 +285,7 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
     ((derived-mode-p 'shell-mode) "Shell")
     ((derived-mode-p 'eshell-mode) "EShell")
     ((derived-mode-p 'dired-mode) "Dired")
+
     ((derived-mode-p 'prog-mode)
      "Editing")
     ((derived-mode-p 'emacs-lisp-mode) "Elisp")
@@ -293,8 +304,15 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 			diary-mode))
      "OrgMode")
     (t
-     (centaur-tabs-get-group-name (current-buffer))))))
+     (centaur-tabs-get-group-name (current-buffer)))))
 
+(defun centaur-tabs-buffer-groups ()
+  "`centaur-tabs-buffer-groups' control buffers' group rules.
+Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+All buffer name start with * will group to \"Emacs\".
+Other buffer group by `centaur-tabs-get-group-name' with project name."
+  (list (mycentaur-tabs-buffer-group-default)))
+ 
 
 (defun centaur-tabs--create-new-tab ()
   "Create a context-aware new tab."
@@ -316,6 +334,8 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
     (eshell t))
    ((eq major-mode 'vterm-mode)
     (vterm t))
+   ((eq major-mode 'treemacs-mode)
+    (treemacs t))
    ((eq major-mode 'term-mode)
     (ansi-term "/bin/bash"))
    ((derived-mode-p 'eww-mode)
@@ -354,5 +374,11 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 
 (advice-add 'kill-buffer :around #'my/vterm-better-kill)
 
+;(add-hook 'kill-buffer-hook  asdf)
+
 (require 'vterm)
 (define-key vterm-mode-map (kbd "C-`") #'(lambda () (interactive) (kill-buffer (current-buffer))))
+
+(require 'treemacs)
+
+(winner-mode 1)
