@@ -1,6 +1,7 @@
 (setenv "_JAVA_AWT_WM_NONREPARENTING" "1")
 (require 'exwm)
 (require 'exwm-systemtray)
+(require 'exwm-randr)
 
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/exwm")
@@ -39,24 +40,23 @@
 
 ;; Set the initial workspace number.
 
+;(setq cc/arandr-file nil)
+;(if cc/arandr-file (start-process-shell-command nil (format "~/.screenlayout/%s.sh" cc/arandr-file)))
+
 (defun cc/exwm-randr-screen-change ()
-  (setq cc/screen-list (nreverse (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected .*:\\1:p'")))
+  (setq cc/secondary (process-lines "sh" "-c" "xrandr | grep -v 'connected primary' | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
+  (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
+  (setq cc/screen-list (append cc/primary cc/secondary))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
-;  (setq exwm-workspace-number (+ 1 (car (car (last exwm-randr-workspace-monitor-alist)))))
-  (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
-  (let ((first (car cc/screen-list))
-	(rest (cdr cc/screen-list)))
-    (dolist (screen rest)
-      (start-process-shell-command "xrandr" nil (format "xrandr --output %s --left-of %s --auto" screen first))))
-  (exwm-randr-refresh))
+  (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist)))
+  ;; (let ((first (car cc/screen-list))
+	;; (rest (cdr cc/screen-list)))
+    ;; (dolist (screen rest)
+      ;; (start-process-shell-command "xrandr" nil (format "xrandr --output %s --left-of %s --auto" screen first))))
+  ;; (exwm-randr-refresh))
 
 ; multi monitor support
 (add-hook 'exwm-randr-screen-change-hook #'cc/exwm-randr-screen-change)
-          ;; (lambda ()
-            ;; (start-process-shell-command
-             ;; "xrandr" nil "xrandr --output HDMI-1 --left-of eDP-1 --auto")
-            ;; (start-process-shell-command
-             ;; "xrandr" nil "xrandr --output DP-1 --left-of eDP-1 --auto")))
 
 
 ;; Make buffer name more meaningful
@@ -261,7 +261,9 @@
 
 
 (defun cc/exwm-init ()
-  (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
+  (dolist (screen (cdr exwm-randr-workspace-monitor-alist)) 
+    (exwm-workspace-switch-create (car screen))) 
+  ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   (efs/run-in-background "nm-applet")
   (efs/run-in-background "insync start")
   (efs/run-in-background "blueman-applet")
