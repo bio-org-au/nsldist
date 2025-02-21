@@ -14,7 +14,7 @@ PATH=$HOME/Google/bin:$HOME/Google/binw:$PATH
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-#source /usr/share/nvm/init-nvm.sh
+source /usr/share/nvm/init-nvm.sh
 
 #source /etc/profile.d/vte.sh
 

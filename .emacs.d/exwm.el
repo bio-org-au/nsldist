@@ -264,13 +264,13 @@
   (dolist (screen (cdr exwm-randr-workspace-monitor-alist)) 
     (exwm-workspace-switch-create (car screen))) 
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
+  (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "nm-applet")
   (efs/run-in-background "insync start")
   (efs/run-in-background "blueman-applet")
   (efs/run-in-background "udiskie --tray")
   (efs/run-in-background "indicator-sound-switcher")
 ;  (efs/run-in-background "jetbrains-toolbox")
-  (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "picom") ; composite manager, plank prefers it
   (efs/run-in-background "plank -n dock1"))
 
