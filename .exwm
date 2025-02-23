@@ -2,6 +2,8 @@
 test -f ~/.bashrc && source ~/.bashrc
 test -f ~/.emacs.d/exwm/Xresources && xrdb ~/.emacs.d/exwm/Xresources
 
+#xhost +
+
 #emacs --maximized --debug-init --daemon -l ~/.emacs.d/desktop.el
 
 xscreensaver --no-splash &
@@ -9,3 +11,5 @@ xscreensaver --no-splash &
 dconf dump /net/launchpad/plank/docks/ > ~/.config/plank/docks.ini
 
 exec emacs --maximized --debug-init -l ~/.emacs.d/exwm.el
+
+#konsole

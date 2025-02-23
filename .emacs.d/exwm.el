@@ -271,7 +271,17 @@
   (efs/run-in-background "udiskie --tray")
   (efs/run-in-background "indicator-sound-switcher")
 ;  (efs/run-in-background "jetbrains-toolbox")
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   (efs/run-in-background "picom") ; composite manager, plank prefers it
+=======
+  (efs/run-in-background "~/.config/polybar/launch.sh")
+;  (efs/run-in-background "picom") ; composite manager, plank prefers it
+>>>>>>> Stashed changes
+=======
+  (efs/run-in-background "~/.config/polybar/launch.sh")
+;  (efs/run-in-background "picom") ; composite manager, plank prefers it
+>>>>>>> Stashed changes
   (efs/run-in-background "plank -n dock1"))
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)

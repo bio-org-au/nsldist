@@ -37,7 +37,7 @@ There are two things you can do about this warning:
  '(custom-safe-themes
    '("b23f3067e27a9940a563f1fb3bf455aabd0450cb02c3fa4ad43f75a583311216" "24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6" default))
  '(package-selected-packages
-   '(winner-mode-enable treemacs direx filetree treesit-auto projectile dirtree-prosjekt dirtree dired-sidebar dir-treeview-themes dir-treeview neotree treemacs-magit melpa-upstream-visit magit exwm counsel list-utils fancy-battery ace-jump-mode backlight fontawesome list-utils dmenu centaur-tabs lsp-javacomp company helm-lsp lsp-ivy lsp-ui dap-mode lsp-treemacs lsp-mode lsp-groovy yaml-mode xah-get-thing vterm simple-httpd mark-thing-at lsp-java hide-comnt groovy-mode groovy-imports find-things-fast fancy-battery exwm elgrep desktop-environment counsel arjen-grey-theme arc-dark-theme)))
+   '(async avy winner-mode-enable direx filetree treesit-auto projectile dirtree-prosjekt dirtree dired-sidebar dir-treeview-themes dir-treeview neotree melpa-upstream-visit magit exwm counsel list-utils fancy-battery ace-jump-mode backlight fontawesome list-utils dmenu centaur-tabs lsp-javacomp company helm-lsp lsp-ivy lsp-ui dap-mode lsp-mode lsp-groovy yaml-mode xah-get-thing vterm simple-httpd mark-thing-at lsp-java hide-comnt groovy-mode groovy-imports find-things-fast fancy-battery exwm elgrep desktop-environment counsel arjen-grey-theme arc-dark-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -67,6 +67,7 @@ There are two things you can do about this warning:
 ;(require 'thing-cmds)
 ;(thgcmd-bind-keys)
 
+(require 'avy)
 (global-set-key (kbd "C-:") 'avy-goto-char)
 (global-set-key (kbd "C-'") 'avy-goto-char-2)
 (global-set-key (kbd "M-g f") 'avy-goto-line)
@@ -379,6 +380,6 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 (require 'vterm)
 (define-key vterm-mode-map (kbd "C-`") #'(lambda () (interactive) (kill-buffer (current-buffer))))
 
-(require 'treemacs)
+;(require 'treemacs)
 
 (winner-mode 1)
