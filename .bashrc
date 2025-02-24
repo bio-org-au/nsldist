@@ -1,5 +1,7 @@
 
-PATH=$HOME/Google/bin:$HOME/Google/bin:$HOME/.sdkman/candidates/java/current/bin:$PATH
+PATH=$HOME/Google/bin:$HOME/bin:$HOME/.sdkman/candidates/java/current/bin:$PATH
+
+export EDITOR=em
 
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
