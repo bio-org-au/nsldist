@@ -11,7 +11,7 @@ xscreensaver --no-splash &
 dconf dump /net/launchpad/plank/docks/ > ~/.config/plank/docks.ini
 
 #exec emacs --maximized --debug-init -l ~/.emacs.d/exwm.el
-#exec exwm
+exec exwm
 
 #konsole
-xterm
+#xterm

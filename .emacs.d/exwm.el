@@ -104,42 +104,20 @@
 
 (add-hook 'exwm-update-title-hook #'cc/exwm-update-title)
 
-(defun my/toggle-line-char ()
-  "If on a EXWM buffer, toggle 'line' or 'char'"
-  (interactive)
-  (if exwm-window-type
-      ;; (cl-case exwm--input-mode
-        ;; (line-mode
-	 ;; (progn (exwm-input-release-keyboard) (message "char-mode")))
-        ;; (char-mode
-          ;; (progn (exwm-reset) (message "line-mode"))))
-
-
-      (if (equal exwm--input-mode 'line-mode) 
-          (exwm-input-release-keyboard)
-;;          (progn (exwm-input-release-keyboard) (message "char-mode")) ; switch to char mode
-         (exwm-reset))
-;;          (progn (exwm-reset) (message "line-mode"))) ; switch to line mode
-      (message "Not on a EXWM window")))
-
  ;; Global keybindings.
 (setq exwm-input-global-keys
       `(([?\s-r] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
+        ([?\s-k] . exwm-input-release-keyboard)
+	([?\s-z] . exwm-input-toggle-keyboard)
         ([?\s-a] . (lambda () (interactive) (cc/exwm-toggle-show-all-buffers)))
         ;; ([?\s-k] . (lambda () (interactive) (exwm-input-release-keyboard) (message "char-mode")))
-        ([?\s-k] . exwm-input-release-keyboard)
         ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
         ([?\s-&] . (lambda (cmd) ;; s-&: Launch application. 
                      (interactive (list (read-shell-command "$ ")))
                      (start-process-shell-command cmd nil cmd)))
-	([?\s-v] . exwm-input-toggle-keyboard)
-;	([f2] . (lambda () (interactive) (exwm-input-toggle-keyboard)))
-	([f2] . (lambda () (interactive) (my/toggle-line-char)))
-	([?\s-z] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
+	([f2] . (lambda () (interactive) (exwm-input-toggle-keyboard)))
+;	([f2] . (lambda () (interactive) (my/toggle-line-char)))
 	([?\s-p] . (lambda () (interactive) (message (symbol-name exwm--input-mode))))
-	([?\s-o] . my/toggle-line-char) ;; s-r: Reset (to line-mode).
-	;; ([?\s-z] . exwm-reset)
-	;; ([?\s-p] . (lambda () (interactive) (my/toggle-line-char)))
 	([?\s-s] . (lambda () (interactive) (efs/run-in-background "xscreensaver-command --activate")))
 	([?\s-l] . (lambda () (interactive) (efs/run-in-background "xscreensaver-command --lock")))
 	([?\s- ] . (lambda () (interactive) (efs/run-in-background "rofi -show combi")))
@@ -158,7 +136,7 @@
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))))
 (exwm-input--update-global-prefix-keys) ;; not necessary on startup, but maybe later
-
+   
 
 ;; To add a key binding only available in line-mode, simply define it in
 ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
