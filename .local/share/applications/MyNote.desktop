@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=OneNote
-Exec=firefox https://onenote.com/
+Exec=www https://onenote.com/
 Icon=OneNote
 StartupWMClass=OneNote

@@ -11,16 +11,16 @@ Actions=Direct-Messages;Explore;New-post;Notifications
 
 [Desktop Action Direct-Messages]
 Name=Direct Messages
-Exec=firefox https://x.com/messages?utm_source=jumplist&utm_medium=shortcut
+Exec=www https://x.com/messages?utm_source=jumplist&utm_medium=shortcut
 
 [Desktop Action Explore]
 Name=Explore
-Exec=firefox https://x.com/explore?utm_source=jumplist&utm_medium=shortcut
+Exec=www https://x.com/explore?utm_source=jumplist&utm_medium=shortcut
 
 [Desktop Action New-post]
 Name=New post
-Exec=firefox https://x.com/compose/post?utm_source=jumplist&utm_medium=shortcut
+Exec=www https://x.com/compose/post?utm_source=jumplist&utm_medium=shortcut
 
 [Desktop Action Notifications]
 Name=Notifications
-Exec=firefox https://x.com/notifications?utm_source=jumplist&utm_medium=shortcut
+Exec=www https://x.com/notifications?utm_source=jumplist&utm_medium=shortcut

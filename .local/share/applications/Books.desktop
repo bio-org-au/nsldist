@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Books
-Exec=firefox https://books.google.com/
+Exec=www https://books.google.com/
 Icon=Books
 StartupWMClass=Books

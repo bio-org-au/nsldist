@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=PornHub
-Exec=firefox http://pornhub.com
+Exec=www http://pornhub.com
 Icon=PornHub
 StartupWMClass=PornHub

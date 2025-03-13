@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Google News
-Exec=firefox news.google.com
+Exec=www news.google.com
 Icon=News
 StartupWMClass=News

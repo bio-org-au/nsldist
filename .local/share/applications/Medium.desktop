@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Medium
-Exec=firefox http://medium.com
+Exec=www http://medium.com
 Icon=Medium
 StartupWMClass=Medium

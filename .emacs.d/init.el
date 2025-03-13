@@ -241,6 +241,7 @@ There are two things you can do about this warning:
 ;; (defun centaur-tabs-hide-tab (x)
 ;;   nil)
 
+;; Basic means these are not tabbed applications
 (setq basic-titles
    '(("Gmail" . "Gmail")
      ("Google Keep" . "Keep")
@@ -254,6 +255,7 @@ There are two things you can do about this warning:
      ("YouTube" . "YouTube")
      ("Gmail" . "Gmail")))
 
+;; Basic means these are not tabbed applications
 (setq basic-names
       '(("Slack" . "Slack")
 	("KeePassXC" . "KeePassXC")))
@@ -327,6 +329,8 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
        (name nil)
        ((string= exwm-class-name "Google-chrome")
 	(efs/run-in-background "google-chrome-stable"))
+       ((string= exwm-class-name "Vivaldi-stable")
+	(efs/run-in-background "vivaldi-stable"))
        ((string= exwm-class-name "net-sourceforge-squirrel_sql-client-Main")
 	(efs/run-in-background "squirrel-sql"))
        (t (efs/run-in-background (format "%s" exwm-class-name))))))
