@@ -231,7 +231,7 @@ There are two things you can do about this warning:
   (setq centaur-tabs-height 24)
   (setq centaur-tabs-cycle-scope 'tabs)
   (setq centaur-tabs-label-fixed-length 20)
-  (centaur-tabs-change-fonts "arial" 100)
+  (centaur-tabs-change-fonts "Arimo Nerd Font-12.0" 180)
 ;  :hook
 ;  (exwm-mode . centaur-tabs-local-mode) ;; ????? crap? 
   :bind
