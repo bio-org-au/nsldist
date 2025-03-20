@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Rumble
-Exec=www https://rumble.com/
+Exec=interweb https://rumble.com/
 Icon=Rumble
 StartupWMClass=Rumble

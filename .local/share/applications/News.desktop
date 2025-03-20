@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Google News
-Exec=www news.google.com
+Exec=interweb news.google.com
 Icon=News
 StartupWMClass=News

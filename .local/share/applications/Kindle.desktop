@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Kindle
-Exec=www https://read.amazon.com/kindle-library
+Exec=interweb https://read.amazon.com/kindle-library
 Icon=Kindle
 StartupWMClass=Kindle

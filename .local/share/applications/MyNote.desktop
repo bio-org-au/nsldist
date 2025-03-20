@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=OneNote
-Exec=www https://onenote.com/
+Exec=interweb https://onenote.com/
 Icon=OneNote
 StartupWMClass=OneNote

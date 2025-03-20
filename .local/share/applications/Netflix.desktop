@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Netflix
-Exec=www http://netflix.com
+Exec=interweb http://netflix.com
 Icon=Netflix
 StartupWMClass=Netflix

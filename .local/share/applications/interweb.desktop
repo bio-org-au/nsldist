@@ -1,6 +1,6 @@
 [Desktop Entry]
 Version=1.0
-Name=WWW
+Name=Interweb
 # Only KDE 4 seems to use GenericName, so we reuse the KDE strings.
 # From Ubuntu's language-pack-kde-XX-base packages, version 9.04-20090413.
 GenericName=World Wide Web
@@ -106,7 +106,7 @@ Comment[zh_CN]=访问互联网
 Comment[zh_HK]=連線到網際網路
 Comment[zh_TW]=連線到網際網路
 StartupWMClass=Vivaldi-stable
-Exec=www %U
+Exec=interweb %U
 StartupNotify=true
 Terminal=false
 Icon=vivaldi
@@ -168,7 +168,7 @@ Name[vi]=Cửa sổ Mới
 Name[zh_CN]=新建窗口
 Name[zh_TW]=開新視窗
 StartupWMClass=Vivaldi-stable
-Exec=www
+Exec=interweb
 
 [Desktop Action new-private-window]
 Name=New Incognito Window
@@ -221,4 +221,4 @@ Name[vi]=Cửa sổ ẩn danh mới
 Name[zh_CN]=新建隐身窗口
 Name[zh_TW]=新增無痕式視窗
 StartupWMClass=Vivaldi-stable
-Exec=www
+Exec=interweb

@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Google Contacts
-Exec=www https://contacts.google.com/
+Exec=interweb https://contacts.google.com/
 Icon=Contacts
 StartupWMClass=Contacts

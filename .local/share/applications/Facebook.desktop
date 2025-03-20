@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Facebook
-Exec=www https://www.facebook.com/
+Exec=interweb https://www.facebook.com/
 Icon=Facebook
 StartupWMClass=Facebook
