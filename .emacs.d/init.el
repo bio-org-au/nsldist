@@ -258,7 +258,9 @@ There are two things you can do about this warning:
 ;; Basic means these are not tabbed applications
 (setq basic-names
       '(("Slack" . "Slack")
-	("KeePassXC" . "KeePassXC")))
+	("KeePassXC" . "KeePassXC")
+	("jetbrains-idea" . "jetbrains")
+	("jetbrains-toolbox" . "jetbrains")))
 
 (defvar mycentaur-t ()
   "(BUFFER-OR-NAME . group-name)")
