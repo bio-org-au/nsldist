@@ -32,18 +32,35 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
-   ["#21252B" "#E06C75" "#98C379" "#E5C07B" "#61AFEF" "#C678DD" "#56B6C2" "#ABB2BF"])
+   ["#21252B" "#E06C75" "#98C379" "#E5C07B" "#61AFEF" "#C678DD" "#56B6C2"
+    "#ABB2BF"])
  '(custom-enabled-themes '(manoj-dark))
  '(custom-safe-themes
-   '("b23f3067e27a9940a563f1fb3bf455aabd0450cb02c3fa4ad43f75a583311216" "24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6" default))
+   '("b23f3067e27a9940a563f1fb3bf455aabd0450cb02c3fa4ad43f75a583311216"
+     "24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6"
+     default))
+ '(display-battery-mode t)
+ '(display-time-mode t)
+ '(menu-bar-mode nil)
  '(package-selected-packages
-   '(async avy winner-mode-enable direx filetree treesit-auto projectile dirtree-prosjekt dirtree dired-sidebar dir-treeview-themes dir-treeview neotree melpa-upstream-visit magit exwm counsel list-utils fancy-battery ace-jump-mode backlight fontawesome list-utils dmenu centaur-tabs lsp-javacomp company helm-lsp lsp-ivy lsp-ui dap-mode lsp-mode lsp-groovy yaml-mode xah-get-thing vterm simple-httpd mark-thing-at lsp-java hide-comnt groovy-mode groovy-imports find-things-fast fancy-battery exwm elgrep desktop-environment counsel arjen-grey-theme arc-dark-theme)))
+   '(async avy winner-mode-enable direx filetree treesit-auto projectile
+	   dirtree-prosjekt dirtree dired-sidebar dir-treeview-themes
+	   dir-treeview neotree melpa-upstream-visit magit exwm
+	   counsel list-utils fancy-battery ace-jump-mode backlight
+	   fontawesome list-utils dmenu centaur-tabs lsp-javacomp
+	   company helm-lsp lsp-ivy lsp-ui dap-mode lsp-mode
+	   lsp-groovy yaml-mode xah-get-thing vterm simple-httpd
+	   mark-thing-at lsp-java hide-comnt groovy-mode
+	   groovy-imports find-things-fast fancy-battery exwm elgrep
+	   desktop-environment counsel arjen-grey-theme arc-dark-theme))
+ '(tab-bar-mode t)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Courier New" :foundry "outline" :slant normal :weight normal :height 120 :width normal))))
+ '(default ((t (:family "FreeMono" :foundry "GNU " :slant normal :weight bold :height 143 :width normal))))
  '(mode-line ((t (:background "#330000" :foreground "white" :box (:line-width (1 . -1) :style released-button) :height 0.9))))
  '(mode-line-buffer-id ((t (:background "black" :distant-foreground "gold" :foreground "white" :weight bold :height 0.9))))
  '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9))))
