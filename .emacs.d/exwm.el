@@ -318,15 +318,15 @@
 (exwm-input-set-key
  (kbd "<XF86AudioLowerVolume>")
  (lambda () (interactive)
-   (shell-command "pactl set-sink-volume 0 -5% ; pactl get-sink-volume 0 | sed -nr 's/.*? ([[:digit:]]*?%).*/\\1/gp' | tr -d '\n' ; printf ' ' ; pactl get-sink-mute 0 | grep 'Mute: yes'")))
+   (shell-command "SINK=$(pactl list sinks short | grep 'RUNNING$' | awk '{print $1}') ; pactl set-sink-volume $SINK -5% ; pactl get-sink-volume $SINK | sed -nr 's/.*? ([[:digit:]]*?)%.*/\\1/gp' | tr -d '\n' ; printf ' ' ; pactl get-sink-mute $SINK | grep 'Mute: yes'")))
                 ;; (lambda () (interactive) (shell-command "amixer set Master 5%- | sed -nr 's/.*: Playback.*?\\[([[:digit:]%]*)\\].*/\\1/gp' | head -1")))
 (exwm-input-set-key
  (kbd "<XF86AudioRaiseVolume>")
  (lambda () (interactive)
-   (shell-command "pactl set-sink-volume 0 +5% ; pactl get-sink-volume 0 | sed -nr 's/.*? ([[:digit:]]*?%).*/\\1/gp' | tr -d '\n' ; printf ' ' ; pactl get-sink-mute 0 | grep 'Mute: yes'")))
+   (shell-command "SINK=$(pactl list sinks short | grep 'RUNNING$' | awk '{print $1}') ; pactl set-sink-volume $SINK +5% ; pactl get-sink-volume $SINK | sed -nr 's/.*? ([[:digit:]]*?)%.*/\\1/gp' | tr -d '\n' ; printf ' ' ; pactl get-sink-mute $SINK | grep 'Mute: yes'")))
                 ;; (lambda () (interactive) (shell-command "amixer set Master 5%+ | sed -nr 's/.*: Playback.*?\\[([[:digit:]%]*)\\].*/\\1/gp' | head -1")))
 (exwm-input-set-key (kbd "<XF86AudioMute>")
-                    (lambda () (interactive) (shell-command "pactl set-sink-mute 0 toggle ; pactl get-sink-mute 0")))
+                    (lambda () (interactive) (shell-command "SINK=$(pactl list sinks short | grep 'RUNNING$' | awk '{print $1}') ; pactl set-sink-mute $SINK toggle ; pactl get-sink-mute $SINK")))
                     ;; (lambda () (interactive) (shell-command "amixer set Master 1+ toggle | sed -nr 's/.*: Playback.*?\\[([[:alpha:]]*)\\].*/\\1/gp' | head -1")))
 (exwm-input-set-key (kbd "<XF86MonBrightnessDown>") (lambda () (interactive) (shell-command "lux -s 5")))
 (exwm-input-set-key (kbd "<XF86MonBrightnessUp>") (lambda () (interactive) (shell-command "lux -a 5")))
