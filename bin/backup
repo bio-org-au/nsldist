@@ -3,6 +3,6 @@ BACKUPS=~/backups
 DT=$(date '+%Y-%m-%dT%H:%M:%S')
 KPI=~/Google/AppData/KeePass
 KPO=$BACKUPS/KeePass
-mkdir -p $KP
+mkdir -p $KPO
 cp $KPI/KeePassDB.kdbx $KPO/KeePassDB.kdbx.$DT
 ls -l $KPO

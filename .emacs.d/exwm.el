@@ -44,13 +44,13 @@
 ;(if cc/arandr-file (start-process-shell-command nil (format "~/.screenlayout/%s.sh" cc/arandr-file)))
 
 (defun cc/exwm-randr-screen-change ()
-  (setq cc/secondary (process-lines "sh" "-c" "xrandr | grep -v 'connected primary' | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
   (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
+  (setq cc/secondary (process-lines "sh" "-c" "xrandr | grep -v 'connected primary' | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
   (setq cc/screen-list (append cc/primary cc/secondary))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
-  (start-process-shell-command "xrandr" nil "autorandr --change" ))
-  ;; (let ((first (car cc/screen-list))
+  (start-process-shell-command "autorandr" nil "autorandr --change" ))
+ ;; (let ((first (car cc/screen-list))
 	;; (rest (cdr cc/screen-list)))
     ;; (dolist (screen rest)
       ;; (start-process-shell-command "xrandr" nil (format "xrandr --output %s --left-of %s --auto" screen first))))
@@ -394,7 +394,7 @@ The DWIM behaviour of this command is as follows:
 
 (define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 
-;; (after! exwm
+(after! exwm
   (defun exwm-layout--show (id &optional window)
     "Show window ID exactly fit in the Emacs window WINDOW."
     (exwm--log "Show #x%x in %s" id window)
@@ -430,13 +430,15 @@ The DWIM behaviour of this command is as follows:
                   width width*
                   height height*)))
         ;; edited here
+	;; without this, centaur tabs tab bar not visible
         (when
-            (and (not (bound-and-true-p centaur-tabs-local-mode))
+              (and (not (bound-and-true-p centaur-tabs-local-mode))
                  (not (exwm-layout--fullscreen-p))
-                 (or (bound-and-true-p centaur-tabs-mode)
-                     (bound-and-true-p tab-line-mode)))
-          (setq y (+ y centaur-tabs-height)))
-        ;; edited here
+                 (or (bound-and-true-p centaur-tabs-mode)))
+		     (setq y (+ y centaur-tabs-height)))
+        (when (bound-and-true-p tab-line-mode) 
+	  (setq y (+ y 30))) ; guesswork number, but not sure what is better
+        ;; end edited here
         (exwm--set-geometry id x y width height)
         (xcb:+request exwm--connection (make-instance 'xcb:MapWindow :window id))
         (exwm-layout--set-state id xcb:icccm:WM_STATE:NormalState)
@@ -445,8 +447,7 @@ The DWIM behaviour of this command is as follows:
         (exwm-layout--set-ewmh-state id)
         (exwm-layout--auto-iconify)))
     (xcb:flush exwm--connection))
-;; )
-
+)
 
 
 
