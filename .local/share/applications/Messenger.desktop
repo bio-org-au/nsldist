@@ -4,6 +4,6 @@ Version=1.0
 Terminal=false
 Type=Application
 Name=Messenger
-Exec=interweb https://www.messenger.com/e2ee/t/25805227852457537/
+Exec=interweb https://www.messenger.com/
 Icon=Messenger
 StartupWMClass=Messenger

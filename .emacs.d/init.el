@@ -477,39 +477,6 @@ truncates text if needed.  Minimal width can be set with
                (buffer-name (concat padding buffer-name)))
           (concat buffer-name (make-string (- tab-width (length buffer-name)) ?\s)))))))
 
-(defun tab-line-close-tab (&optional e)
-  "Close the selected tab.
-
-If tab is presented in another window, close the tab by using
-`bury-buffer` function.  If tab is unique to all existing
-windows, kill the buffer with `kill-buffer` function.  Lastly, if
-no tabs left in the window, it is deleted with `delete-window`
-function."
-  (interactive "e")
-  (let* ((posnp (event-start e))
-         (window (posn-window posnp))
-         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
-    (with-selected-window window
-      (let ((tab-list (tab-line-tabs-window-buffers))
-            (buffer-list (flatten-list
-                          (seq-reduce (lambda (list window)
-                                        (select-window window t)
-                                        (cons (tab-line-tabs-window-buffers) list))
-                                      (window-list) nil))))
-        (select-window window)
-        (if (> (seq-count (lambda (b) (eq b buffer)) buffer-list) 1)
-            (progn
-              (if (eq buffer (current-buffer))
-                  (bury-buffer)
-                (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
-                (set-window-next-buffers window (delq buffer (window-next-buffers))))
-              (unless (cdr tab-list)
-                (ignore-errors (delete-window window))))
-          (and (kill-buffer buffer)
-               (unless (cdr tab-list)
-                 (ignore-errors (delete-window window)))))))))
-
-
 
  (use-package tab-line
     :ensure nil
@@ -545,9 +512,148 @@ function."
 
     
     (my/set-tab-theme)
+
+    (defun tab-line-close-tab (&optional e)
+  "Close the selected tab.
+
+If tab is presented in another window, close the tab by using
+`bury-buffer` function. Being present means existing in any tab.
+If tab is unique to all existing
+windows, kill the buffer with `kill-buffer` function.  Lastly, if
+no tabs left in the window, it is deleted with `delete-window`
+function."
+  (interactive "e")
+  (let* ((posnp (event-start e))
+         (window (posn-window posnp))
+         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+    (with-selected-window window
+      (let ((tab-list (tab-line-tabs-window-buffers))
+            (buffer-list (flatten-list
+                          (seq-reduce (lambda (list window)
+                                        (select-window window t)
+                                        (cons (tab-line-tabs-window-buffers) list))
+                                      (window-list) nil))))
+        (select-window window)
+        (if (> (seq-count (lambda (b) (eq b buffer)) buffer-list) 1)
+            (progn
+              (if (eq buffer (current-buffer))
+                  (bury-buffer)
+                (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
+                (set-window-next-buffers window (delq buffer (window-next-buffers))))
+              (unless (cdr tab-list)
+                (ignore-errors (delete-window window))))
+          (and (kill-buffer buffer)
+               (unless (cdr tab-list)
+                 (ignore-errors (delete-window window))))))
+      )))
+
+    
+    (defun tab-line-bury-tab (&optional e)
+  "Close the selected tab.
+
+If tab is presented in another window, close the tab by using
+`bury-buffer` function.  If tab is unique to all existing
+windows, kill the buffer with `kill-buffer` function.  Lastly, if
+no tabs left in the window, it is deleted with `delete-window`
+function."
+  (interactive "e")
+  (let* ((posnp (event-start e))
+         (window (posn-window posnp))
+         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+    (bury-buffer buffer)))
+  
+(defun tab-line-kill-tab (&optional e)
+  "Close the selected tab.
+
+If tab is presented in another window, close the tab by using
+`bury-buffer` function.  If tab is unique to all existing
+windows, kill the buffer with `kill-buffer` function.  Lastly, if
+no tabs left in the window, it is deleted with `delete-window`
+function."
+  (interactive "e")
+  (let* ((posnp (event-start e))
+         (window (posn-window posnp))
+         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+    (kill-buffer buffer)))
+
+
+(defun tab-line-tab-context-menu (&optional event)
+  "Pop up the context menu for a tab-line tab."
+  (interactive "e")
+  (let ((menu (make-sparse-keymap (propertize "Context Menu" 'hide t))))
+    (define-key-after menu [close] '(menu-item "Close" tab-line-close-tab :help "Close the tab"))
+    (define-key-after menu [bury] '(menu-item "Bury" tab-line-bury-tab :help "Bury the tab"))
+    (define-key-after menu [kill] '(menu-item "Kill" tab-line-kill-tab :help "Kill the tab"))
+    (popup-menu menu event)))
+
+
     ;; (dolist (mode '(ediff-mode process-menu-mode))
       ;; (add-to-list 'tab-line-exclude-modes mode))
     )
-    
+
+
+;; (setopt
+;;     ;; Add tab-line-tab-face-inactive-alternating, but add it before tab-line-tab-face-modified so the alternating faces do not
+;;     ;; override the settings for a modified buffer.
+;;      tab-line-tab-face-functions '(tab-line-tab-face-inactive-alternating tab-line-tab-face-special tab-line-tab-face-modified)
+;;     ;; Do not show the new tab button.
+;;      tab-line-new-button-show nil
+;;     )
+;;     ;; The tab line background
+;;     (set-face-attribute 'tab-line nil
+;;                         :inherit 'default
+;;                         :weight 'normal
+;;                         :width 'normal
+;;                         :foreground "#ffffff"
+;;                         :background "#000000"
+;;                         )
+;;     ;; Tab with mouseover
+;;     (set-face-attribute 'tab-line-highlight nil
+;;                         :inverse-video t)
+;;     ;; Active tab on a window that is not active
+;;     (set-face-attribute 'tab-line-tab nil
+;;                         :inherit 'default
+;;                         :foreground "#0000ff"
+;;                         :background "#ffffff"
+;;                         :box '(:line-width (3 . 5) :color "#0000ff" :style pressed-button))
+;;     ;; Active tab on the active window
+;;     (set-face-attribute 'tab-line-tab-current nil
+;;                         :inherit 'default
+;;                         :weight 'bold
+;;                         :slant 'italic
+;;                         :foreground "#ff0000"
+;;                         :background "#ffffff"
+;;                         :height 130
+;;                         )    
+;;     ;; Special buffers
+;;     (set-face-attribute  'tab-line-tab-special nil
+;;                          :inherit 'default
+;;                          :foreground "#000000"
+;;                          :background "#ffffff"
+;;                          :box '(:line-width (3 . 5) :color "#000000"  :style pressed-button))
+;;     ;; Buffers with unsaved data
+;;     (set-face-attribute 'tab-line-tab-modified nil
+;;                         :inherit 'default
+;;                         :slant 'italic
+;;                         :foreground "#ff0000"
+;;                         :background "#000000"
+;;                         :box '(:line-width (2 . 5) :color "#ff0000" :style pressed-button))
+;;     ;; Inactive tabs
+;;     (set-face-attribute 'tab-line-tab-inactive nil
+;;                         :inherit 'default
+;;                         :foreground "#00ff00"
+;;                         :background "#000000"
+;;                         :box '(:line-width 3 :color "#00ff00" :style released-button))
+;;     ;; Alternate color for inactive tabs
+;;     (set-face-attribute 'tab-line-tab-inactive-alternate nil
+;;                         :inherit 'tab-line-tab-inactive
+;;                         :foreground "#ff00ff"
+;;                         :background "#000000"
+;;                         :box '(:line-width 3 :color "#ff00ff" :style released-button))
+
+
 (global-tab-line-mode t)
+
+
+
 

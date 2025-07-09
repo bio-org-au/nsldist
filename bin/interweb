@@ -1,1 +1,2 @@
-exec vivaldi "$@"
+exec firefox "$@"
+#exec vivaldi "$@"
