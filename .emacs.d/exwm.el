@@ -15,6 +15,9 @@
 (defun cc/exwm-toggle-show-all-buffers ()
   (cc/exwm-show-all-buffers (not exwm-layout-show-all-buffers)))
 
+(setq exwm-layout-show-all-buffers t)
+(setq exwm-workspace-show-all-buffers t)
+
 (defun cc/build-workspaces (l n)
   (cons
    (cons n (car l))
@@ -92,12 +95,12 @@
     (exwm-workspace-rename-buffer "Squirrelsql"))
    ((string= exwm-class-name "Google-chrome")
     ;; (exwm-workspace-rename-buffer (format "C | %s" (my/first-n-words exwm-title 3))))
-    (exwm-workspace-rename-buffer (format "C | %s" exwm-title)))
+    (exwm-workspace-rename-buffer (format "C:%s" exwm-title)))
    ((string= exwm-class-name "firefox")
     ;; (exwm-workspace-rename-buffer (format "F | %s" (my/first-n-words exwm-title 3))))
-    (exwm-workspace-rename-buffer (format "F | %s" exwm-title)))
+    (exwm-workspace-rename-buffer (format "F:%s" exwm-title)))
    ((string= exwm-class-name "Vivaldi-stable")
-    (exwm-workspace-rename-buffer (format "V | %s" exwm-title)))
+    (exwm-workspace-rename-buffer (format "V:%s" exwm-title)))
    ((or (string= exwm-class-name "com-jetbrains-toolbox-entry-ToolboxEntry")
 	(string= exwm-class-name "jetbrains-toolbox"))
      (exwm-workspace-rename-buffer "Jetbrains Toolbox"))
@@ -112,7 +115,7 @@
       `(([?\s-r] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
         ([?\s-k] . exwm-input-release-keyboard)
 	([?\s-z] . exwm-input-toggle-keyboard)
-        ([?\s-a] . (lambda () (interactive) (cc/exwm-toggle-show-all-buffers)))
+        ;; ([?\s-a] . (lambda () (interactive) (cc/exwm-toggle-show-all-buffers)))
         ;; ([?\s-k] . (lambda () (interactive) (exwm-input-release-keyboard) (message "char-mode")))
         ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
         ([?\s-&] . (lambda (cmd) ;; s-&: Launch application. 
@@ -328,10 +331,10 @@
 (exwm-input-set-key (kbd "<XF86AudioMute>")
                     (lambda () (interactive) (shell-command "volume toggle")))
                     ;; (lambda () (interactive) (shell-command "amixer set Master 1+ toggle | sed -nr 's/.*: Playback.*?\\[([[:alpha:]]*)\\].*/\\1/gp' | head -1")))
-(exwm-input-set-key (kbd "<XF86MonBrightnessDown>") (lambda () (interactive) (shell-command "lux -s 5")))
-(exwm-input-set-key (kbd "<XF86MonBrightnessUp>") (lambda () (interactive) (shell-command "lux -a 5")))
+(exwm-input-set-key (kbd "<XF86MonBrightnessDown>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%- ; brightnessctl g")))
+(exwm-input-set-key (kbd "<XF86MonBrightnessUp>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%+ ; brightnessctl g")))
 (exwm-input-set-key (kbd "<print>") (lambda () (interactive) (start-process-shell-command "spectacle" nil "spectacle")))
-
+  
 ;; for emacsclient
 (server-start)
 

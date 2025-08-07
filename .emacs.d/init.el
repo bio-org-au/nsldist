@@ -377,15 +377,15 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
         ;; (equal (alist-get 'comm (process-attributes it))
                ;; (file-name-base explicit-shell-file-name)))))
 
-(defun my/vterm-better-kill (orig-fun &rest args)
-  "Override kill-buffer for vterm: kill without confirmation when vterm is idle."
-  (if (eq major-mode 'vterm-mode) 
-      (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil))
+;-(defun my/vterm-better-kill (orig-fun &rest args)
+;-  "Override kill-buffer for vterm: kill without confirmation when vterm is idle."
+;-  (if (eq major-mode 'vterm-mode) 
+;-      (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil))
       ;; (let ((process (get-buffer-process (current-buffer))))
 	;; (if (and (vz/shell-inside-p) (vterm--at-prompt-p))
             ;; (set-process-query-on-exit-flag process nil)
           ;; (set-process-query-on-exit-flag process t))))
-  (apply orig-fun args))
+;-  (apply orig-fun args))
 ;; (defun my/vterm-better-kill (orig-fun &rest args)
   ;; "Override kill-buffer for vterm: kill without confirmation when vterm is idle."
   ;; (if (eq major-mode 'vterm-mode)
@@ -396,7 +396,7 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
             ;; (set-process-query-on-exit-flag process t)))))
   ;; (apply orig-fun args))
 
-(advice-add 'kill-buffer :around #'my/vterm-better-kill)
+;-(advice-add 'kill-buffer :around #'my/vterm-better-kill)
 
 ;(add-hook 'kill-buffer-hook  asdf)
 
