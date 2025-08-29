@@ -397,7 +397,8 @@ The DWIM behaviour of this command is as follows:
 
 (define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 
-(after! exwm
+;(use-package my/foo/package :after exwm :config
+;(after! exwm
   (defun exwm-layout--show (id &optional window)
     "Show window ID exactly fit in the Emacs window WINDOW."
     (exwm--log "Show #x%x in %s" id window)
@@ -450,14 +451,4 @@ The DWIM behaviour of this command is as follows:
         (exwm-layout--set-ewmh-state id)
         (exwm-layout--auto-iconify)))
     (xcb:flush exwm--connection))
-)
-
-
-
-
-
-
-
-
-
-
+;)
