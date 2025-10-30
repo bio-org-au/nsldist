@@ -115,6 +115,7 @@
       `(([?\s-r] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
         ([?\s-k] . exwm-input-release-keyboard)
 	([?\s-z] . exwm-input-toggle-keyboard)
+	(,(kbd "<f7>") . exwm-input-toggle-keyboard)
         ;; ([?\s-a] . (lambda () (interactive) (cc/exwm-toggle-show-all-buffers)))
         ;; ([?\s-k] . (lambda () (interactive) (exwm-input-release-keyboard) (message "char-mode")))
         ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
