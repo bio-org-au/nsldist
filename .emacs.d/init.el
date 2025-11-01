@@ -137,15 +137,20 @@ There are two things you can do about this warning:
 (keymap-global-set "C-c z" 'ace-window)
 ;(ace-window-display-mode t)
 
-(keymap-global-set "C-c <left>" 'windmove-left)
-(keymap-global-set "C-c <right>" 'windmove-right)
-(keymap-global-set "C-c <up>" 'windmove-up)
-(keymap-global-set "C-c <down>" 'windmove-down)
+(keymap-global-set "M-<left>" 'windmove-left)
+(keymap-global-set "M-<right>" 'windmove-right)
+(keymap-global-set "M-<up>" 'windmove-up)
+(keymap-global-set "M-<down>" 'windmove-down)
 
-(keymap-global-set "C-c C-<left>" 'windmove-swap-states-left)
-(keymap-global-set "C-c C-<right>" 'windmove-swap-states-right)
-(keymap-global-set "C-c C-<up>" 'windmove-swap-states-up)
-(keymap-global-set "C-c C-<down>" 'windmove-swap-states-down)
+(keymap-global-set "s-<left>" 'windmove-swap-states-left)
+(keymap-global-set "s-<right>" 'windmove-swap-states-right)
+(keymap-global-set "s-<up>" 'windmove-swap-states-up)
+(keymap-global-set "s-<down>" 'windmove-swap-states-down)
+
+(keymap-global-set "C-<left>" 'shrink-window-horizontally)
+(keymap-global-set "C-<right>" 'enlarge-window-horizontally)
+(keymap-global-set "C-<up>" 'enlarge-window)
+(keymap-global-set "C-<down>" 'shrink-window)
 
 (add-to-list 'auto-mode-alist '("\\.gsp\\'" . xml-mode))
 
@@ -418,7 +423,7 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
     (set-face-attribute 'tab-line nil
 			:background base
 			:foreground fg
-			:height 1.1
+			:height 0.8
 			:inherit nil
 			:box (list :line-width -1 :color base)
 			)
