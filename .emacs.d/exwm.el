@@ -92,7 +92,7 @@
    ((string-match-p "Gmail" exwm-title)
     (exwm-workspace-rename-buffer "Gmail"))
    ((string= "net-sourceforge-squirrel_sql-client-Main" exwm-class-name)
-    (exwm-workspace-rename-buffer "Squirrelsql"))
+    (exwm-workspace-rename-buffer (replace-regexp-in-string "Session: [0-9]* - \\(.*\\)" "\\1" exwm-title)))
    ((string= exwm-class-name "Google-chrome")
     ;; (exwm-workspace-rename-buffer (format "C | %s" (my/first-n-words exwm-title 3))))
     (exwm-workspace-rename-buffer (format "C:%s" exwm-title)))

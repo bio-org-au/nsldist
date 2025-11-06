@@ -93,6 +93,11 @@ There are two things you can do about this warning:
 (avy-setup-default)
 (global-set-key (kbd "C-c C-j") 'avy-resume)
 (global-set-key (kbd "C-c C-s") 'avy-goto-char-timer) ;; isearch-forward
+
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C-_") 'text-scale-decrease)
+(global-set-key (kbd "C-)") (lambda () (interactive) (text-scale-adjust 0)))
+
 (setq avy-background t)
 
 ;; (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
