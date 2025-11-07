@@ -1,6 +1,10 @@
 ; MELPA package library https://melpa.org/#/getting-started
 ;(setq debug-on-error t)
-;(setq debug-on-message "Package cl is deprecated")
+					;(setq debug-on-message "Package cl is deprecated")
+
+(setq-default indent-tabs-mode t)
+(setq-default tab-width 4)
+(setq standard-indent 4)
 
 (global-set-key "\C-x\C-b" 'buffer-menu)
 (defun efs/run-in-background (command)
@@ -33,29 +37,29 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#21252B" "#E06C75" "#98C379" "#E5C07B" "#61AFEF" "#C678DD" "#56B6C2"
-    "#ABB2BF"])
+	"#ABB2BF"])
  '(custom-enabled-themes '(manoj-dark))
  '(custom-safe-themes
    '("b23f3067e27a9940a563f1fb3bf455aabd0450cb02c3fa4ad43f75a583311216"
-     "24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6"
-     default))
+	 "24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6"
+	 default))
  '(display-battery-mode t)
  '(display-time-mode t)
  '(menu-bar-mode nil)
  '(package-selected-packages
    '(ace-jump-mode arc-dark-theme arjen-grey-theme async avy backlight
-		   centaur-tabs company counsel counsel dap-mode
-		   desktop-environment dir-treeview
-		   dir-treeview-themes dired-sidebar direx dirtree
-		   dirtree-prosjekt dmenu elgrep exwm exwm
-		   fancy-battery fancy-battery filetree
-		   find-things-fast fira-code-mode fontawesome
-		   grails-mode groovy-imports groovy-mode helm-lsp
-		   hide-comnt list-utils list-utils lsp-groovy lsp-ivy
-		   lsp-java lsp-javacomp lsp-mode lsp-ui magit
-		   mark-thing-at melpa-upstream-visit neotree
-		   projectile simple-httpd treesit-auto vterm
-		   winner-mode-enable xah-get-thing yaml-mode))
+				   buffer-move centaur-tabs company counsel counsel
+				   current-window-only dap-mode desktop-environment
+				   dir-treeview dir-treeview-themes dired-sidebar
+				   direx dirtree dirtree-prosjekt dmenu elgrep exwm
+				   exwm fancy-battery fancy-battery filetree
+				   find-things-fast fira-code-mode fontawesome
+				   grails-mode groovy-imports groovy-mode helm-lsp
+				   hide-comnt list-utils list-utils lsp-groovy lsp-ivy
+				   lsp-java lsp-javacomp lsp-mode lsp-ui magit
+				   mark-thing-at melpa-upstream-visit neotree
+				   projectile simple-httpd slime treesit-auto vterm
+				   winner-mode-enable xah-get-thing yaml-mode))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -100,8 +104,8 @@ There are two things you can do about this warning:
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-_") 'text-scale-decrease)
 (global-set-key (kbd "C-)") (lambda () (interactive) (text-scale-adjust 0)))
-(global-set-key (kbd "C-~") 'kill-current-buffer)
-(global-set-key (kbd "C-`") 'bury-buffer)
+(global-set-key (kbd "C-`") 'kill-current-buffer)
+(global-set-key (kbd "s-`") 'bury-buffer)
 
 (setq avy-background t)
 
@@ -152,10 +156,16 @@ There are two things you can do about this warning:
 (keymap-global-set "M-<up>" 'windmove-up)
 (keymap-global-set "M-<down>" 'windmove-down)
 
-(keymap-global-set "s-<left>" 'windmove-swap-states-left)
-(keymap-global-set "s-<right>" 'windmove-swap-states-right)
-(keymap-global-set "s-<up>" 'windmove-swap-states-up)
-(keymap-global-set "s-<down>" 'windmove-swap-states-down)
+(keymap-global-set "s-<left>" 'buf-move-left)
+(keymap-global-set "s-<right>" 'buf-move-right)
+(keymap-global-set "s-<up>" 'buf-move-up)
+(keymap-global-set "s-<down>" 'buf-move-down)
+
+(keymap-global-set "S-s-<left>" 'windmove-swap-states-left)
+(keymap-global-set "S-s-<right>" 'windmove-swap-states-right)
+(keymap-global-set "S-s-<up>" 'windmove-swap-states-up)
+(keymap-global-set "S-s-<down>" 'windmove-swap-states-down)
+
 
 (keymap-global-set "C-<left>" 'shrink-window-horizontally)
 (keymap-global-set "C-<right>" 'enlarge-window-horizontally)
@@ -668,6 +678,7 @@ function."
 ;;                         :background "#000000"
 ;;                         :box '(:line-width 3 :color "#ff00ff" :style released-button))
 
+(use-package current-window-only :ensure t)
 
 (global-tab-line-mode t)
 
