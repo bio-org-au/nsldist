@@ -97,6 +97,7 @@ There are two things you can do about this warning:
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-_") 'text-scale-decrease)
 (global-set-key (kbd "C-)") (lambda () (interactive) (text-scale-adjust 0)))
+(global-set-key (kbd "C-`") 'kill-current-buffer)
 
 (setq avy-background t)
 
