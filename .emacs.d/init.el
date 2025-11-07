@@ -50,12 +50,12 @@ There are two things you can do about this warning:
 		   dirtree-prosjekt dmenu elgrep exwm exwm
 		   fancy-battery fancy-battery filetree
 		   find-things-fast fira-code-mode fontawesome
-		   groovy-imports groovy-mode helm-lsp hide-comnt
-		   list-utils list-utils lsp-groovy lsp-ivy lsp-java
-		   lsp-javacomp lsp-mode lsp-ui magit mark-thing-at
-		   melpa-upstream-visit neotree projectile
-		   simple-httpd treesit-auto vterm winner-mode-enable
-		   xah-get-thing yaml-mode))
+		   grails-mode groovy-imports groovy-mode helm-lsp
+		   hide-comnt list-utils list-utils lsp-groovy lsp-ivy
+		   lsp-java lsp-javacomp lsp-mode lsp-ui magit
+		   mark-thing-at melpa-upstream-visit neotree
+		   projectile simple-httpd treesit-auto vterm
+		   winner-mode-enable xah-get-thing yaml-mode))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -416,7 +416,7 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 ;(add-hook 'kill-buffer-hook  asdf)
 
 (require 'vterm)
-(define-key vterm-mode-map (kbd "C-`") #'(lambda () (interactive) (kill-buffer (current-buffer))))
+(define-key vterm-mode-map (kbd "C-~") #'(lambda () (interactive) (kill-buffer (current-buffer))))
 
 ;(require 'treemacs)
 
