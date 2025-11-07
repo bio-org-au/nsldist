@@ -129,6 +129,8 @@
 	([?\s-l] . (lambda () (interactive) (efs/run-in-background "xscreensaver-command --lock")))
 	([?\s- ] . (lambda () (interactive) (efs/run-in-background "rofi -show combi")))
 ;	([?\s-l] . (lambda () (interactive) (start-process "xscreensaver-command", nil, "xscreensaver-command --lock")))
+	([?\C-`] . bury-buffer)
+	([?\C-~] . kill-current-buffer)
 	([?\s-h] . exwm-floating-hide)
 	([?\s-f] . exwm-floating-toggle-floating)
 	([?\s-e] . exwm-layout-toggle-fullscreen)
@@ -217,8 +219,9 @@
       (append
        sim-key-basic
        '(([?\C-l] . [C-r])
+;	 ((kbd "C-x C-left") 
 ;	 ([?\C-x ?\C-f] . [C-t])
-	 ([?\C-\`] . [C-w])
+;	 ([?\C-\`] . [C-w])
 ;	 ([?\s-left] . [s-left])
 ;	 ([?\s-right] . [s-right])
 ;	 ([?\s-up] . [s-up])

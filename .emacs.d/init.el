@@ -43,16 +43,19 @@ There are two things you can do about this warning:
  '(display-time-mode t)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(async avy winner-mode-enable direx filetree treesit-auto projectile
-	   dirtree-prosjekt dirtree dired-sidebar dir-treeview-themes
-	   dir-treeview neotree melpa-upstream-visit magit exwm
-	   counsel list-utils fancy-battery ace-jump-mode backlight
-	   fontawesome list-utils dmenu centaur-tabs lsp-javacomp
-	   company helm-lsp lsp-ivy lsp-ui dap-mode lsp-mode
-	   lsp-groovy yaml-mode xah-get-thing vterm simple-httpd
-	   mark-thing-at lsp-java hide-comnt groovy-mode
-	   groovy-imports find-things-fast fancy-battery exwm elgrep
-	   desktop-environment counsel arjen-grey-theme arc-dark-theme))
+   '(ace-jump-mode arc-dark-theme arjen-grey-theme async avy backlight
+		   centaur-tabs company counsel counsel dap-mode
+		   desktop-environment dir-treeview
+		   dir-treeview-themes dired-sidebar direx dirtree
+		   dirtree-prosjekt dmenu elgrep exwm exwm
+		   fancy-battery fancy-battery filetree
+		   find-things-fast fira-code-mode fontawesome
+		   groovy-imports groovy-mode helm-lsp hide-comnt
+		   list-utils list-utils lsp-groovy lsp-ivy lsp-java
+		   lsp-javacomp lsp-mode lsp-ui magit mark-thing-at
+		   melpa-upstream-visit neotree projectile
+		   simple-httpd treesit-auto vterm winner-mode-enable
+		   xah-get-thing yaml-mode))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -97,7 +100,8 @@ There are two things you can do about this warning:
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C-_") 'text-scale-decrease)
 (global-set-key (kbd "C-)") (lambda () (interactive) (text-scale-adjust 0)))
-(global-set-key (kbd "C-`") 'kill-current-buffer)
+(global-set-key (kbd "C-~") 'kill-current-buffer)
+(global-set-key (kbd "C-`") 'bury-buffer)
 
 (setq avy-background t)
 
@@ -419,6 +423,8 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 (winner-mode 1)
 
 
+(set-face-attribute 'default nil :font "Fira Code-12")
+
 ;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36#file-tabline-el-L10
 (defun my/set-tab-theme ()
   (let ((bg (face-attribute 'mode-line :background))
@@ -664,7 +670,6 @@ function."
 
 
 (global-tab-line-mode t)
-
 
 
 
