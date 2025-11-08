@@ -140,15 +140,23 @@
 	(,(kbd "M-<right>") . windmove-right)
 	(,(kbd "M-<up>") . windmove-up)
 	(,(kbd "M-<down>") . windmove-down)
+	
+	(,(kbd "s-<left>") . buf-move-left)
+	(,(kbd "s-<right>") . buf-move-right)
+	(,(kbd "s-<up>") . buf-move-up)
+	(,(kbd "s-<down>") . buf-move-down)
+
+	(,(kbd "S-s-<left>") . windmove-swap-states-left)
+	(,(kbd "S-s-<right>") . windmove-swap-states-right)
+	(,(kbd "S-s-<up>") . windmove-swap-states-up)
+	(,(kbd "S-s-<down>") . windmove-swap-states-down)
+
 	(,(kbd "C-<left>") . shrink-window-horizontally)
 	(,(kbd "C-<right>") . enlarge-window-horizontally)
 	(,(kbd "C-<up>") . enlarge-window)
 	(,(kbd "C-<down>") . shrink-window)
-	(,(kbd "s-<left>") . windmove-swap-states-left)
-	(,(kbd "s-<right>") . windmove-swap-states-right)
-	(,(kbd "s-<up>") . windmove-swap-states-up)
-	(,(kbd "s-<down>") . windmove-swap-states-down)
-;	([?\s-z] . (lambda () (interactive) (ace-window nil)))
+
+		;	([?\s-z] . (lambda () (interactive) (ace-window nil)))
         ;; s-N: Switch to certain workspace.
         ,@(mapcar (lambda (i)
                     `(,(kbd (format "s-%d" i)) .

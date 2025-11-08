@@ -151,10 +151,10 @@ There are two things you can do about this warning:
 (keymap-global-set "C-c z" 'ace-window)
 ;(ace-window-display-mode t)
 
-(keymap-global-set "M-<left>" 'windmove-left)
-(keymap-global-set "M-<right>" 'windmove-right)
-(keymap-global-set "M-<up>" 'windmove-up)
-(keymap-global-set "M-<down>" 'windmove-down)
+(keymap-global-set "C-<left>" 'shrink-window-horizontally)
+(keymap-global-set "C-<right>" 'enlarge-window-horizontally)
+(keymap-global-set "C-<up>" 'enlarge-window)
+(keymap-global-set "C-<down>" 'shrink-window)
 
 (keymap-global-set "s-<left>" 'buf-move-left)
 (keymap-global-set "s-<right>" 'buf-move-right)
@@ -166,11 +166,13 @@ There are two things you can do about this warning:
 (keymap-global-set "S-s-<up>" 'windmove-swap-states-up)
 (keymap-global-set "S-s-<down>" 'windmove-swap-states-down)
 
+(keymap-global-set "M-<left>" 'windmove-left)
+(keymap-global-set "M-<right>" 'windmove-right)
+(keymap-global-set "M-<up>" 'windmove-up)
+(keymap-global-set "M-<down>" 'windmove-down)
 
-(keymap-global-set "C-<left>" 'shrink-window-horizontally)
-(keymap-global-set "C-<right>" 'enlarge-window-horizontally)
-(keymap-global-set "C-<up>" 'enlarge-window)
-(keymap-global-set "C-<down>" 'shrink-window)
+
+
 
 (add-to-list 'auto-mode-alist '("\\.gsp\\'" . xml-mode))
 
