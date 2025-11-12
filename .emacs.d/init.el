@@ -150,15 +150,6 @@ There are two things you can do about this warning:
 
 (keymap-global-set "C-c z" 'ace-window)
 ;(ace-window-display-mode t)
-(define-key vterm-mode-map (kbd "C-<left>") nil)
-(define-key vterm-mode-map (kbd "C-<right>") nil)
-(define-key vterm-mode-map (kbd "C-<up>") nil)
-(define-key vterm-mode-map (kbd "C-<down>") nil)
-
-(define-key vterm-mode-map (kbd "M-<left>") nil)
-(define-key vterm-mode-map (kbd "M-<right>") nil)
-(define-key vterm-mode-map (kbd "M-<up>") nil)
-(define-key vterm-mode-map (kbd "M-<down>") nil)
 
 
 (keymap-global-set "C-<left>" 'shrink-window-horizontally)
@@ -439,6 +430,15 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 
 (require 'vterm)
 (define-key vterm-mode-map (kbd "C-~") #'(lambda () (interactive) (kill-buffer (current-buffer))))
+(define-key vterm-mode-map (kbd "C-<left>") nil)
+(define-key vterm-mode-map (kbd "C-<right>") nil)
+(define-key vterm-mode-map (kbd "C-<up>") nil)
+(define-key vterm-mode-map (kbd "C-<down>") nil)
+
+(define-key vterm-mode-map (kbd "M-<left>") nil)
+(define-key vterm-mode-map (kbd "M-<right>") nil)
+(define-key vterm-mode-map (kbd "M-<up>") nil)
+(define-key vterm-mode-map (kbd "M-<down>") nil)
 
 ;(require 'treemacs)
 
