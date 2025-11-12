@@ -532,6 +532,8 @@ truncates text if needed.  Minimal width can be set with
       :type 'integer
       :group 'tab-line)
 
+	(setq tab-bar-close-tab-select 'right)
+	
     (setq tab-line-close-button-show t
           tab-line-new-button-show t
           tab-line-separator "|"
