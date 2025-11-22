@@ -142,11 +142,24 @@
 	(,(kbd "M-<right>") . windmove-right)
 	(,(kbd "M-<up>") . windmove-up)
 	(,(kbd "M-<down>") . windmove-down)
+
 	
-	(,(kbd "s-<left>") . buf-move-left)
-	(,(kbd "s-<right>") . buf-move-right)
-	(,(kbd "s-<up>") . buf-move-up)
-	(,(kbd "s-<down>") . buf-move-down)
+	(,(kbd "s-<left>") . (lambda () (interactive)
+						   (if exwm--floating-frame
+							   (exwm-floating-move -10 0)
+							 (buf-move-left))))
+	(,(kbd "s-<right>") . (lambda () (interactive)
+						   (if exwm--floating-frame
+							   (exwm-floating-move 10 0)
+							 (buf-move-right))))
+	(,(kbd "s-<up>") . (lambda () (interactive)
+						   (if exwm--floating-frame
+							   (exwm-floating-move 0 -10)
+							 (buf-move-up))))
+	(,(kbd "s-<down>") . (lambda () (interactive)
+						   (if exwm--floating-frame
+							   (exwm-floating-move 0 10)
+							 (buf-move-down))))
 
 	(,(kbd "S-s-<left>") . windmove-swap-states-left)
 	(,(kbd "S-s-<right>") . windmove-swap-states-right)
