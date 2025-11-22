@@ -172,6 +172,7 @@ There are two things you can do about this warning:
 (keymap-global-set "M-<up>" 'windmove-up)
 (keymap-global-set "M-<down>" 'windmove-down)
 
+(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 
 
 
@@ -517,7 +518,7 @@ truncates text if needed.  Minimal width can be set with
           (concat buffer-name (make-string (- tab-width (length buffer-name)) ?\s)))))))
 
 
- (use-package tab-line
+(use-package tab-line
     :ensure nil
     :hook (after-init . global-tab-line-mode)
     :config
@@ -531,8 +532,6 @@ truncates text if needed.  Minimal width can be set with
       "Maximum width of a tab in characters."
       :type 'integer
       :group 'tab-line)
-
-	(setq tab-bar-close-tab-select 'right)
 	
     (setq tab-line-close-button-show t
           tab-line-new-button-show t
@@ -605,7 +604,6 @@ function."
   
 (defun tab-line-kill-tab (&optional e)
   "Close the selected tab.
-
 If tab is presented in another window, close the tab by using
 `bury-buffer` function.  If tab is unique to all existing
 windows, kill the buffer with `kill-buffer` function.  Lastly, if
@@ -617,6 +615,22 @@ function."
          (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
     (kill-buffer buffer)))
 
+(define-advice tab-line-close-tab (:around (orig-fn &rest args) force-right-tab)
+  "Close the current tab and select the tab to its right, or the first tab if the rightmost was closed."
+  (let* ((current-tab-buffer (current-buffer))
+         (tab-buffers (tab-line-tabs))
+         (current-tab-index (cl-position current-tab-buffer tab-buffers)))
+    ;; Call the original close function
+    (apply orig-fn args)
+    ;; If there are still tabs left
+    (when (tab-line-tabs)
+      (let* ((new-tab-buffers (tab-line-tabs))
+             (next-tab-index (if (>= current-tab-index (length new-tab-buffers))
+                                 0 ; Wrap around to the first tab if the rightmost was closed
+                               current-tab-index))
+             (next-tab-to-select (nth next-tab-index new-tab-buffers)))
+        (when next-tab-to-select
+          (tab-line-select-tab next-tab-to-select))))))
 
 (defun tab-line-tab-context-menu (&optional event)
   "Pop up the context menu for a tab-line tab."
@@ -625,12 +639,11 @@ function."
     (define-key-after menu [close] '(menu-item "Close" tab-line-close-tab :help "Close the tab"))
     (define-key-after menu [bury] '(menu-item "Bury" tab-line-bury-tab :help "Bury the tab"))
     (define-key-after menu [kill] '(menu-item "Kill" tab-line-kill-tab :help "Kill the tab"))
-    (popup-menu menu event)))
+    (popup-menu menu event))))
 
 
     ;; (dolist (mode '(ediff-mode process-menu-mode))
       ;; (add-to-list 'tab-line-exclude-modes mode))
-    )
 
 
 ;; (setopt
@@ -696,5 +709,12 @@ function."
 
 (global-tab-line-mode t)
 
+
+;(defun cc/refresh-buffer-list ()
+;  (when (string= (buffer-name) "*Buffer List*") ;; Or "*Ibuffer*"
+;    (buffer-menu))) ;; Revert the buffer, even if modified, without confirmation
+
+;(advice-add 'kill-buffer :after #'cc/refresh-buffer-list)
+;(add-hook 'kill-buffer-hook 'cc/refresh-buffer-list)
 
 

@@ -49,10 +49,12 @@
 (defun cc/exwm-randr-screen-change ()
   (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
   (setq cc/secondary (process-lines "sh" "-c" "xrandr | grep -v 'connected primary' | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
-  (setq cc/screen-list (append cc/primary cc/secondary))
+  (setq cc/tertiary '("DP-1"))
+  (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
-  (start-process-shell-command "autorandr" nil "autorandr --change" ))
+  (start-process-shell-command "autorandr" nil "autorandr --change" )
+  )
  ;; (let ((first (car cc/screen-list))
 	;; (rest (cdr cc/screen-list)))
     ;; (dolist (screen rest)
@@ -151,10 +153,18 @@
 	(,(kbd "S-s-<up>") . windmove-swap-states-up)
 	(,(kbd "S-s-<down>") . windmove-swap-states-down)
 
-	(,(kbd "C-<left>") . shrink-window-horizontally)
-	(,(kbd "C-<right>") . enlarge-window-horizontally)
-	(,(kbd "C-<up>") . enlarge-window)
-	(,(kbd "C-<down>") . shrink-window)
+;	(,(kbd "C-<left>") . shrink-window-horizontally)
+;	(,(kbd "C-<right>") . enlarge-window-horizontally)
+;	(,(kbd "C-<up>") . enlarge-window)
+;	(,(kbd "C-<down>") . shrink-window)
+
+	(,(kbd "C-<left>") . (lambda () (interactive) (exwm-layout-shrink-window-horizontally 10)))
+	(,(kbd "C-<right>") . (lambda () (interactive) (exwm-layout-enlarge-window-horizontally 10)))
+	(,(kbd "C-<up>") . (lambda () (interactive) (exwm-layout-enlarge-window 10)))
+	(,(kbd "C-<down>") . (lambda () (interactive) (exwm-layout-shrink-window 10)))
+
+	
+	(,(kbd "C-g") . prot/keyboard-quit-dwim)
 
 		;	([?\s-z] . (lambda () (interactive) (ace-window nil)))
         ;; s-N: Switch to certain workspace.
@@ -419,60 +429,60 @@ The DWIM behaviour of this command is as follows:
    (t
     (keyboard-quit))))
 
-(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 
 ;(use-package my/foo/package :after exwm :config
 ;(after! exwm
-  (defun exwm-layout--show (id &optional window)
-    "Show window ID exactly fit in the Emacs window WINDOW."
-    (exwm--log "Show #x%x in %s" id window)
-    (let* ((edges (window-inside-absolute-pixel-edges window))
-           (x (pop edges))
-           (y (pop edges))
-           (width (- (pop edges) x))
-           (height (- (pop edges) y))
-           frame-x frame-y frame-width frame-height)
-      (with-current-buffer (exwm--id->buffer id)
-        (when exwm--floating-frame
-          (setq frame-width (frame-pixel-width exwm--floating-frame)
-                frame-height (+ (frame-pixel-height exwm--floating-frame)
-                                ;; Use `frame-outer-height' in the future.
-                                exwm-workspace--frame-y-offset))
-          (when exwm--floating-frame-position
-            (setq frame-x (elt exwm--floating-frame-position 0)
-                  frame-y (elt exwm--floating-frame-position 1)
-                  x (+ x frame-x (- exwm-layout--floating-hidden-position))
-                  y (+ y frame-y (- exwm-layout--floating-hidden-position)))
-            (setq exwm--floating-frame-position nil))
-          (exwm--set-geometry (frame-parameter exwm--floating-frame
-                                               'exwm-container)
-                              frame-x frame-y frame-width frame-height))
-        (when (exwm-layout--fullscreen-p)
-          (with-slots ((x* x)
-                       (y* y)
-                       (width* width)
-                       (height* height))
-              (exwm-workspace--get-geometry exwm--frame)
-            (setq x x*
-                  y y*
-                  width width*
-                  height height*)))
-        ;; edited here
-	;; without this, centaur tabs tab bar not visible
-        (when
-              (and (not (bound-and-true-p centaur-tabs-local-mode))
-                 (not (exwm-layout--fullscreen-p))
-                 (or (bound-and-true-p centaur-tabs-mode)))
-		     (setq y (+ y centaur-tabs-height)))
-        (when (bound-and-true-p tab-line-mode) 
-	  (setq y (+ y 30))) ; guesswork number, but not sure what is better
-        ;; end edited here
-        (exwm--set-geometry id x y width height)
-        (xcb:+request exwm--connection (make-instance 'xcb:MapWindow :window id))
-        (exwm-layout--set-state id xcb:icccm:WM_STATE:NormalState)
-        (setq exwm--ewmh-state
-              (delq xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state))
-        (exwm-layout--set-ewmh-state id)
-        (exwm-layout--auto-iconify)))
-    (xcb:flush exwm--connection))
-;)
+;;  (defun exwm-layout--show (id &optional window)
+;;    "Show window ID exactly fit in the Emacs window WINDOW."
+;;    (exwm--log "Show #x%x in %s" id window)
+;;    (let* ((edges (window-inside-absolute-pixel-edges window))
+;;           (x (pop edges))
+;;           (y (pop edges))
+;;           (width (- (pop edges) x))
+;;           (height (- (pop edges) y))
+;;           frame-x frame-y frame-width frame-height)
+;;      (with-current-buffer (exwm--id->buffer id)
+;;        (when exwm--floating-frame
+;;          (setq frame-width (frame-pixel-width exwm--floating-frame)
+;;                frame-height (+ (frame-pixel-height exwm--floating-frame)
+;;                                ;; Use `frame-outer-height' in the future.
+;;                                exwm-workspace--frame-y-offset))
+;;          (when exwm--floating-frame-position
+;;            (setq frame-x (elt exwm--floating-frame-position 0)
+;;                  frame-y (elt exwm--floating-frame-position 1)
+;;                  x (+ x frame-x (- exwm-layout--floating-hidden-position))
+;;                  y (+ y frame-y (- exwm-layout--floating-hidden-position)))
+;;            (setq exwm--floating-frame-position nil))
+;;          (exwm--set-geometry (frame-parameter exwm--floating-frame
+;;                                               'exwm-container)
+;;                              frame-x frame-y frame-width frame-height))
+;;        (when (exwm-layout--fullscreen-p)
+;;          (with-slots ((x* x)
+;;                       (y* y)
+;;                       (width* width)
+;;                       (height* height))
+;;              (exwm-workspace--get-geometry exwm--frame)
+;;            (setq x x*
+;;                  y y*
+;;                  width width*
+;;                  height height*)))
+;;        ;; edited here
+;;	;; without this, centaur tabs tab bar not visible
+;;        (when
+;;              (and (not (bound-and-true-p centaur-tabs-local-mode))
+;;                 (not (exwm-layout--fullscreen-p))
+;;                 (or (bound-and-true-p centaur-tabs-mode)))
+;;		     (setq y (+ y centaur-tabs-height)))
+;;        (when (bound-and-true-p tab-line-mode) 
+;;	  (setq y (+ y 30))) ; guesswork number, but not sure what is better
+;;        ;; end edited here
+;;        (exwm--set-geometry id x y width height)
+;;        (xcb:+request exwm--connection (make-instance 'xcb:MapWindow :window id))
+;;        (exwm-layout--set-state id xcb:icccm:WM_STATE:NormalState)
+;;        (setq exwm--ewmh-state
+;;              (delq xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state))
+;;        (exwm-layout--set-ewmh-state id)
+;;        (exwm-layout--auto-iconify)))
+;;    (xcb:flush exwm--connection))
+;;;)
+;;
