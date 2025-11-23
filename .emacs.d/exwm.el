@@ -49,7 +49,7 @@
 (defun cc/exwm-randr-screen-change ()
   (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
   (setq cc/secondary (process-lines "sh" "-c" "xrandr | grep -v 'connected primary' | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
-  (setq cc/tertiary '("DP-1"))
+  (setq cc/tertiary '())
   (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
@@ -70,6 +70,47 @@
           ;; (lambda ()
             ;; (exwm-workspace-rename-buffer exwm-class-name)))
 (defun my/first-n-words (s n) (mapconcat (lambda (i) i) (seq-take (split-string s " ") n) " "))
+
+(defun exwm-current-workspace()
+  (exwm-workspace--position (exwm-workspace--workspace-from-frame-or-index (selected-frame))))
+
+(defun exwm-workspace-move-window-left ()
+  (let* ((ws (exwm-current-workspace))
+		 (new-ws 
+		  (if (<= ws 0)
+			  (- (length exwm-workspace--list) 1)
+			(- ws 1))))
+	(exwm-workspace-move-window new-ws)
+	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
+
+(defun exwm-workspace-move-window-right ()
+  (let* ((ws (exwm-current-workspace))
+		 (new-ws 
+		  (if (>= (length exwm-workspace--list) (+ ws 1)))
+			  0
+			(+ ws 1)))
+	(exwm-workspace-move-window new-ws)
+	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
+
+(defun exwm-workspace-switch-left ()
+  (interactive)
+  (let* ((ws (exwm-current-workspace))
+		 (new-ws 
+		  (if (<= ws 0)
+			  (- (length exwm-workspace--list) 1)
+			(- ws 1))))
+	(exwm-workspace-switch new-ws)))
+
+(defun exwm-workspace-switch-right ()
+  (interactive)
+  (let* ((ws (exwm-current-workspace))
+		 (new-ws 
+		  (if (>= (length exwm-workspace--list) (+ ws 1))
+			  0
+			(+ ws 1))))
+	(exwm-workspace-switch new-ws)))
+
+
 
 (defun cc/exwm-update-title ()
   (cond
@@ -117,13 +158,14 @@
       `(([?\s-r] . (lambda () (interactive) (exwm-reset) (message "line-mode"))) ;; s-r: Reset (to line-mode).
         ([?\s-k] . exwm-input-release-keyboard)
 	([?\s-z] . exwm-input-toggle-keyboard)
+	([?\s-c] . exwm-workspace-toggle-minibuffer)
 	(,(kbd "<f7>") . exwm-input-toggle-keyboard)
         ;; ([?\s-a] . (lambda () (interactive) (cc/exwm-toggle-show-all-buffers)))
         ;; ([?\s-k] . (lambda () (interactive) (exwm-input-release-keyboard) (message "char-mode")))
-        ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
-        ([?\s-&] . (lambda (cmd) ;; s-&: Launch application. 
-                     (interactive (list (read-shell-command "$ ")))
-                     (start-process-shell-command cmd nil cmd)))
+    ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
+    ([?\s-&] . (lambda (cmd) ;; s-&: Launch application. 
+                 (interactive (list (read-shell-command "$ ")))
+                 (start-process-shell-command cmd nil cmd)))
 	([f2] . (lambda () (interactive) (exwm-input-toggle-keyboard)))
 ;	([f2] . (lambda () (interactive) (my/toggle-line-char)))
 	([?\s-p] . (lambda () (interactive) (message (symbol-name exwm--input-mode))))
@@ -143,6 +185,9 @@
 	(,(kbd "M-<up>") . windmove-up)
 	(,(kbd "M-<down>") . windmove-down)
 
+	(,(kbd "S-M-<left>") . exwm-workspace-switch-left)
+	(,(kbd "S-M-<right>") . exwm-workspace-switch-right)
+
 	
 	(,(kbd "s-<left>") . (lambda () (interactive)
 						   (if exwm--floating-frame
@@ -161,10 +206,15 @@
 							   (exwm-floating-move 0 10)
 							 (buf-move-down))))
 
-	(,(kbd "S-s-<left>") . windmove-swap-states-left)
-	(,(kbd "S-s-<right>") . windmove-swap-states-right)
-	(,(kbd "S-s-<up>") . windmove-swap-states-up)
-	(,(kbd "S-s-<down>") . windmove-swap-states-down)
+	(,(kbd "S-s-<left>") . (lambda () (interactive)
+							 (exwm-workspace-move-window-left)))
+	(,(kbd "S-s-<right>") . (lambda () (interactive)
+							 (exwm-workspace-move-window-right)))
+
+;	(,(kbd "S-s-<left>") . windmove-swap-states-left)
+;	(,(kbd "S-s-<right>") . windmove-swap-states-right)
+;	(,(kbd "S-s-<up>") . windmove-swap-states-up)
+;	(,(kbd "S-s-<down>") . windmove-swap-states-down)
 
 ;	(,(kbd "C-<left>") . shrink-window-horizontally)
 ;	(,(kbd "C-<right>") . enlarge-window-horizontally)
@@ -499,3 +549,6 @@ The DWIM behaviour of this command is as follows:
 ;;    (xcb:flush exwm--connection))
 ;;;)
 ;;
+
+(setq exwm-workspace-minibuffer-position 'bottom)
+
