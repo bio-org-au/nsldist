@@ -2,6 +2,7 @@
 (require 'exwm)
 (require 'exwm-systemtray)
 (require 'exwm-randr)
+(require 'buffer-move)
 
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/exwm")
@@ -25,7 +26,7 @@
        (cc/build-workspaces (cdr l) (+ n 1))
      nil)))
 
-;; (setq exwm-input-prefix-keys
+;; (setq exwm-input-prefix-keysy
 ;;     '(?\C-x
 ;;       ?\C-u
 ;;       ?\C-h
@@ -77,40 +78,54 @@
 (defun exwm-workspace-move-window-left ()
   (let* ((ws (exwm-current-workspace))
 		 (new-ws 
-		  (if (<= ws 0)
-			  (- (length exwm-workspace--list) 1)
-			(- ws 1))))
+		  (if (< 0 ws)
+			(- ws 1)
+			(- (length exwm-workspace--list) 1))))
 	(exwm-workspace-move-window new-ws)
-	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
+	(exwm-workspace-switch new-ws)))
+;;	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
 
 (defun exwm-workspace-move-window-right ()
   (let* ((ws (exwm-current-workspace))
 		 (new-ws 
-		  (if (>= (length exwm-workspace--list) (+ ws 1)))
+		  (if (<= (length exwm-workspace--list) (+ ws 1))
 			  0
-			(+ ws 1)))
+			(+ ws 1))))
 	(exwm-workspace-move-window new-ws)
-	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
+	(exwm-workspace-switch new-ws)))
+;;-	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
 
 (defun exwm-workspace-switch-left ()
   (interactive)
   (let* ((ws (exwm-current-workspace))
 		 (new-ws 
-		  (if (<= ws 0)
-			  (- (length exwm-workspace--list) 1)
-			(- ws 1))))
+		  (if (< 0 ws)
+			  (- ws 1)
+			  (- (length exwm-workspace--list) 1))))
+	(message "switched from workspace %s to %s of %s" ws new-ws (length exwm-workspace--list))
 	(exwm-workspace-switch new-ws)))
 
 (defun exwm-workspace-switch-right ()
   (interactive)
   (let* ((ws (exwm-current-workspace))
 		 (new-ws 
-		  (if (>= (length exwm-workspace--list) (+ ws 1))
+		  (if (<= (length exwm-workspace--list) (+ ws 1))
 			  0
-			(+ ws 1))))
+			  (+ ws 1))))
+	(message "switched from workspace %s to %s of %s" ws new-ws (length exwm-workspace--list))
 	(exwm-workspace-switch new-ws)))
 
+(defun exwm-buf-move-window-left ()
+  (interactive)
+  (if (null (windmove-find-other-window 'left))
+	(exwm-workspace-move-window-left)
+	(buf-move-left)))
 
+(defun exwm-buf-move-window-right ()
+  (interactive)
+  (if (null (windmove-find-other-window 'right))
+	  (exwm-workspace-move-window-right)
+	  (buf-move-right)))
 
 (defun cc/exwm-update-title ()
   (cond
@@ -192,11 +207,11 @@
 	(,(kbd "s-<left>") . (lambda () (interactive)
 						   (if exwm--floating-frame
 							   (exwm-floating-move -10 0)
-							 (buf-move-left))))
+							 (exwm-buf-move-window-left))))
 	(,(kbd "s-<right>") . (lambda () (interactive)
 						   (if exwm--floating-frame
 							   (exwm-floating-move 10 0)
-							 (buf-move-right))))
+							 (exwm-buf-move-window-right))))
 	(,(kbd "s-<up>") . (lambda () (interactive)
 						   (if exwm--floating-frame
 							   (exwm-floating-move 0 -10)
@@ -551,4 +566,5 @@ The DWIM behaviour of this command is as follows:
 ;;
 
 (setq exwm-workspace-minibuffer-position 'bottom)
+
 
