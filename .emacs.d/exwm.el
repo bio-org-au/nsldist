@@ -75,25 +75,63 @@
 (defun exwm-current-workspace()
   (exwm-workspace--position (exwm-workspace--workspace-from-frame-or-index (selected-frame))))
 
+(defun prompt-workspace (current-prefix-arg)
+  (list
+   (cond
+    ((null current-prefix-arg)
+     (let ((exwm-workspace--prompt-add-allowed t)
+           (exwm-workspace--prompt-delete-allowed t))
+       (exwm-workspace--prompt-for-workspace "Move to [+/-]: ")))
+    ((and (integerp current-prefix-arg)
+                       (<= 0 current-prefix-arg (exwm-workspace--count)))
+     current-prefix-arg)
+    (t 0))))
+
+(defun exwm-workspace-move-buffer (frame-or-index)
+  (interactive (prompt-workspace current-prefix-arg))
+  (let ((buffer (current-buffer))
+		(old-ws (exwm-current-workspace)))
+	(previous-buffer)
+	(exwm-workspace-switch frame-or-index)
+	(switch-to-buffer buffer)))
+   
+(defun exwm-workspace-move-buffer-or-window (frame-or-index)
+  (interactive (prompt-workspace current-prefix-arg))
+  (if exwm--id
+	  (exwm-workspace-move-window frame-or-index)
+	(exwm-workspace-move-buffer frame-or-index)))
+
 (defun exwm-workspace-move-window-left ()
+  (let ((ws (exwm-current-workspace)))
+	(if (< 0 ws)
+		(let ((new-ws (- ws 1)))
+		  (exwm-workspace-move-buffer-or-window new-ws)
+		  (exwm-workspace-switch new-ws)))))
+	
+(defun exwm-workspace-move-window-left-wrap ()
   (let* ((ws (exwm-current-workspace))
 		 (new-ws 
 		  (if (< 0 ws)
 			(- ws 1)
 			(- (length exwm-workspace--list) 1))))
-	(exwm-workspace-move-window new-ws)
+	(exwm-workspace-move-buffer-or-window new-ws)
 	(exwm-workspace-switch new-ws)))
-;;	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
 
 (defun exwm-workspace-move-window-right ()
+  (let ((ws (exwm-current-workspace)))
+	(if (< (+ ws 1) (length exwm-workspace--list))
+		(let ((new-ws (+ ws 1)))
+		  (exwm-workspace-move-buffer-or-window new-ws)
+		  (exwm-workspace-switch new-ws)))))
+
+(defun exwm-workspace-move-window-right-wrap ()
   (let* ((ws (exwm-current-workspace))
 		 (new-ws 
-		  (if (<= (length exwm-workspace--list) (+ ws 1))
-			  0
-			(+ ws 1))))
-	(exwm-workspace-move-window new-ws)
+		  (if (< (+ ws 1) (length exwm-workspace--list))
+			  (+ ws 1)
+			  0)))
+	(exwm-workspace-move-buffer-or-window new-ws)
 	(exwm-workspace-switch new-ws)))
-;;-	(run-with-idle-timer 0.25 nil (lambda() (exwm-workspace-switch new-ws)))))
 
 (defun exwm-workspace-switch-left ()
   (interactive)

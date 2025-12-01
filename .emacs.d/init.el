@@ -5,6 +5,7 @@
 (setq-default indent-tabs-mode t)
 (setq-default tab-width 4)
 (setq standard-indent 4)
+(setq buffer-move-behavior 'move)
 
 (global-set-key "\C-x\C-b" 'buffer-menu)
 (defun efs/run-in-background (command)
@@ -718,3 +719,4 @@ function."
 ;(add-hook 'kill-buffer-hook 'cc/refresh-buffer-list)
 
 
+;(apply 'append (mapcar #'window-list (frame-list)))
