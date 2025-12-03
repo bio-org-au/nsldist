@@ -25,4 +25,5 @@ PERL_LOCAL_LIB_ROOT="/c/Users/chris/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LI
 PERL_MB_OPT="--install_base \"/c/Users/chris/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/c/Users/chris/perl5"; export PERL_MM_OPT;
 
-deadmansswitch
+deadmansswitch &
+sleep 1

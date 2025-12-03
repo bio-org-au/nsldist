@@ -45,18 +45,36 @@
 ;; Set the initial workspace number.
 
 ;(setq cc/arandr-file nil)
-;(if cc/arandr-file (start-process-shell-command nil (format "~/.screenlayout/%s.sh" cc/arandr-file)))
+;(if cc/arandr-file (start-process-shell-command nil (format "~/.screenlayout/%s.sh" cc/arandr-file))) 
 
 (defun cc/exwm-randr-screen-change ()
+  (start-process-shell-command "autorandr" nil "autorandr --change" )
   (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
   (setq cc/secondary (process-lines "sh" "-c" "xrandr | grep -v 'connected primary' | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
   (setq cc/tertiary '())
   (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
-  (start-process-shell-command "autorandr" nil "autorandr --change" )
-  )
- ;; (let ((first (car cc/screen-list))
+  (let* ((last-ws (car (car (last exwm-randr-workspace-monitor-alist))))
+		 (last-plus (+ last-ws 1)))
+	(exwm-workspace-switch-create last-ws)
+	(exwm-workspace-switch-create 0)
+	(while (< last-plus (length exwm-workspace--list))
+	  (exwm-workspace-delete last-plus))))
+;  (exwm-randr-refresh))
+
+
+;  (run-with-timer 5 nil
+;				  (lambda ()
+;  (if (boundp 'exwm-randr-workspace-monitor-alist)
+;	  (setq old-workspace-monitor-alist exwm-randr-workspace-monitor-alist))
+;  (dolist (screen (cdr exwm-randr-workspace-monitor-alist))
+;	(if (<= (length exwm-workspace--list) (car screen))
+;		(exwm-workspace-switch-create (car screen))))
+;  (if (boundp 'old-workspace-monitor-alist)
+;	  (let ((deleted-workspaces (seq-filter (lambda (c) (not (assoc (car c) exwm-randr-workspace-monitor-alist))) old-workspace-monitor-alist)))
+;		(dolist (screen deleted-workspaces)
+;; (let ((first (car cc/screen-list))
 	;; (rest (cdr cc/screen-list)))
     ;; (dolist (screen rest)
       ;; (start-process-shell-command "xrandr" nil (format "xrandr --output %s --left-of %s --auto" screen first))))
@@ -459,8 +477,7 @@
 
 
 (defun cc/exwm-init ()
-  (dolist (screen (cdr exwm-randr-workspace-monitor-alist)) 
-    (exwm-workspace-switch-create (car screen))) 
+  (cc/exwm-randr-screen-change)
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "nm-applet")
@@ -706,7 +723,7 @@ The DWIM behaviour of this command is as follows:
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
   (start-process-shell-command "autorandr" nil "autorandr --change" )
-  )
+  (exwm-randr-refresh))
  ;; (let ((first (car cc/screen-list))
 	;; (rest (cdr cc/screen-list)))
     ;; (dolist (screen rest)
@@ -1073,9 +1090,8 @@ The DWIM behaviour of this command is as follows:
 
 
 (defun cc/exwm-init ()
-  (dolist (screen (cdr exwm-randr-workspace-monitor-alist)) 
-    (exwm-workspace-switch-create (car screen))) 
-  ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
+;  (cc/exwm-randr-screen-change)
+  (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "nm-applet")
   (efs/run-in-background "insync start")
@@ -1283,7 +1299,7 @@ The DWIM behaviour of this command is as follows:
 (setq exwm-workspace-minibuffer-position 'bottom)
 
 
-exwm-layout--fullscreen-p))
+;;exwm-layout--fullscreen-p))
 ;;                 (or (bound-and-true-p centaur-tabs-mode)))
 ;;		     (setq y (+ y centaur-tabs-height)))
 ;;        (when (bound-and-true-p tab-line-mode) 
