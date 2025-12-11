@@ -18,6 +18,7 @@
 
 (setq exwm-layout-show-all-buffers t)
 (setq exwm-workspace-show-all-buffers t)
+(setq exwm-workspace-minibuffer-position 'top) 
 
 (defun cc/build-workspaces (l n)
   (cons
@@ -26,7 +27,7 @@
        (cc/build-workspaces (cdr l) (+ n 1))
      nil)))
 
-;; (setq exwm-input-prefix-keysy
+;; (setq exwm-input-prefix-keys
 ;;     '(?\C-x
 ;;       ?\C-u
 ;;       ?\C-h
@@ -314,6 +315,12 @@
 	([?\s-e] . exwm-layout-toggle-fullscreen)
 	([?\s-g] . exwm-input-grab-keyboard)
 	([?\s-m] . exwm-workspace-move-window)
+
+	(,(kbd "s-x s-b") . exwm-workspace-switch-right)
+
+	;; (,(kbd "s-<f11>") . exwm-layout-toggle-fullscreen)
+	;; (,(kbd "<f11>") . exwm-layout-toggle-fullscreen)
+
 	(,(kbd "M-<left>") . exwm-windmove-left)
 	(,(kbd "M-<right>") . exwm-windmove-right)
 	(,(kbd "M-<up>") . windmove-up)
@@ -924,7 +931,7 @@ The DWIM behaviour of this command is as follows:
 	([?\s-`] . bury-buffer)
 	([?\s-h] . exwm-floating-hide)
 	([?\s-f] . exwm-floating-toggle-floating)
-	([?\s-e] . exwm-layout-toggle-fullscreen)
+	([?\s-a] . exwm-layout-toggle-fullscreen)
 	([?\s-g] . exwm-input-grab-keyboard)
 	([?\s-m] . exwm-workspace-move-window)
 	(,(kbd "M-<left>") . exwm-windmove-left)
@@ -1296,7 +1303,6 @@ The DWIM behaviour of this command is as follows:
 ;;;)
 ;;
 
-(setq exwm-workspace-minibuffer-position 'bottom)
 
 
 ;;exwm-layout--fullscreen-p))
@@ -1316,6 +1322,6 @@ The DWIM behaviour of this command is as follows:
 ;;;)
 ;;
 
-(setq exwm-workspace-minibuffer-position 'bottom)
+
 
 

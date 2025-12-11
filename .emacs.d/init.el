@@ -90,10 +90,34 @@ There are two things you can do about this warning:
       (cygwin-mount-activate)))
 
 ;(require 'thing-cmds)
-;(thgcmd-bind-keys)
+										;(thgcmd-bind-keys)
+
+;; (defun cc/toggle-maximise ()
+  ;; (interactive)
+  ;; (if (eq (count-windows) 1)
+	  ;; (tab-bar-history-back)
+	;; (delete-other-windows)))
+
+;(defun cc/toggle-maximise ()
+;  (interactive)
+;  (if (one-window-p)
+;	  (winner-undo)
+										;	(delete-other-windows)))
+
+(defvar cc/toggled-windows nil)
+(defun cc/toggle-maximise ()
+  (interactive)
+  (if (and (one-window-p) cc/toggled-windows)
+      (window-state-put cc/toggled-windows)
+    (progn (setq cc/toggled-windows (window-state-get))
+		   (delete-other-windows))))
 
 (require 'avy)
+;(global-set-key (kbd "s-<f11>") 'cc/toggle-maximise)
+;(global-set-key (kbd "<f11>") 'cc/toggle-maximise)
+
 (global-set-key (kbd "C-:") 'avy-goto-char)
+
 (global-set-key (kbd "C-'") 'avy-goto-char-2)
 (global-set-key (kbd "M-g f") 'avy-goto-line)
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
@@ -173,9 +197,11 @@ There are two things you can do about this warning:
 (keymap-global-set "M-<up>" 'windmove-up)
 (keymap-global-set "M-<down>" 'windmove-down)
 
-(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
+;(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
+(define-key global-map (kbd "C-g") 'keyboard-quit)
 
-
+(define-key key-translation-map (kbd "<escape>") (kbd "C-g"))
+(define-key key-translation-map (kbd "s-<escape>") (kbd "<escape>"))
 
 (add-to-list 'auto-mode-alist '("\\.gsp\\'" . xml-mode))
 
@@ -445,6 +471,7 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 ;(require 'treemacs)
 
 (winner-mode 1)
+;(tab-bar-history-mode 1)
 
 
 (set-face-attribute 'default nil :font "Fira Code-12")

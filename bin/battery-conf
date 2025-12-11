@@ -1,0 +1,2 @@
+sudo vi /etc/tlp.conf
+sudo systemctl restart tlp
