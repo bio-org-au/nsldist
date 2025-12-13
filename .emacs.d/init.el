@@ -69,9 +69,21 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "FreeMono" :foundry "GNU " :slant normal :weight bold :height 143 :width normal))))
+ '(font-lock-comment-delimiter-face ((t (:foreground "#808080"))))
+ '(font-lock-comment-face ((t (:foreground "#808080" :slant oblique))))
+ '(font-lock-constant-face ((t (:foreground "#6897bb" :weight bold))))
+ '(font-lock-function-name-face ((t (:foreground "white" :weight normal))))
+ '(font-lock-keyword-face ((t (:foreground "#CC7832"))))
+ '(font-lock-string-face ((t (:foreground "#6a8759"))))
+ '(font-lock-type-face ((t (:foreground "white"))))
+ '(font-lock-variable-name-face ((t (:foreground "#9676aa"))))
+ '(groovy-annotation-face ((t (:inherit font-lock-constant-face :foreground "#bbb429"))))
  '(mode-line ((t (:background "#330000" :foreground "white" :box (:line-width (1 . -1) :style released-button) :height 0.9))))
  '(mode-line-buffer-id ((t (:background "black" :distant-foreground "gold" :foreground "white" :weight bold :height 0.9))))
  '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9))))
+ '(nxml-attribute-local-name ((t (:inherit font-lock-variable-name-face :foreground "#bababa"))))
+ '(nxml-element-local-name ((t (:inherit font-lock-function-name-face :foreground "#e8bf6a"))))
+ '(rng-error ((t (:inherit font-lock-warning-face :foreground "#cc7832"))))
  '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "light gray")))))
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
