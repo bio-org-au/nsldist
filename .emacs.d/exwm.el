@@ -315,8 +315,8 @@
 	([?\s-e] . exwm-layout-toggle-fullscreen)
 	([?\s-g] . exwm-input-grab-keyboard)
 	([?\s-m] . exwm-workspace-move-window)
+	([?\s-b] . buffer-menu)
 
-	(,(kbd "s-x s-b") . exwm-workspace-switch-right)
 
 	;; (,(kbd "s-<f11>") . exwm-layout-toggle-fullscreen)
 	;; (,(kbd "<f11>") . exwm-layout-toggle-fullscreen)

@@ -209,6 +209,9 @@ There are two things you can do about this warning:
 (keymap-global-set "M-<up>" 'windmove-up)
 (keymap-global-set "M-<down>" 'windmove-down)
 
+(keymap-global-set "s-b" 'buffer-menu)
+
+
 ;(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 (define-key global-map (kbd "C-g") 'keyboard-quit)
 
@@ -641,7 +644,8 @@ function."
          (window (posn-window posnp))
          (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
     (bury-buffer buffer)))
-  
+
+;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36	
 (defun tab-line-kill-tab (&optional e)
   "Close the selected tab.
 If tab is presented in another window, close the tab by using
@@ -658,13 +662,13 @@ function."
 (define-advice tab-line-close-tab (:around (orig-fn &rest args) force-right-tab)
   "Close the current tab and select the tab to its right, or the first tab if the rightmost was closed."
   (let* ((current-tab-buffer (current-buffer))
-         (tab-buffers (tab-line-tabs))
+         (tab-buffers (tab-line-tabs-window-buffers)) ;cjb
          (current-tab-index (cl-position current-tab-buffer tab-buffers)))
     ;; Call the original close function
     (apply orig-fn args)
     ;; If there are still tabs left
-    (when (tab-line-tabs)
-      (let* ((new-tab-buffers (tab-line-tabs))
+    (when (tab-line-tabs-window-buffers) ; cjb
+      (let* ((new-tab-buffers (tab-line-tabs-window-buffers)) ;cjb
              (next-tab-index (if (>= current-tab-index (length new-tab-buffers))
                                  0 ; Wrap around to the first tab if the rightmost was closed
                                current-tab-index))
@@ -759,3 +763,7 @@ function."
 
 
 ;(apply 'append (mapcar #'window-list (frame-list)))
+
+(setq project-vc-merge-submodules nil)
+(setq project-mode-line t)
+ 
