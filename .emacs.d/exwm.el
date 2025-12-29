@@ -674,10 +674,6 @@ The DWIM behaviour of this command is as follows:
 ;;        (when
 ;;              (and (not (bound-and-true-p centaur-tabs-local-mode))
 ;;                 (not ((setenv "_JAVA_AWT_WM_NONREPARENTING" "1")
-(require 'exwm)
-(require 'exwm-systemtray)
-(require 'exwm-randr)
-(require 'buffer-move)
 
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
 ;(add-to-list 'load-path "/usr/share/emacs/site-lisp/exwm")

@@ -528,7 +528,8 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 			:background hg
 			:weight 'normal
 			:inherit nil
-			:box (list :line-width box-width :color hg))))
+			:box (list :line-width box-width :color hg))
+	))
 
 
 (defun my/tab-line-name-buffer (buffer &rest _buffers)
