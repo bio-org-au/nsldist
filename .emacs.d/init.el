@@ -632,14 +632,9 @@ function."
       )))
 
     
-    (defun tab-line-bury-tab (&optional e)
-  "Close the selected tab.
-
-If tab is presented in another window, close the tab by using
-`bury-buffer` function.  If tab is unique to all existing
-windows, kill the buffer with `kill-buffer` function.  Lastly, if
-no tabs left in the window, it is deleted with `delete-window`
-function."
+(defun tab-line-bury-tab (&optional e)
+  "Bury the selected tab.
+"
   (interactive "e")
   (let* ((posnp (event-start e))
          (window (posn-window posnp))
@@ -648,12 +643,8 @@ function."
 
 ;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36	
 (defun tab-line-kill-tab (&optional e)
-  "Close the selected tab.
-If tab is presented in another window, close the tab by using
-`bury-buffer` function.  If tab is unique to all existing
-windows, kill the buffer with `kill-buffer` function.  Lastly, if
-no tabs left in the window, it is deleted with `delete-window`
-function."
+  "Kill the selected tab.
+"
   (interactive "e")
   (let* ((posnp (event-start e))
          (window (posn-window posnp))
