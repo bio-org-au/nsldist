@@ -84,7 +84,9 @@ There are two things you can do about this warning:
  '(nxml-attribute-local-name ((t (:inherit font-lock-variable-name-face :foreground "#bababa"))))
  '(nxml-element-local-name ((t (:inherit font-lock-function-name-face :foreground "#e8bf6a"))))
  '(rng-error ((t (:inherit font-lock-warning-face :foreground "#cc7832"))))
- '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "light gray")))))
+ '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "light gray"))))
+ '(tab-line-highlight ((t (:inherit nil :background "midnight blue" :foreground "WhiteSmoke" :box (:line-width (5 . 5) :color "black") :weight normal))))
+ '(tab-line-tab-current ((t (:inherit nil :background "dark green" :foreground "WhiteSmoke" :box (:line-width (5 . 5) :color "black") :weight normal)))))
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
 
