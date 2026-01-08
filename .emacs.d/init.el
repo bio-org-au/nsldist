@@ -63,35 +63,6 @@ There are two things you can do about this warning:
 				   winner-mode-enable xah-get-thing yaml-mode))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "FreeMono" :foundry "GNU " :slant normal :weight bold :height 143 :width normal))))
- '(font-lock-comment-delimiter-face ((t (:foreground "#808080"))))
- '(font-lock-comment-face ((t (:foreground "#808080" :slant oblique))))
- '(font-lock-constant-face ((t (:foreground "#6897bb" :weight bold))))
- '(font-lock-function-name-face ((t (:foreground "white" :weight normal))))
- '(font-lock-keyword-face ((t (:foreground "#CC7832"))))
- '(font-lock-string-face ((t (:foreground "#6a8759"))))
- '(font-lock-type-face ((t (:foreground "white"))))
- '(font-lock-variable-name-face ((t (:foreground "#9676aa"))))
- '(groovy-annotation-face ((t (:inherit font-lock-constant-face :foreground "#bbb429"))))
- '(minibuffer-prompt ((t (:background "tomato4" :foreground "white"))))
- '(mode-line ((t (:background "#330000" :foreground "white" :box (:line-width (1 . -1) :style released-button) :height 0.9))))
- '(mode-line-active ((t (:inherit nil :background "dim gray"))))
- '(mode-line-buffer-id ((t (:background "black" :distant-foreground "gold" :foreground "white" :weight bold :height 0.9))))
- '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9))))
- '(nxml-attribute-local-name ((t (:inherit font-lock-variable-name-face :foreground "#bababa"))))
- '(nxml-element-local-name ((t (:inherit font-lock-function-name-face :foreground "#e8bf6a"))))
- '(rng-error ((t (:inherit font-lock-warning-face :foreground "#cc7832"))))
- '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "light gray"))))
- '(tab-line ((t (:inherit variable-pitch :background "gray14" :foreground "white" :box (:line-width (3 . 3) :color "gray14" :style released-button) :height 0.9))))
- '(tab-line-highlight ((t (:inherit nil :background "midnight blue" :foreground "WhiteSmoke" :box (:line-width (5 . 5) :color "black") :weight normal))))
- '(tab-line-tab ((t (:inherit nil :background "#440000" :foreground "WhiteSmoke" :box (:line-width (3 . 3) :color "pale goldenrod" :style released-button) :weight normal))))
- '(tab-line-tab-current ((t (:inherit nil :background "tomato4" :foreground "WhiteSmoke" :box (:line-width (3 . 3) :color "gold") :weight normal))))
- '(tab-line-tab-inactive ((t (:background "gray14" :foreground "white")))))
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
 
@@ -768,3 +739,33 @@ function."
 (setq project-vc-merge-submodules nil)
 (setq project-mode-line t)
  
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "FreeMono" :foundry "GNU " :slant normal :weight bold :height 143 :width normal))))
+ '(font-lock-comment-delimiter-face ((t (:foreground "#808080"))))
+ '(font-lock-comment-face ((t (:foreground "#808080" :slant oblique))))
+ '(font-lock-constant-face ((t (:foreground "#6897bb" :weight bold))))
+ '(font-lock-function-name-face ((t (:foreground "white" :weight normal))))
+ '(font-lock-keyword-face ((t (:foreground "#CC7832"))))
+ '(font-lock-string-face ((t (:foreground "#6a8759"))))
+ '(font-lock-type-face ((t (:foreground "white"))))
+ '(font-lock-variable-name-face ((t (:foreground "#9676aa"))))
+ '(groovy-annotation-face ((t (:inherit font-lock-constant-face :foreground "#bbb429"))))
+ '(minibuffer-prompt ((t (:background "tomato4" :foreground "white"))))
+ '(mode-line ((t (:background "gray14" :foreground "white" :box (:line-width (1 . -1) :style released-button) :height 0.9))))
+ '(mode-line-active ((t (:inherit mode-line :background "tomato4"))))
+ '(mode-line-buffer-id ((t (:weight bold :height 0.9))))
+ '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9))))
+ '(nxml-attribute-local-name ((t (:inherit font-lock-variable-name-face :foreground "#bababa"))))
+ '(nxml-element-local-name ((t (:inherit font-lock-function-name-face :foreground "#e8bf6a"))))
+ '(rng-error ((t (:inherit font-lock-warning-face :foreground "#cc7832"))))
+ '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "light gray"))))
+ '(tab-line ((t (:inherit variable-pitch :background "gray14" :foreground "white" :box (:line-width (3 . 3) :color "gray14" :style released-button) :height 0.9))))
+ '(tab-line-highlight ((t (:inherit nil :background "midnight blue" :foreground "WhiteSmoke" :box (:line-width (5 . 5) :color "black") :weight normal))))
+ '(tab-line-tab ((t (:inherit nil :background "#440000" :foreground "WhiteSmoke" :box (:line-width (3 . 3) :color "pale goldenrod" :style released-button) :weight normal))))
+ '(tab-line-tab-current ((t (:inherit nil :background "tomato4" :foreground "WhiteSmoke" :box (:line-width (3 . 3) :color "gold") :weight normal))))
+ '(tab-line-buffer-id ((t (:inherit tab-line :background "blue"))))
+ '(tab-line-tab-inactive ((t (:background "gray14" :foreground "white")))))
