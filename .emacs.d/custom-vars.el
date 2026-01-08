@@ -15,7 +15,7 @@
  '(groovy-annotation-face ((t (:inherit font-lock-constant-face :foreground "#bbb429"))))
  '(minibuffer-prompt ((t (:background "tomato4" :foreground "white"))))
  '(mode-line ((t (:background "gray14" :foreground "white" :box (:line-width (1 . -1) :style released-button) :height 0.9))))
- '(mode-line-active ((t (:inherit mode-line :background "tomato4"))))
+ '(mode-line-active ((t (:inherit mode-line :background "tomato4" :box (:line-width (3 . 3) :color "gold" :style released-button)))))
  '(mode-line-buffer-id ((t (:weight bold :height 0.9))))
  '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9))))
  '(nxml-attribute-local-name ((t (:inherit font-lock-variable-name-face :foreground "#bababa"))))
