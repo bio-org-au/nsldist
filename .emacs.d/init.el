@@ -78,15 +78,20 @@ There are two things you can do about this warning:
  '(font-lock-type-face ((t (:foreground "white"))))
  '(font-lock-variable-name-face ((t (:foreground "#9676aa"))))
  '(groovy-annotation-face ((t (:inherit font-lock-constant-face :foreground "#bbb429"))))
+ '(minibuffer-prompt ((t (:background "tomato4" :foreground "white"))))
  '(mode-line ((t (:background "#330000" :foreground "white" :box (:line-width (1 . -1) :style released-button) :height 0.9))))
+ '(mode-line-active ((t (:inherit nil :background "dim gray"))))
  '(mode-line-buffer-id ((t (:background "black" :distant-foreground "gold" :foreground "white" :weight bold :height 0.9))))
  '(mode-line-inactive ((t (:background "gray14" :foreground "white" :box (:line-width (1 . 1) :color "gray40") :weight light :height 0.9))))
  '(nxml-attribute-local-name ((t (:inherit font-lock-variable-name-face :foreground "#bababa"))))
  '(nxml-element-local-name ((t (:inherit font-lock-function-name-face :foreground "#e8bf6a"))))
  '(rng-error ((t (:inherit font-lock-warning-face :foreground "#cc7832"))))
  '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "light gray"))))
+ '(tab-line ((t (:inherit variable-pitch :background "gray14" :foreground "white" :box (:line-width (3 . 3) :color "gray14" :style released-button) :height 0.9))))
  '(tab-line-highlight ((t (:inherit nil :background "midnight blue" :foreground "WhiteSmoke" :box (:line-width (5 . 5) :color "black") :weight normal))))
- '(tab-line-tab-current ((t (:inherit nil :background "dark green" :foreground "WhiteSmoke" :box (:line-width (5 . 5) :color "black") :weight normal)))))
+ '(tab-line-tab ((t (:inherit nil :background "#440000" :foreground "WhiteSmoke" :box (:line-width (3 . 3) :color "pale goldenrod" :style released-button) :weight normal))))
+ '(tab-line-tab-current ((t (:inherit nil :background "tomato4" :foreground "WhiteSmoke" :box (:line-width (3 . 3) :color "gold") :weight normal))))
+ '(tab-line-tab-inactive ((t (:background "gray14" :foreground "white")))))
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
 
@@ -485,8 +490,10 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 (define-key vterm-mode-map (kbd "M-<up>") nil)
 (define-key vterm-mode-map (kbd "M-<down>") nil)
 
-;(require 'treemacs)
+(setq vterm-kill-buffer-on-exit t)
+(setq confirm-kill-processes nil)
 
+;(require 'treemacs)
 (winner-mode 1)
 ;(tab-bar-history-mode 1)
 
