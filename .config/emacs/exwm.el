@@ -484,6 +484,7 @@
 
 
 (defun cc/exwm-init ()
+  (load custom-file 'noerror)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   (efs/run-in-background "~/.config/polybar/launch.sh")
