@@ -1,1 +1,2 @@
-exec emacs --maximized --debug-init -l ~/.emacs.d/exwm.el
+#!/bin/sh
+exec emacs --maximized --debug-init -l ~/.config/emacs/exwm.el

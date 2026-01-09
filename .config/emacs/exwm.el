@@ -2,10 +2,10 @@
 (require 'exwm)
 (require 'exwm-systemtray)
 (require 'exwm-randr)
-(require 'buffer-move)
+;;(require 'buffer-move)
 
-;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
-;(add-to-list 'load-path "/usr/share/emacs/site-lisp/exwm")
+;;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
+;;(add-to-list 'load-path "/usr/share/emacs/site-lisp/exwm")
 
 (defun cc/exwm-show-all-buffers (b)
   ;; Automatically move EXWM buffer to current workspace when selected
@@ -484,7 +484,7 @@
 
 
 (defun cc/exwm-init ()
-  (cc/exwm-randr-screen-change)
+  (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "nm-applet")
@@ -552,8 +552,8 @@
 
 ;(efs/run-in-background "jetbrains-toolbox")
 
-(require 'fancy-battery)
-(fancy-battery-mode)
+;;(require 'fancy-battery)
+;;(fancy-battery-mode)
 
 (exwm-input-set-key
  (kbd "<XF86AudioLowerVolume>")
@@ -675,8 +675,6 @@ The DWIM behaviour of this command is as follows:
 ;;              (and (not (bound-and-true-p centaur-tabs-local-mode))
 ;;                 (not ((setenv "_JAVA_AWT_WM_NONREPARENTING" "1")
 
-;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
-;(add-to-list 'load-path "/usr/share/emacs/site-lisp/exwm")
 
 (defun cc/exwm-show-all-buffers (b)
   ;; Automatically move EXWM buffer to current workspace when selected
@@ -1093,7 +1091,7 @@ The DWIM behaviour of this command is as follows:
 
 
 (defun cc/exwm-init ()
-;  (cc/exwm-randr-screen-change)
+  (cc/exwm-randr-screen-change) ;; make sure we set the primary before we launch other stuff
   (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "nm-applet")
@@ -1161,8 +1159,8 @@ The DWIM behaviour of this command is as follows:
 
 ;(efs/run-in-background "jetbrains-toolbox")
 
-(require 'fancy-battery)
-(fancy-battery-mode)
+;;(require 'fancy-battery)
+;;(fancy-battery-mode)
 
 (exwm-input-set-key
  (kbd "<XF86AudioLowerVolume>")

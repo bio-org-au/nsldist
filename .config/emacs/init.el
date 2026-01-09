@@ -1,7 +1,8 @@
 ; MELPA package library https://melpa.org/#/getting-started
 ;(setq debug-on-error t)
 					;(setq debug-on-message "Package cl is deprecated")
-
+(setq user-emacs-directory "~/.config/emacs")
+(setq package-user-dir "~/local/share/emacs/elpa")
 (setq-default indent-tabs-mode t)
 (setq-default tab-width 4)
 (setq standard-indent 4)
@@ -34,8 +35,10 @@ There are two things you can do about this warning:
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
 
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-(add-to-list 'load-path "~/.emacs.d/lisp/treemacs/")
+(add-to-list 'load-path (expand-file-name "lisp;" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/treemacs/" user-emacs-directory))
+;(add-to-list 'load-path "~/.config/emacs/lisp/")
+;(add-to-list 'load-path "~/.config/emacs/lisp/treemacs/")
 
 (setq *win32* (eq system-type 'windows-nt) )
 ;(if window-system (color-scheme-blah))
@@ -182,7 +185,7 @@ There are two things you can do about this warning:
 ;(windmove-find-other-window 'right)
 
 ;;; use groovy-mode when file ends in .groovy or has #!/bin/groovy at start
-;(add-to-list 'load-path "~/.emacs.d/lisp/vendor/groovy-mode")
+;(add-to-list 'load-path "~/.config/emacs/lisp/vendor/groovy-mode")
 ;(autoload 'groovy-mode "groovy-mode" "Major mode for editing Groovy code." t)
 ;(add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
 ;(add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))

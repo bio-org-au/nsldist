@@ -1,6 +1,8 @@
+#!/bin/sh
 
+USER_EMACS_DIRECTORY=$HOME/.config/emacs
 test -f ~/.bashrc && source ~/.bashrc
-test -f ~/.emacs.d/exwm/Xresources && xrdb ~/.emacs.d/exwm/Xresources
+test -f $USER_EMACS_DIRECTORY/exwm/Xresources && xrdb $USER_EMACS_DIRECTORY/exwm/Xresources
 
 #xhost +
 
@@ -10,8 +12,8 @@ xscreensaver --no-splash &
 
 dconf dump /net/launchpad/plank/docks/ > ~/.config/plank/docks.ini
 
-#exec emacs --maximized --debug-init -l ~/.emacs.d/exwm.el
-exec exwm
+emacs --maximized --debug-init -l $USER_EMACS_DIRECTORY/exwm.el
+#exec exwm
 
 #konsole
-#xterm
+##xterm
