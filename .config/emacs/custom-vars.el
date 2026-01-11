@@ -57,6 +57,6 @@
 				   lsp-java lsp-javacomp lsp-mode lsp-ui magit
 				   mark-thing-at melpa-upstream-visit neotree
 				   projectile simple-httpd slime treesit-auto vterm
-				   winner-mode-enable xah-get-thing yaml-mode))
+				   winner-mode-enable xah-get-thing xelb yaml-mode))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))

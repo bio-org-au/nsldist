@@ -18,7 +18,7 @@
 
 (setq exwm-layout-show-all-buffers t)
 (setq exwm-workspace-show-all-buffers t)
-(setq exwm-workspace-minibuffer-position 'top) 
+(setq exwm-workspace-minibuffer-position nil)
 
 (defun cc/build-workspaces (l n)
   (cons
