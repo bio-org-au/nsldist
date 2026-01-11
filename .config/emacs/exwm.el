@@ -2,6 +2,7 @@
 (require 'exwm)
 (require 'exwm-systemtray)
 (require 'exwm-randr)
+(require 'windmove)
 ;;(require 'buffer-move)
 
 ;;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")

@@ -1,10 +1,6 @@
 output DP-1
 off
-output DP-3
-off
-output DP-5
-off
-output DP-6
+output DP-2
 off
 output HDMI-1
 crtc 0
@@ -21,10 +17,10 @@ x-prop-underscan off
 x-prop-underscan_hborder 0
 x-prop-underscan_vborder 0
 output eDP-1
-crtc 2
+crtc 1
 mode 1920x1080
 pos 0x2160
-rate 60.06
+rate 60.03
 x-prop-colorspace Default
 x-prop-max_bpc 16
 x-prop-non_desktop 0
