@@ -546,7 +546,7 @@
 (exwm-randr-mode 1)
 
 ;(exwm-systemtray-mode 1)
-(exwm-enable)
+(exwm-wm-mode)
 ;(exwm-config-example)
 
 ;(print (kbd "<F1>"))
