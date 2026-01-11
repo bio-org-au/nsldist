@@ -1,14 +1,12 @@
 
-PATH=$HOME/Google/bin:$HOME/bin:$HOME/.sdkman/candidates/java/current/bin:$PATH
+PATH=$HOME/Google/binw:$HOME/Google/bin:$HOME/bin:$HOME/.sdkman/candidates/java/current/bin:$PATH
 
 export EDITOR=em
 
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-
 PATH=$PATH:/opt/google-cloud-cli/bin
-PATH=$HOME/Google/bin:$HOME/Google/binw:$PATH
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
