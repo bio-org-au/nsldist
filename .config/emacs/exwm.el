@@ -488,7 +488,7 @@
   (load custom-file 'noerror)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
-;;  (efs/run-in-background "~/.config/polybar/launch.sh")
+  (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "nm-applet")
   (efs/run-in-background "insync start")
   (efs/run-in-background "blueman-applet")
