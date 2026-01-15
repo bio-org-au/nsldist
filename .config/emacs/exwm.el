@@ -313,7 +313,7 @@
 	([?\s-`] . bury-buffer)
 	([?\s-h] . exwm-floating-hide)
 	([?\s-f] . exwm-floating-toggle-floating)
-	([?\s-e] . exwm-layout-toggle-fullscreen)
+	([?\s-a] . exwm-layout-toggle-fullscreen)
 	([?\s-g] . exwm-input-grab-keyboard)
 	([?\s-m] . exwm-workspace-move-window)
 	([?\s-b] . buffer-menu)
