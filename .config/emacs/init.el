@@ -7,6 +7,7 @@
 (setq-default tab-width 4)
 (setq standard-indent 4)
 (setq buffer-move-behavior 'move)
+(setq custom-file (expand-file-name "custom-vars.el" user-emacs-directory))
 
 (global-set-key "\C-x\C-b" 'buffer-menu)
 (defun efs/run-in-background (command)
@@ -176,7 +177,7 @@ There are two things you can do about this warning:
     (apply orig-fun args)))
 
 (advice-add 'switch-to-buffer-other-window :around #'use-least-recent-window)
-(tab-bar-mode)
+(tab-bar-mode 1)
 
 
 ;;If at any point you want to get rid of the advice, then evaluate the following:
@@ -582,42 +583,69 @@ function."
                  (ignore-errors (delete-window window))))))
       )))
 
-    
-(defun tab-line-bury-tab (&optional e)
+	(defun tab-line-bury-tab (&optional e)
   "Bury the selected tab.
 "
   (interactive "e")
   (let* ((posnp (event-start e))
          (window (posn-window posnp))
          (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
-    (bury-buffer buffer)))
+    (with-selected-window window
+      (let ((tab-list (tab-line-tabs-window-buffers))
+            (buffer-list (flatten-list
+                          (seq-reduce (lambda (list window)
+                                        (select-window window t)
+                                        (cons (tab-line-tabs-window-buffers) list))
+                                      (window-list) nil))))
+        (select-window window)
+        (progn
+          (if (eq buffer (current-buffer))
+              (bury-buffer)
+            (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
+            (set-window-next-buffers window (delq buffer (window-next-buffers))))
+          (unless (cdr tab-list)
+            (ignore-errors (delete-window window))))
+      ))))
 
-;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36	
-(defun tab-line-kill-tab (&optional e)
-  "Kill the selected tab.
+
+	(defun tab-line-kill-tab (&optional e)
+	  "Kill the selected tab.
+
 "
-  (interactive "e")
-  (let* ((posnp (event-start e))
-         (window (posn-window posnp))
-         (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
-    (kill-buffer buffer)))
+	  (interactive "e")
+	  (let* ((posnp (event-start e))
+			 (window (posn-window posnp))
+			 (buffer (get-pos-property 1 'tab (car (posn-string posnp)))))
+		(with-selected-window window
+		  (let ((tab-list (tab-line-tabs-window-buffers))
+				(buffer-list (flatten-list
+							  (seq-reduce (lambda (list window)
+											(select-window window t)
+											(cons (tab-line-tabs-window-buffers) list))
+										  (window-list) nil))))
+			(select-window window)
+			(and (kill-buffer buffer)
+				 (unless (cdr tab-list)
+				   (ignore-errors (delete-window window))))))
+		))
 
-(define-advice tab-line-close-tab (:around (orig-fn &rest args) force-right-tab)
-  "Close the current tab and select the tab to its right, or the first tab if the rightmost was closed."
-  (let* ((current-tab-buffer (current-buffer))
-         (tab-buffers (tab-line-tabs-window-buffers)) ;cjb
-         (current-tab-index (cl-position current-tab-buffer tab-buffers)))
-    ;; Call the original close function
-    (apply orig-fn args)
-    ;; If there are still tabs left
-    (when (tab-line-tabs-window-buffers) ; cjb
-      (let* ((new-tab-buffers (tab-line-tabs-window-buffers)) ;cjb
-             (next-tab-index (if (>= current-tab-index (length new-tab-buffers))
-                                 0 ; Wrap around to the first tab if the rightmost was closed
-                               current-tab-index))
-             (next-tab-to-select (nth next-tab-index new-tab-buffers)))
-        (when next-tab-to-select
-          (tab-line-select-tab next-tab-to-select))))))
+    
+;; (define-advice tab-line-close-tab (:around (orig-fn &rest args) force-right-tab)
+;;   "Close the current tab and select the tab to its right, or the first tab if the rightmost was closed."
+;;   (let* ((current-tab-buffer (current-buffer))
+;;          (tab-buffers (tab-line-tabs-window-buffers)) ;cjb
+;;          (current-tab-index (cl-position current-tab-buffer tab-buffers)))
+;;     ;; Call the original close function
+;;     (apply orig-fn args)
+;;     ;; If there are still tabs left
+;;     (when (tab-line-tabs-window-buffers) ; cjb
+;;       (let* ((new-tab-buffers (tab-line-tabs-window-buffers)) ;cjb
+;;              (next-tab-index (if (>= current-tab-index (length new-tab-buffers))
+;;                                  0 ; Wrap around to the first tab if the rightmost was closed
+;;                                current-tab-index))
+;;              (next-tab-to-select (nth next-tab-index new-tab-buffers)))
+;;         (when next-tab-to-select
+;;           (tab-line-select-tab next-tab-to-select))))))
 
 (defun tab-line-tab-context-menu (&optional event)
   "Pop up the context menu for a tab-line tab."
@@ -710,7 +738,6 @@ function."
 (setq project-vc-merge-submodules nil)
 (setq project-mode-line t)
 
-(setq custom-file (expand-file-name "custom-vars.el" user-emacs-directory))
  
 (add-hook 'emacs-startup-hook
           (lambda () (load custom-file 'noerror)))
