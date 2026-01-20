@@ -20,6 +20,19 @@
 (setq exwm-workspace-show-all-buffers t)
 (setq exwm-workspace-minibuffer-position nil)
 
+(defun lower-case-p (c) (and (>= c ?a) (<= c ?z)))
+
+(defun upper-case-p (c) (and (>= c ?A) (<= c ?Z)))
+
+(defun toggle-case-string (s)
+  "Convert uppercase to lowercase and lowercase to uppercase in string S."
+  (mapconcat (lambda (c)
+               (cond ((lower-case-p c) (upcase (char-to-string c)))
+                     ((upper-case-p c) (downcase (char-to-string c)))
+                     (t (char-to-string c))))
+             s ""))
+
+
 (defun cc/build-workspaces (l n)
   (cons
    (cons n (car l))
@@ -56,11 +69,19 @@
   (setq cc/secondary-randr (seq-filter (lambda (s) (not (string-match " connected primary " s))) cc/randr))
   (setq cc/primary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected primary" s) (match-string 1 s))) cc/primary-randr))
   (setq cc/secondary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected" s) (match-string 1 s))) cc/secondary-randr))
+  (setq cc/screen-x (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected .*[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (cons (match-string 1 s) (string-to-number (match-string 2 s))))) cc/randr))
+  (setq cc/screen-sorted
+		(sort cc/screen-x
+			  (lambda (a b) (let ((diff (- (cdr a) (cdr b))))
+							  (if (= diff 0)
+								  (string< (car a)
+										   (car b))
+								diff)))))
 
-  (setq cc/screen-x (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected .*[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (cons (match-string 1 s) (match-string 2 s)))) cc/randr))
-
-  (setq cc/tertiary '())
-  (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
+;;  (setq cc/tertiary '())
+  ;;  (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
+  (setq cc/screen-list (mapcar (lambda (s) (car s)) cc/screen-x))
+;;  (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))
   (setq exwm-randr-workspace-monitor-plist (list-utils-flatten exwm-randr-workspace-monitor-alist))
   (let* ((last-ws (car (car (last exwm-randr-workspace-monitor-alist))))
@@ -496,7 +517,8 @@
   (load custom-file 'noerror)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
-;;  (efs/run-in-background "~/.config/polybar/launch.sh")
+  ;;  (efs/run-in-background "~/.config/polybar/launch.sh")
+  (exwm-workspace-switch-create 0)
   (efs/run-in-background "nm-applet")
   (efs/run-in-background "insync start")
   (efs/run-in-background "blueman-applet")
@@ -504,7 +526,8 @@
   (efs/run-in-background "indicator-sound-switcher")
 ;  (efs/run-in-background "jetbrains-toolbox")
   (efs/run-in-background "picom") ; composite manager, plank prefers it
-  (efs/run-in-background "plank -n dock1"))
+;;  (efs/run-in-background "plank -n dock1")
+  )
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)
 
@@ -564,23 +587,34 @@
 ;;(require 'fancy-battery)
 ;;(fancy-battery-mode)
 
-(exwm-input-set-key
- (kbd "<XF86AudioLowerVolume>")
- (lambda () (interactive)
-   (shell-command "volume -5%")))
-                ;; (lambda () (interactive) (shell-command "amixer set Master 5%- | sed -nr 's/.*: Playback.*?\\[([[:digit:]%]*)\\].*/\\1/gp' | head -1")))
-(exwm-input-set-key
- (kbd "<XF86AudioRaiseVolume>")
- (lambda () (interactive)
-   (shell-command "volume +5%")))
+;;(exwm-input-set-key
+;; (kbd "<XF86AudioLowerVolume>")
+;; (lambda () (interactive)
+;;   (shell-command "volume -5%")))
+;;                ;; (lambda () (interactive) (shell-command "amixer set Master 5%- | sed -nr 's/.*: Playback.*?\\[([[:digit:]%]*)\\].*/\\1/gp' | head -1")))
+;;(exwm-input-set-key
+;; (kbd "<XF86AudioRaiseVolume>")
+;; (lambda () (interactive)
+;;   (shell-command "volume +5%")))
                 ;; (lambda () (interactive) (shell-command "amixer set Master 5%+ | sed -nr 's/.*: Playback.*?\\[([[:digit:]%]*)\\].*/\\1/gp' | head -1")))
-(exwm-input-set-key (kbd "<XF86AudioMute>")
-                    (lambda () (interactive) (shell-command "volume toggle")))
+;;(exwm-input-set-key (kbd "<XF86AudioMute>")
+;;                    (lambda () (interactive) (shell-command "volume toggle")))
                     ;; (lambda () (interactive) (shell-command "amixer set Master 1+ toggle | sed -nr 's/.*: Playback.*?\\[([[:alpha:]]*)\\].*/\\1/gp' | head -1")))
-(exwm-input-set-key (kbd "<XF86MonBrightnessDown>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%- ; brightnessctl g")))
-(exwm-input-set-key (kbd "<XF86MonBrightnessUp>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%+ ; brightnessctl g")))
-(exwm-input-set-key (kbd "<print>") (lambda () (interactive) (start-process-shell-command "spectacle" nil "spectacle")))
-  
+;;(exwm-input-set-key (kbd "<XF86MonBrightnessDown>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%- ; brightnessctl g")))
+;;(exwm-input-set-key (kbd "<XF86MonBrightnessUp>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%+ ; brightnessctl g")))
+;;(exwm-input-set-key (kbd "<print>") (lambda () (interactive) (start-process-shell-command "spectacle" nil "spectacle")))
+
+(use-package desktop-environment
+  :after exwm
+  :config (desktop-environment-mode)
+  :custom
+  (desktop-environment-brightness-small-increment "2%+")
+  (desktop-environment-brightness-small-decrement "2%-")
+  (desktop-environment-brightness-normal-increment "5%+")
+  (desktop-environment-brightness-normal-decrement "5%-")
+  )
+
+
 ;; for emacsclient
 (server-start)
 
