@@ -1,6 +1,5 @@
 (setenv "_JAVA_AWT_WM_NONREPARENTING" "1")
 (require 'exwm)
-(require 'exwm-systemtray)
 (require 'exwm-randr)
 (require 'windmove)
 ;;(require 'buffer-move)
@@ -58,8 +57,7 @@
   (setq cc/primary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected primary" s) (match-string 1 s))) cc/primary-randr))
   (setq cc/secondary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected" s) (match-string 1 s))) cc/secondary-randr))
 
-  (setq cc/primary-x (mapcar (lambda (s) (if (string-match "[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (match-string 1 s))) cc/primary-randr))
-  (setq cc/secondary-x (mapcar (lambda (s) (if (string-match "[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (s . (match-string 1 s)))) cc/secondary-randr))
+  (setq cc/screen-x (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected .*[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (cons (match-string 1 s) (match-string 2 s)))) cc/randr))
 
   (setq cc/tertiary '())
   (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
@@ -488,15 +486,17 @@
 
 ;; (setq exwm-manage-configurations '((t floating nil)))
 
-
+;; systemtray
+(require 'exwm-systemtray)
 (setq exwm-systemtray-height 20)
+(exwm-systemtray-mode 1)
 
 
 (defun cc/exwm-init ()
   (load custom-file 'noerror)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
-  (efs/run-in-background "~/.config/polybar/launch.sh")
+;;  (efs/run-in-background "~/.config/polybar/launch.sh")
   (efs/run-in-background "nm-applet")
   (efs/run-in-background "insync start")
   (efs/run-in-background "blueman-applet")
@@ -554,7 +554,6 @@
 
 (exwm-randr-mode 1)
 
-;(exwm-systemtray-mode 1)
 (exwm-wm-mode)
 ;(exwm-config-example)
 
