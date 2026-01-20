@@ -8,8 +8,6 @@ test -f $USER_EMACS_DIRECTORY/exwm/Xresources && xrdb $USER_EMACS_DIRECTORY/exwm
 
 #emacs --maximized --debug-init --daemon -l ~/.emacs.d/desktop.el
 
-xscreensaver --no-splash &
-
 dconf dump /net/launchpad/plank/docks/ > ~/.config/plank/docks.ini
 
 emacs --maximized --debug-init -l $USER_EMACS_DIRECTORY/exwm.el

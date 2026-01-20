@@ -51,8 +51,16 @@
 
 (defun cc/exwm-randr-screen-change ()
   (start-process-shell-command "autorandr" nil "autorandr --change" )
-  (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
-  (setq cc/secondary (process-lines "sh" "-c" "xrandr | grep -v 'connected primary' | sed -n  's:\\([^ ]\\) connected .*:\\1:p'"))
+;;  (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
+  (setq cc/randr (process-lines "sh" "-c" "xrandr | grep ' connected '"))
+  (setq cc/primary-randr (seq-filter (lambda (s) (string-match " connected primary " s)) cc/randr))
+  (setq cc/secondary-randr (seq-filter (lambda (s) (not (string-match " connected primary " s))) cc/randr))
+  (setq cc/primary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected primary" s) (match-string 1 s))) cc/primary-randr))
+  (setq cc/secondary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected" s) (match-string 1 s))) cc/secondary-randr))
+
+  (setq cc/primary-x (mapcar (lambda (s) (if (string-match "[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (match-string 1 s))) cc/primary-randr))
+  (setq cc/secondary-x (mapcar (lambda (s) (if (string-match "[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (s . (match-string 1 s)))) cc/secondary-randr))
+
   (setq cc/tertiary '())
   (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
   (setq exwm-randr-workspace-monitor-alist (cc/build-workspaces cc/screen-list 0))

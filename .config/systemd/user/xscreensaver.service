@@ -1,0 +1,21 @@
+[Unit]
+Description=xscreensaver
+After=graphical-session.target
+BindsTo=graphical-session.target
+PartOf=graphical-session.target
+Requisite=graphical-session.target
+ConditionEnvironment=DISPLAY
+ConditionEnvironment=XAUTHORITY
+
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/xscreensaver --no-splash
+Restart=always
+RemainAfterExit=no
+RestartSec=3
+StandardOutput=journal
+RuntimeMaxSec=10m
+
+[Install]
+WantedBy=graphical-session.target
