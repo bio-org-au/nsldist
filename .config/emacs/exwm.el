@@ -65,11 +65,16 @@
   (start-process-shell-command "autorandr" nil "autorandr --change" )
 ;;  (setq cc/primary (process-lines "sh" "-c" "xrandr | sed -n  's:\\([^ ]\\) connected primary.*:\\1:p'"))
   (setq cc/randr (process-lines "sh" "-c" "xrandr | grep ' connected '"))
-  (setq cc/primary-randr (seq-filter (lambda (s) (string-match " connected primary " s)) cc/randr))
-  (setq cc/secondary-randr (seq-filter (lambda (s) (not (string-match " connected primary " s))) cc/randr))
-  (setq cc/primary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected primary" s) (match-string 1 s))) cc/primary-randr))
-  (setq cc/secondary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected" s) (match-string 1 s))) cc/secondary-randr))
-  (setq cc/screen-x (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected .*[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s) (cons (match-string 1 s) (string-to-number (match-string 2 s))))) cc/randr))
+;;  (setq cc/primary-randr (seq-filter (lambda (s) (string-match " connected primary " s)) cc/randr))
+;;  (setq cc/secondary-randr (seq-filter (lambda (s) (not (string-match " connected primary " s))) cc/randr))
+;;  (setq cc/primary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected primary" s) (match-string 1 s))) cc/primary-randr))
+;;  (setq cc/secondary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected" s) (match-string 1 s))) cc/secondary-randr))
+  (setq cc/screen-x
+		(mapcar (lambda (s)
+				  (if (string-match "\\([^ ]*\\) connected .*[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s)
+					  (cons (match-string 1 s) (string-to-number (match-string 2 s)))
+					(if (string-match "\\([^ ]*\\) connected" s) (cons (match-string 1 s) 0))
+					)) cc/randr))
   (setq cc/screen-sorted
 		(sort cc/screen-x
 			  (lambda (a b) (let ((diff (- (cdr a) (cdr b))))
@@ -531,6 +536,9 @@
   (efs/run-in-background "copyq");
   (efs/run-in-background "redshift-gtk");
   (efs/run-in-background "keepassxc");
+  (efs/run-in-background "trayclock");
+  (efs/run-in-background "cbatticon");
+  (efs/run-in-background "mictray");
 ;;  (efs/run-in-background "jetbrains-toolbox")
   (efs/run-in-background "picom") ; composite manager, plank prefers it
 ;;  (efs/run-in-background "plank -n dock1")
@@ -542,7 +550,7 @@
 			    
 ;; Enable EXWM
 					;(require 'exwm-config)
-(display-battery-mode 1)
+;;(display-battery-mode 1)
 (setq display-time-day-and-date t)
 (display-time-mode 1)
 
