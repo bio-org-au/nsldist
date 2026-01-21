@@ -528,6 +528,8 @@
   (efs/run-in-background "caffeine")
   (efs/run-in-background "pasystray");
   (efs/run-in-background "gxkb");
+  (efs/run-in-background "copyq");
+  (efs/run-in-background "redshift-gtk");
 ;;  (efs/run-in-background "jetbrains-toolbox")
   (efs/run-in-background "picom") ; composite manager, plank prefers it
 ;;  (efs/run-in-background "plank -n dock1")
