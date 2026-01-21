@@ -524,7 +524,11 @@
   (efs/run-in-background "blueman-applet")
   (efs/run-in-background "udiskie --tray")
   (efs/run-in-background "indicator-sound-switcher")
-;  (efs/run-in-background "jetbrains-toolbox")
+  (efs/run-in-background "radiotray-ng")
+  (efs/run-in-background "caffeine")
+  (efs/run-in-background "pasystray");
+  (efs/run-in-background "gxkb");
+;;  (efs/run-in-background "jetbrains-toolbox")
   (efs/run-in-background "picom") ; composite manager, plank prefers it
 ;;  (efs/run-in-background "plank -n dock1")
   )
