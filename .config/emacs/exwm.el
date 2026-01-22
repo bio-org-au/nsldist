@@ -71,17 +71,22 @@
 ;;  (setq cc/secondary (mapcar (lambda (s) (if (string-match "\\([^ ]*\\) connected" s) (match-string 1 s))) cc/secondary-randr))
   (setq cc/screen-x
 		(mapcar (lambda (s)
-				  (if (string-match "\\([^ ]*\\) connected .*[0-9]*x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s)
-					  (cons (match-string 1 s) (string-to-number (match-string 2 s)))
-					(if (string-match "\\([^ ]*\\) connected" s) (cons (match-string 1 s) 0))
+				  (if (string-match "\\([^ ]*\\) connected.* \\([0-9]*\\)x[0-9]*\\+\\([0-9]*\\)\\+[0-9]*" s)
+					  (cons (match-string 1 s) (cons (string-to-number (match-string 3 s)) (string-to-number (match-string 2 s))))
+					(if (string-match "\\([^ ]*\\) connected" s) (cons (match-string 1 s) (cons 0 0)))
 					)) cc/randr))
   (setq cc/screen-sorted
 		(sort cc/screen-x
-			  (lambda (a b) (let ((diff (- (cdr a) (cdr b))))
-							  (if (= diff 0)
+			  (lambda (a b) (let ((diff-pos (- (car (cdr a)) (car (cdr b))))
+								  (diff-wid (- (cdr (cdr a)) (cdr (cdr b)))))
+							  (if (/= diff-pos 0)
+								  diff-pos
+								(if (/= diff-wid 0)
+									diff-wid
 								  (string< (car a)
-										   (car b))
-								diff)))))
+										   (car b))))))))
+
+  
 
 ;;  (setq cc/tertiary '())
   ;;  (setq cc/screen-list (append cc/primary cc/secondary cc/tertiary))
@@ -539,6 +544,7 @@
   (efs/run-in-background "trayclock");
   (efs/run-in-background "cbatticon");
   (efs/run-in-background "mictray");
+  (efs/run-in-background "meteo-qt");
 ;;  (efs/run-in-background "jetbrains-toolbox")
   (efs/run-in-background "picom") ; composite manager, plank prefers it
 ;;  (efs/run-in-background "plank -n dock1")
@@ -551,8 +557,8 @@
 ;; Enable EXWM
 					;(require 'exwm-config)
 ;;(display-battery-mode 1)
-(setq display-time-day-and-date t)
-(display-time-mode 1)
+;;(setq display-time-day-and-date nil)
+;;(display-time-mode nil)
 
 
 ;(counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)

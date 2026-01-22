@@ -22,7 +22,7 @@
  '(nxml-element-local-name ((t (:inherit font-lock-function-name-face :foreground "#e8bf6a"))))
  '(rng-error ((t (:inherit font-lock-warning-face :foreground "#cc7832"))))
  '(tab-bar ((t (:inherit variable-pitch :background "black" :foreground "white"))))
- '(tab-bar-tab ((t (:inherit tab-bar :background "tomato4" :foreground "white" :box (:line-width (1 . 3) :color "gold" :style released-button)))))
+ '(tab-bar-tab ((t (:inherit tab-bar :background "#330000" :foreground "dim gray" :box (:line-width (1 . 3) :color "#222200" :style released-button)))))
  '(tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "tomato4" :foreground "white" :box nil :weight bold))))
  '(tab-bar-tab-group-inactive ((t (:inherit (shadow tab-bar-tab-inactive) :background "gray14" :box (:line-width (1 . 3) :color "gray14" :style released-button)))))
  '(tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "gray14" :foreground "gainsboro" :box (:line-width (1 . 3) :color "gray14" :style released-button)))))
@@ -46,8 +46,8 @@
    '("b23f3067e27a9940a563f1fb3bf455aabd0450cb02c3fa4ad43f75a583311216"
 	 "24fc62afe2e5f0609e436aa2427b396adf9a958a8fa660edbaab5fb13c08aae6"
 	 default))
- '(display-battery-mode t)
- '(display-time-mode t)
+ '(display-battery-mode nil)
+ '(display-time-mode nil)
  '(menu-bar-mode nil)
  '(package-selected-packages
    '(ace-jump-mode arc-dark-theme arjen-grey-theme async avy backlight

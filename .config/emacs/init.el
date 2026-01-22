@@ -36,7 +36,7 @@ There are two things you can do about this warning:
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
 
-(add-to-list 'load-path (expand-file-name "lisp;" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/treemacs/" user-emacs-directory))
 ;(add-to-list 'load-path "~/.config/emacs/lisp/")
 ;(add-to-list 'load-path "~/.config/emacs/lisp/treemacs/")
@@ -741,3 +741,17 @@ function."
  
 (add-hook 'emacs-startup-hook
           (lambda () (load custom-file 'noerror)))
+
+(require 'framemove)
+;;(framemove-default-keybindings)
+
+(require 'awesome-tray)
+(setq awesome-tray-info-padding-right (/ (- (frame-width) 28) 2))
+(setq awesome-tray-hide-mode-line nil)
+(setq awesome-tray-date-format "%a %d-%b-%G %I:%-M %p")
+(setq awesome-tray-active-modules
+  '("battery" "date"))
+(awesome-tray-mode 1)
+
+(setq column-number-mode t)
+(setq size-indication-mode t)
