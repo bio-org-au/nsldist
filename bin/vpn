@@ -1,11 +1,11 @@
 #!/bin/sh
-NM="$1"
+#NM="$1"
 [ "$NM" ] || NM=IBISVPN
 
 while getopts "klvsz" opt; do
   case "$opt" in
     k)
-	  nmcli con up "$NM"
+	  nmcli con down "$NM"
       ;;
     l)
 	  nmcli -f GENERAL.STATE con show "$NM"
