@@ -2,6 +2,7 @@
 (require 'exwm)
 (require 'exwm-randr)
 (require 'windmove)
+(require 'winframe-move)
 ;;(require 'buffer-move)
 
 ;;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
@@ -213,32 +214,10 @@
 	(,(kbd "S-M-<right>") . exwm-workspace-switch-right)
 
 	
-	(,(kbd "s-<left>") . (lambda () (interactive)
-						   (if exwm--floating-frame
-							   (exwm-floating-move -10 0)
-							 (exwm-buf-move-window-left))))
-	(,(kbd "s-<right>") . (lambda () (interactive)
-						   (if exwm--floating-frame
-							   (exwm-floating-move 10 0)
-							 (exwm-buf-move-window-right))))
-	(,(kbd "s-<up>") . (lambda () (interactive)
-						   (if exwm--floating-frame
-							   (exwm-floating-move 0 -10)
-							 (buf-move-up))))
-	(,(kbd "s-<down>") . (lambda () (interactive)
-						   (if exwm--floating-frame
-							   (exwm-floating-move 0 10)
-							 (buf-move-down))))
-
-	(,(kbd "S-s-<left>") . (lambda () (interactive)
-							 (exwm-workspace-move-window-left)))
-	(,(kbd "S-s-<right>") . (lambda () (interactive)
-							 (exwm-workspace-move-window-right)))
-
-;	(,(kbd "S-s-<left>") . windmove-swap-states-left)
-;	(,(kbd "S-s-<right>") . windmove-swap-states-right)
-;	(,(kbd "S-s-<up>") . windmove-swap-states-up)
-;	(,(kbd "S-s-<down>") . windmove-swap-states-down)
+	(,(kbd "s-<left>") . winframe-buf-or-window-or-floating-move-left)
+	(,(kbd "s-<right>") . winframe-buf-or-window-or-floating-move-right)
+	(,(kbd "s-<up>") . winframe-buf-or-window-or-floating-move-up)
+	(,(kbd "s-<down>") . winframe-buf-or-window-or-floating-move-down)
 
 ;	(,(kbd "C-<left>") . shrink-window-horizontally)
 ;	(,(kbd "C-<right>") . enlarge-window-horizontally)
@@ -585,4 +564,3 @@ The DWIM behaviour of this command is as follows:
 ;;                 (not ((setenv "_JAVA_AWT_WM_NONREPARENTING" "1")
 
 
-(require 'exwm-move)
