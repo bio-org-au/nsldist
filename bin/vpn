@@ -1,18 +1,20 @@
 #!/bin/sh
+NM="$1"
+[ "$NM" ] || NM=IBISVPN
 
 while getopts "klvsz" opt; do
   case "$opt" in
     k)
-      sudo systemctl stop openvpn-client@client
+	  nmcli con up "$NM"
       ;;
     l)
-      sudo systemctl status openvpn-client@client
+	  nmcli -f GENERAL.STATE con show "$NM"
       ;;
     v)
-      sudo journalctl -u openvpn-client@client
+	  sudo journalctl -u NetworkManager.service
       ;;
     s)
-      sudo systemctl start openvpn-client@client
+	  nmcli con up "$NM"
       ;;
     z)
       emacs -nw $0

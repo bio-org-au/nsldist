@@ -102,8 +102,8 @@
           (cdr coord))))
 
 
-(defun fm-next-frame (dir)
-  "move focus to next frame in direction (from currently focused frame)"
+(defun fm-find-next-frame (dir)
+  "find next frame in direction (from currently focused frame)"
   (interactive (list
                 (intern (completing-read "Which direction: " '("up" "down" "left" "right") nil t))))
   (let* ((thisframe (selected-frame))
@@ -131,11 +131,18 @@
                 #'(lambda (f1 f2)
                    (< (fm-dist-from-coords coords-projected-in-dir f1)
                       (fm-dist-from-coords coords-projected-in-dir f2))))))
-          (select-frame-set-input-focus
            (or (car frames-in-line-of-cursor)
                (car frames-in-line-of-frame)
-               (car possible-frames))))
-      (error "No frame in that direction"))))
+               (car possible-frames)))
+      nil)))
+
+(defun fm-next-frame (dir)
+  "move focus to next frame in direction (from currently focused frame)"
+  (interactive (list
+                (intern (completing-read "Which direction: " '("up" "down" "left" "right") nil t))))
+  (if-let ((next-frame (fm-find-next-frame dir)))
+	  (select-frame-set-input-focus next-frame)
+	(error "No frame in that direction")))
 
 (defun fm-dist-from-coords (coord frame)
   "distance from coord to the bbox of the frame"

@@ -131,6 +131,8 @@ There are two things you can do about this warning:
       (save-buffers-kill-emacs)                                                                                            
     (message "Canceled frame close")))
 
+(require 'winframe-move)
+
 (when (daemonp)
   (global-set-key (kbd "C-x C-c") 'ask-before-closing))
 (put 'upcase-region 'disabled nil)
@@ -144,10 +146,10 @@ There are two things you can do about this warning:
 (keymap-global-set "C-<up>" 'enlarge-window)
 (keymap-global-set "C-<down>" 'shrink-window)
 
-(keymap-global-set "s-<left>" 'buf-move-left)
-(keymap-global-set "s-<right>" 'buf-move-right)
-(keymap-global-set "s-<up>" 'buf-move-up)
-(keymap-global-set "s-<down>" 'buf-move-down)
+(keymap-global-set "s-<left>" 'winframe-move-left)
+(keymap-global-set "s-<right>" 'winframe-move-right)
+(keymap-global-set "s-<up>" 'winframe-move-up)
+(keymap-global-set "s-<down>" 'winframe-move-down)
 
 (keymap-global-set "S-s-<left>" 'windmove-swap-states-left)
 (keymap-global-set "S-s-<right>" 'windmove-swap-states-right)
@@ -746,7 +748,8 @@ function."
 ;;(framemove-default-keybindings)
 
 (require 'awesome-tray)
-(setq awesome-tray-info-padding-right (/ (- (frame-width) 28) 2))
+;;(setq awesome-tray-info-padding-right (/ (- (frame-width) 28) 2))
+(setq awesome-tray-info-padding-right 30)
 (setq awesome-tray-hide-mode-line nil)
 (setq awesome-tray-date-format "%a %d-%b-%G %I:%-M %p")
 (setq awesome-tray-active-modules
