@@ -1,137 +1,177 @@
 
 (require 'framemove)
+(require buffer-move)
 
 ;;
-;; MOVE FOCUS
+;; FOCUS
 ;;
 
-(defun winframe-find-other-window (dir)
+(defun wf/winframe-find-other-window (dir)
   (if-let* ((ow (windmove-find-other-window dir))
 			  (mb? (not (window-minibuffer-p ow))))
 	  ow
 	nil))
 
-
-(defun winframe-move (dir)
-  (if-let ((ow (winframe-find-other-window dir)))
+(defun wf/winframe-focus (dir)
+  (if-let ((ow (wf/winframe-find-other-window dir)))
 	(windmove-do-window-select dir)
 	(fm-next-frame dir)))
 
-(defun winframe-move-left ()
+(defun wf/winframe-focus-left ()
   (interactive)
-  (winframe-move 'left))
+  (wf/winframe-focus 'left))
 
-(defun winframe-move-right ()
+(defun wf/winframe-focus-right ()
   (interactive)
-  (winframe-move 'right))
+  (wf/winframe-focus 'right))
 
-(defun winframe-move-up ()
+(defun wf/winframe-focus-up ()
   (interactive)
-  (winframe-move 'up))
+  (wf/winframe-focus 'up))
 
-(defun winframe-move-down ()
+(defun wf/winframe-focus-down ()
   (interactive)
-  (winframe-move 'down))
+  (wf/winframe-focus 'down))
 
 ;;
 ;; MOVE A BUFFER/X-WINDOW
 ;;
 
-(defun winframe-buf-move-to (frame-or-index)
+(defun wf/winframe-buf-move-to (frame-or-index)
   (interactive (prompt-workspace current-prefix-arg))
   (let ((buffer (current-buffer)))
 	(previous-buffer)
 	(exwm-workspace-switch frame-or-index)
 	(switch-to-buffer buffer)))
 
-(defun winframe-opposite (dir)
+(defun wf/winframe-opposite (dir)
   (cl-ecase dir
 	(left 'right)
 	(right 'left)
 	(up 'down)
 	(down 'up)))
 
-(defun winframe-buf-move-to (frame-or-index)
+(defun wf/winframe-buf-move-to (frame-or-index)
   (interactive (prompt-workspace current-prefix-arg))
   (let ((buffer (current-buffer)))
 	(previous-buffer)
 	(exwm-workspace-switch frame-or-index)
 	(switch-to-buffer buffer)))
 
-(defun winframe-buf-or-window-move-to (frame-or-index)
+(defun wf/winframe-buf-or-window-move-to (frame-or-index)
   (interactive (prompt-workspace current-prefix-arg))
   (if exwm--id
 	  (progn (exwm-workspace-move-window frame-or-index)
 			 (exwm-workspace-switch frame-or-index)
 			 (switch-to-buffer buffer))
-	(winframe-buf-move-to frame-or-index)))
+	(wf/winframe-buf-move-to frame-or-index)))
 
-(defun winframe-buf-move-far (dir)
+(defun wf/winframe-buf-move-far (dir)
     (interactive)
-  (while (winframe-find-other-window dir)
+  (while (wf/winframe-find-other-window dir)
 	(buf-move-to dir)))
 
 
-(defun winframe-buf-or-window-move (dir)
-  (if-let ((ow (winframe-find-other-window dir)))
+(defun wf/winframe-buf-or-window-move (dir)
+  (if-let ((ow (wf/winframe-find-other-window dir)))
 	  (buf-move-to dir)
 	(if-let* ((of (fm-find-next-frame dir)))
-		(progn (winframe-buf-or-window-move-to of)
-			   (winframe-buf-move-far (winframe-opposite dir))))))
+		(progn (wf/winframe-buf-or-window-move-to of)
+			   (wf/winframe-buf-move-far (wf/winframe-opposite dir))))))
 
-(defun winframe-buf-move (dir)
-  (if-let ((ow (winframe-find-other-window dir)))
+(defun wf/winframe-buf-move (dir)
+  (if-let ((ow (wf/winframe-find-other-window dir)))
 	  (buf-move-to dir)
 	(if-let* ((of (fm-find-next-frame dir)))
-		(progn (winframe-buf-move-to of)
-			   (winframe-buf-move-far (winframe-opposite dir))))))
+		(progn (wf/winframe-buf-move-to of)
+			   (wf/winframe-buf-move-far (wf/winframe-opposite dir))))))
 
-(defun winframe-buf-or-window-move-left ()
+(defun wf/winframe-buf-or-window-move-left ()
   (interactive)
-  (winframe-buf-or-window-move 'left))
+  (wf/winframe-buf-or-window-move 'left))
 
-(defun winframe-buf-or-window-move-right ()
+(defun wf/winframe-buf-or-window-move-right ()
   (interactive)
-  (winframe-buf-or-window-move 'right))
+  (wf/winframe-buf-or-window-move 'right))
 
-(defun winframe-buf-or-window-move-up ()
+(defun wf/winframe-buf-or-window-move-up ()
   (interactive)
-  (winframe-buf-or-window-move 'up))
+  (wf/winframe-buf-or-window-move 'up))
 
-(defun winframe-buf-or-window-move-down ()
+(defun wf/winframe-buf-or-window-move-down ()
   (interactive)
-  (winframe-buf-or-window-move 'down))
+  (wf/winframe-buf-or-window-move 'down))
 
-(defvar winframe-floating-move-amount 10 "Increment to move floating window")
+(defvar wf/winframe-floating-move-amount 10 "Increment to move floating window")
 
-(defun winframe-floating-move (dir)
+(defun wf/winframe-floating-move (dir)
   (cl-ecase dir
-	(left (exwm-floating-move (- winframe-floating-move-amount) 0))
-	(right (exwm-floating-move winframe-floating-move-amount 0))
-	(up (exwm-floating-move 0 (- winframe-floating-move-amount))
-	(down (exwm-floating-move 0 winframe-floating-move-amount)))))
+	(left (exwm-floating-move (- wf/winframe-floating-move-amount) 0))
+	(right (exwm-floating-move wf/winframe-floating-move-amount 0))
+	(up (exwm-floating-move 0 (- wf/winframe-floating-move-amount)))
+	(down (exwm-floating-move 0 wf/winframe-floating-move-amount))))
 
-(defun winframe-buf-or-window-or-floating-move (dir)
+(defun wf/winframe-buf-or-window-or-floating-move (dir)
   (interactive)
   (if exwm--floating-frame
-	  (winframe-floating-move dir)
-	(winframe-buf-or-window-move dir)))
+	  (wf/winframe-floating-move dir)
+	(wf/winframe-buf-or-window-move dir)))
 
-(defun winframe-buf-or-window-or-floating-move-left ()
+(defun wf/winframe-buf-or-window-or-floating-move-left ()
   (interactive)
-  (winframe-buf-or-window-or-floating-move 'left))
+  (wf/winframe-buf-or-window-or-floating-move 'left))
 
-(defun winframe-buf-or-window-or-floating-move-right ()
+(defun wf/winframe-buf-or-window-or-floating-move-right ()
   (interactive)
-  (winframe-buf-or-window-or-floating-move 'right))
+  (wf/winframe-buf-or-window-or-floating-move 'right))
 
-(defun winframe-buf-or-window-or-floating-move-up ()
+(defun wf/winframe-buf-or-window-or-floating-move-up ()
   (interactive)
-  (winframe-buf-or-window-or-floating-move 'up))
+  (wf/winframe-buf-or-window-or-floating-move 'up))
 
-(defun winframe-buf-or-window-or-floating-move-down ()
+(defun wf/winframe-buf-or-window-or-floating-move-down ()
   (interactive)
-  (winframe-buf-or-window-or-floating-move 'down))
+  (wf/winframe-buf-or-window-or-floating-move 'down))
+
+;;
+;; RESIZE
+;;
+
+(defvar wf/resize-amount 30 "Increment to resize window")
+
+
+;; (defun wf/win-floating-resize (deltax deltay)
+;;   "Resize the current floating frame horizontally by DELTA pixels."
+;;   (interactive "nPixels to resize: ")
+;;   (if exwm--floating-frame
+;; 	  (set-frame-size (selected-frame) (+ (frame-pixel-width) deltax) (+ (frame-pixel-height) deltay) t)))
+
+
+(defun wf/layout-resize (deltax deltay)
+  (exwm-layout-enlarge-window deltax)
+  (exwm-layout-enlarge-window deltay t))
+
+(defun wf/buf-or-window-or-floating-resize (deltax deltay)
+  (if exwm--floating-frame
+	  (exwm-float-resize-delta deltax deltay)
+	(wf/layout-resize deltax deltay)))
+
+(defun wf/buf-or-window-or-floating-shrink-horizontally ()
+  (interactive)
+  (wf/buf-or-window-or-floating-resize (- wf/resize-amount) 0))
+
+(defun wf/buf-or-window-or-floating-enlarge-horizontally ()
+  (interactive)
+  (wf/buf-or-window-or-floating-resize wf/resize-amount 0))
+
+(defun wf/buf-or-window-or-floating-shrink-vertically ()
+  (interactive)
+  (wf/buf-or-window-or-floating-resize 0 (- wf/resize-amount)))
+
+(defun wf/buf-or-window-or-floating-enlarge-vertically ()
+  (interactive)
+  (wf/buf-or-window-or-floating-resize 0 wf/resize-amount))
 
 (provide 'winframe-move)
+
 

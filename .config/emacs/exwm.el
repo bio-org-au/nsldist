@@ -3,6 +3,14 @@
 (require 'exwm-randr)
 (require 'windmove)
 (require 'winframe-move)
+
+(use-package exwm-float
+  :init
+  (setq exwm-float-modify-amount '(:move-slow 20 :move-fast 100 :resize 50)
+        exwm-float-border '(:stationary ("navy" . 1) :moving ("maroon" . 2)))
+  (exwm-float-setup)
+  (exwm-input-set-key (kbd "C-c M-f") #'exwm-float-mode))
+
 ;;(require 'buffer-move)
 
 ;;(add-to-list 'load-path "/usr/share/emacs/site-lisp/xelb")
@@ -205,29 +213,24 @@
 	;; (,(kbd "s-<f11>") . exwm-layout-toggle-fullscreen)
 	;; (,(kbd "<f11>") . exwm-layout-toggle-fullscreen)
 
-	(,(kbd "M-<left>") . winframe-move-left)
-	(,(kbd "M-<right>") . winframe-move-right)
-	(,(kbd "M-<up>") . winframe-move-up)
-	(,(kbd "M-<down>") . winframe-move-down)
+	(,(kbd "M-<left>") . wf/winframe-focus-left)
+	(,(kbd "M-<right>") . wf/winframe-focus-right)
+	(,(kbd "M-<up>") . wf/winframe-focus-up)
+	(,(kbd "M-<down>") . wf/winframe-focus-down)
 
 	(,(kbd "S-M-<left>") . exwm-workspace-switch-left)
 	(,(kbd "S-M-<right>") . exwm-workspace-switch-right)
 
 	
-	(,(kbd "s-<left>") . winframe-buf-or-window-or-floating-move-left)
-	(,(kbd "s-<right>") . winframe-buf-or-window-or-floating-move-right)
-	(,(kbd "s-<up>") . winframe-buf-or-window-or-floating-move-up)
-	(,(kbd "s-<down>") . winframe-buf-or-window-or-floating-move-down)
+	(,(kbd "s-<left>") . wf/winframe-buf-or-window-or-floating-move-left)
+	(,(kbd "s-<right>") . wf/winframe-buf-or-window-or-floating-move-right)
+	(,(kbd "s-<up>") . wf/winframe-buf-or-window-or-floating-move-up)
+	(,(kbd "s-<down>") . wf/winframe-buf-or-window-or-floating-move-down)
 
-;	(,(kbd "C-<left>") . shrink-window-horizontally)
-;	(,(kbd "C-<right>") . enlarge-window-horizontally)
-;	(,(kbd "C-<up>") . enlarge-window)
-;	(,(kbd "C-<down>") . shrink-window)
-
-	(,(kbd "C-<left>") . (lambda () (interactive) (exwm-layout-shrink-window-horizontally 10)))
-	(,(kbd "C-<right>") . (lambda () (interactive) (exwm-layout-enlarge-window-horizontally 10)))
-	(,(kbd "C-<up>") . (lambda () (interactive) (exwm-layout-enlarge-window 10)))
-	(,(kbd "C-<down>") . (lambda () (interactive) (exwm-layout-shrink-window 10)))
+	(,(kbd "C-<left>") . wf/buf-or-window-or-floating-shrink-vertically)
+	(,(kbd "C-<right>") . wf/buf-or-window-or-floating-enlarge-vertically)
+	(,(kbd "C-<up>") . wf/buf-or-window-or-floating-enlarge-horizontally)
+	(,(kbd "C-<down>") . wf/buf-or-window-or-floating-shrink-horizontally)
 
 	
 	(,(kbd "C-g") . prot/keyboard-quit-dwim)

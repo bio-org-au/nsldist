@@ -1,40 +1,41 @@
 #!/bin/sh
-[ "$1" ] || { echo "$0 [-w] [-s] [-k] [-v]" 1>&2 ; exit 1 ; }
+[ "$1" ] || { echo "$0 [-n] [-s] [-k] [-v]" 1>&2 ; exit 1 ; }
 
 # default is in-terminal editing
-EDITOR="${EDITOR:-emacs -nw}"
 
 while getopts "wskvlzd" opt; do
   case "$opt" in
-      w)  # open in window
-	  EDITOR="emacsclient -a emacs -r -n"
+      n)  # open in window
+      shift $((OPTIND-1))
+	  exec emacs -nw "$@"
 	  ;;
       s)  # [re]start server
-	  systemctl --user restart emacsd ; exit
+	  exec systemctl --user restart emacsd
 	  ;;
       k)  # kill server
-	  systemctl --user stop emacsd ; exit
+	  exec systemctl --user stop emacsd
 	  ;;
       v)  # show server log
-	  EDITOR="sudo journalctl --user-unit emacsd -f"
+	  exec sudo journalctl --user-unit emacsd -f
 	  ;;
       l)  # check server status
-	  EDITOR="systemctl status --user emacsd"
+	  exec systemctl status --user emacsd
 	  ;;
       z)  # edit this script
-	  set -- emacs $0
+	  exec emacs $0
 	  ;;
       d) # edit service file
-	  set -- emacs ~/.config/systemd/user/emacsd.service
+	  exec emacs ~/.config/systemd/user/emacsd.service
 	  ;;
   esac
 done
 if wmctrl -m | grep EXWM >/dev/null
 then
   # always use exwm if available
-  EDITOR="emacsclient -a emacs -r -n"
+  shift $((OPTIND-1))
+  exec emacsclient -a emacs -r -n "$@"
 fi
 
 shift $((OPTIND-1))
-$EDITOR "$@"
+exec emacsclient -c -n -a "" "$@"
 

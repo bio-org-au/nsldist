@@ -155,3 +155,26 @@
 		(progn (exwm-workspace-switch-left)
 			   (windmove-far-right)))))
 
+
+(let* ((deltax 200) (deltay 200))
+    (let* ((floating-container (frame-parameter exwm--floating-frame
+                                                   'exwm-container))
+              (geometry (xcb:+request-unchecked+reply exwm--connection
+                            (make-instance 'xcb:GetGeometry
+                                           :drawable floating-container)))
+              (edges (window-inside-absolute-pixel-edges)))
+      (with-slots (x y width height) geometry
+		(cl-destructuring-bind (xi yi widthi heighti) edges
+		   (let ((xd (- x xi)) (yd (- y yi)) (widthd (- width widthi)) (heightd (- height heighti)))
+           (let ((width-new (+ width deltax))
+                 (height-new (+ height deltay))
+				 (widthi-new (+ widthi deltax))
+				 (heighti-new (+ heighti deltay))
+				 
+				 (deltad (list xd yd widthd heightd)))
+             (exwm--set-geometry floating-container x y width-new height-new)
+             (exwm--set-geometry exwm--id xi yi widthi-new heighti-new)
+             (xcb:flush exwm--connection)
+             (message "%s pi: %s deltad %s" (list :x x :y y :width width :height height :width-new width-new :height-new height-new :widthi-new widthi-new :heighti-new: heighti-new) edges deltad)))))))
+
+ 

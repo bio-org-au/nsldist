@@ -1,12 +1,13 @@
 ; MELPA package library https://melpa.org/#/getting-started
 ;(setq debug-on-error t)
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/treemacs/" user-emacs-directory))
 					;(setq debug-on-message "Package cl is deprecated")
 (setq user-emacs-directory "~/.config/emacs")
 (setq package-user-dir "~/local/share/emacs/elpa")
 (setq-default indent-tabs-mode t)
 (setq-default tab-width 4)
 (setq standard-indent 4)
-(setq buffer-move-behavior 'move)
 (setq custom-file (expand-file-name "custom-vars.el" user-emacs-directory))
 
 (global-set-key "\C-x\C-b" 'buffer-menu)
@@ -36,8 +37,6 @@ There are two things you can do about this warning:
 
 (setq-default buffer-file-coding-system 'utf-8-unix) ;; Unix line endings always
 
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "lisp/treemacs/" user-emacs-directory))
 ;(add-to-list 'load-path "~/.config/emacs/lisp/")
 ;(add-to-list 'load-path "~/.config/emacs/lisp/treemacs/")
 
@@ -101,7 +100,7 @@ There are two things you can do about this warning:
 
 
 ; To disable the menu bar, place the following line in your .emacs file:
-(menu-bar-mode -1)
+;(menu-bar-mode -1)
 ;; (menu-bar-mode 1)
 ; To disable the scrollbar, use the following line:
 (scroll-bar-mode -1)
@@ -131,7 +130,9 @@ There are two things you can do about this warning:
       (save-buffers-kill-emacs)                                                                                            
     (message "Canceled frame close")))
 
-(require 'winframe-move)
+(require 'buffer-move)
+(setq buffer-move-behavior 'move)
+(require 'windmove)
 
 (when (daemonp)
   (global-set-key (kbd "C-x C-c") 'ask-before-closing))
@@ -758,3 +759,4 @@ function."
 
 (setq column-number-mode t)
 (setq size-indication-mode t)
+

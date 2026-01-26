@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#until ps aux | grep "^root.*keysnail" >/dev/null
+#do
+  xhost +SI:localuser:root
+  exec sudo xkeysnail ~/.config/emacs/xkeysnail/xkeysnail.py 
+#  echo "TRIED"
+#  sleep 3
+#done >/tmp/xxx.x

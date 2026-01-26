@@ -56,6 +56,7 @@ define_keymap(re.compile("Firefox|Google-chrome"), {
 #    K("C-KEY_1"): [K("esc"), sleep(0.5), K("C-w")],
 #    K("C-KEY_1"): [K("esc"), K("C-w")],
 #    K("C-KEY_1"): [K("C-l"), sleep(0.5), K("tab"), sleep(0.5), K("C-w")],
+    K("C-grave"): K("C-w"),
     K("C-x"): {
         K("C-f"): K("C-t"),
         K("k"): K("C-w"),

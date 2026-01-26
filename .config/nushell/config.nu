@@ -31,5 +31,7 @@ $env.config.show_banner = false
 
 
 $env.NU_LIB_DIRS ++= [ ($nu.default-config-dir + /modules) ]
+$env.EDITOR = "em"
+
 
 use ngrep.nu

@@ -5,11 +5,12 @@ Description=Keymap for Emacs key bindings
 Type=simple
 #User=
 #Group=
-ExecStart=%h/Google/bin/keymap -t
-Restart=always
+ExecStart=%h/.config/emacs/xkeysnail/keysnail
+#Restart=always
 StandardOutput=journal
 #StandardOutput=file:/tmp/xremap-log-%h
 RuntimeMaxSec=10m
+RestartSec=1000ms
 
 [Install]
 WantedBy=default.target
