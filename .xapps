@@ -1,0 +1,18 @@
+autorandr --change
+nm-applet
+insync start
+blueman-applet
+udiskie --tray
+indicator-sound-switcher
+radiotray-ng
+caffeine
+pasystray
+gxkb
+copyq
+redshift-gtk
+keepassxc
+trayclock
+cbatticon
+mictray
+meteo-qt
+picom

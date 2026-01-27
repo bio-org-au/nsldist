@@ -1,5 +1,7 @@
 ; MELPA package library https://melpa.org/#/getting-started
 ;(setq debug-on-error t)
+(setq default-directory "~")
+
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp/treemacs/" user-emacs-directory))
 					;(setq debug-on-message "Package cl is deprecated")
@@ -447,44 +449,44 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 (set-face-attribute 'default nil :font "Fira Code-12")
 
 ;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36#file-tabline-el-L10
-(defun my/set-tab-theme ()
-  (let ((bg (face-attribute 'mode-line :background))
-        (fg (face-attribute 'default :foreground))
-	(hg (face-attribute 'default :background))
-        (base (face-attribute 'mode-line :background))
-        (box-width (/ (line-pixel-height) 4)))
-    (set-face-attribute 'tab-line nil
-			:background base
-			:foreground fg
-			:height 0.8
-			:inherit nil
-			:box (list :line-width -1 :color base)
-			)
-    (set-face-attribute 'tab-line-tab nil
-			:foreground fg
-			:background bg
-			:weight 'normal
-			:inherit nil
-			:box (list :line-width box-width :color bg))
-    (set-face-attribute 'tab-line-tab-inactive nil
-			:foreground fg
-			:background base
-			:weight 'normal
-			:inherit nil
-			:box (list :line-width box-width :color base))
-    (set-face-attribute 'tab-line-highlight nil
-			:foreground fg
-			:background hg
-			:weight 'normal
-			:inherit nil
-			:box (list :line-width box-width :color hg))
-    (set-face-attribute 'tab-line-tab-current nil
-			:foreground fg
-			:background hg
-			:weight 'normal
-			:inherit nil
-			:box (list :line-width box-width :color hg))
-	))
+;; (defun my/set-tab-theme ()
+;;   (let ((bg (face-attribute 'mode-line :background))
+;;         (fg (face-attribute 'default :foreground))
+;; 	(hg (face-attribute 'default :background))
+;;         (base (face-attribute 'mode-line :background))
+;;         (box-width (/ (line-pixel-height) 4)))
+;;     (set-face-attribute 'tab-line nil
+;; 			:background base
+;; 			:foreground fg
+;; 			:height 0.8
+;; 			:inherit nil
+;; 			:box (list :line-width -1 :color base)
+;; 			)
+;;     (set-face-attribute 'tab-line-tab nil
+;; 			:foreground fg
+;; 			:background bg
+;; 			:weight 'normal
+;; 			:inherit nil
+;; 			:box (list :line-width box-width :color bg))
+;;     (set-face-attribute 'tab-line-tab-inactive nil
+;; 			:foreground fg
+;; 			:background base
+;; 			:weight 'normal
+;; 			:inherit nil
+;; 			:box (list :line-width box-width :color base))
+;;     (set-face-attribute 'tab-line-highlight nil
+;; 			:foreground fg
+;; 			:background hg
+;; 			:weight 'normal
+;; 			:inherit nil
+;; 			:box (list :line-width box-width :color hg))
+;;     (set-face-attribute 'tab-line-tab-current nil
+;; 			:foreground fg
+;; 			:background hg
+;; 			:weight 'normal
+;; 			:inherit nil
+;; 			:box (list :line-width box-width :color hg))
+;; 	))
 
 
 (defun my/tab-line-name-buffer (buffer &rest _buffers)
@@ -550,7 +552,7 @@ truncates text if needed.  Minimal width can be set with
                                             'help-echo "Click to close tab"))
 
     
-    (my/set-tab-theme)
+    ;; (my/set-tab-theme)
 
     (defun tab-line-close-tab (&optional e)
   "Close the selected tab.
@@ -760,3 +762,7 @@ function."
 (setq column-number-mode t)
 (setq size-indication-mode t)
 
+
+(setq  exwm-config (expand-file-name "exwm.el" user-emacs-directory))
+(defun load-exwm ()
+  (load exwm-config))

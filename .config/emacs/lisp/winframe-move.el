@@ -1,6 +1,6 @@
 
 (require 'framemove)
-(require buffer-move)
+(require 'buffer-move)
 
 ;;
 ;; FOCUS

@@ -35,3 +35,4 @@ $env.EDITOR = "em"
 
 
 use ngrep.nu
+use type.nu

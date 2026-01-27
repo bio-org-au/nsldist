@@ -3,6 +3,9 @@
 (require 'exwm-randr)
 (require 'windmove)
 (require 'winframe-move)
+(require 'buffer-move)
+(setq buffer-move-behavior 'move)
+(require 'windmove)
 
 (use-package exwm-float
   :init
@@ -352,29 +355,31 @@
 
 (defun cc/exwm-init ()
   (load custom-file 'noerror)
+  (mapcar #'efs/run-in-background (process-lines "cat" ".xapps"))
+
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   ;;  (efs/run-in-background "~/.config/polybar/launch.sh")
-  (exwm-workspace-switch-create 0)
-  (efs/run-in-background "nm-applet")
-  (efs/run-in-background "insync start")
-  (efs/run-in-background "blueman-applet")
-  (efs/run-in-background "udiskie --tray")
-  (efs/run-in-background "indicator-sound-switcher")
-  (efs/run-in-background "radiotray-ng")
-  (efs/run-in-background "caffeine")
-  (efs/run-in-background "pasystray");
-  (efs/run-in-background "gxkb");
-  (efs/run-in-background "copyq");
-  (efs/run-in-background "redshift-gtk");
-  (efs/run-in-background "keepassxc");
-  (efs/run-in-background "trayclock");
-  (efs/run-in-background "cbatticon");
-  (efs/run-in-background "mictray");
-  (efs/run-in-background "meteo-qt");
-;;  (efs/run-in-background "jetbrains-toolbox")
-  (efs/run-in-background "picom") ; composite manager, plank prefers it
-;;  (efs/run-in-background "plank -n dock1")
+;;   (exwm-workspace-switch-create 0)
+;;   (efs/run-in-background "nm-applet")
+;;   (efs/run-in-background "insync start")
+;;   (efs/run-in-background "blueman-applet")
+;;   (efs/run-in-background "udiskie --tray")
+;;   (efs/run-in-background "indicator-sound-switcher")
+;;   (efs/run-in-background "radiotray-ng")
+;;   (efs/run-in-background "caffeine")
+;;   (efs/run-in-background "pasystray");
+;;   (efs/run-in-background "gxkb");
+;;   (efs/run-in-background "copyq");
+;;   (efs/run-in-background "redshift-gtk");
+;;   (efs/run-in-background "keepassxc");
+;;   (efs/run-in-background "trayclock");
+;;   (efs/run-in-background "cbatticon");
+;;   (efs/run-in-background "mictray");
+;;   (efs/run-in-background "meteo-qt");
+;; ;;  (efs/run-in-background "jetbrains-toolbox")
+;;   (efs/run-in-background "picom") ; composite manager, plank prefers it
+;; ;;  (efs/run-in-background "plank -n dock1")
   )
 
 (add-hook 'exwm-init-hook #'cc/exwm-init)
