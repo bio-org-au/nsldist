@@ -12,7 +12,8 @@
   (setq exwm-float-modify-amount '(:move-slow 20 :move-fast 100 :resize 50)
         exwm-float-border '(:stationary ("navy" . 1) :moving ("maroon" . 2)))
   (exwm-float-setup)
-  (exwm-input-set-key (kbd "C-c M-f") #'exwm-float-mode))
+;;  (exwm-input-set-key (kbd "C-c M-f") #'exwm-float-mode)
+  )
 
 ;;(require 'buffer-move)
 
@@ -455,7 +456,8 @@
                     ;; (lambda () (interactive) (shell-command "amixer set Master 1+ toggle | sed -nr 's/.*: Playback.*?\\[([[:alpha:]]*)\\].*/\\1/gp' | head -1")))
 ;;(exwm-input-set-key (kbd "<XF86MonBrightnessDown>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%- ; brightnessctl g")))
 ;;(exwm-input-set-key (kbd "<XF86MonBrightnessUp>") (lambda () (interactive) (shell-command "brightnessctl -q s 2%+ ; brightnessctl g")))
-;;(exwm-input-set-key (kbd "<print>") (lambda () (interactive) (start-process-shell-command "spectacle" nil "spectacle")))
+
+(exwm-input-set-key (kbd "<print>") (lambda () (interactive) (start-process-shell-command "spectacle" nil "spectacle")))
 
 (use-package desktop-environment
   :after exwm

@@ -1,4 +1,5 @@
 
+
 PATH=$HOME/Google/binw:$HOME/Google/bin:$HOME/bin:$HOME/.sdkman/candidates/java/current/bin:$PATH
 
 export EDITOR=em
@@ -7,6 +8,9 @@ export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 PATH=$PATH:/opt/google-cloud-cli/bin
+
+alias csi="chicken-csi -q"
+alias csc="chicken-csc"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"

@@ -48,6 +48,7 @@
 	 default))
  '(display-battery-mode nil)
  '(display-time-mode nil)
+ '(line-move-visual nil)
  '(menu-bar-mode nil)
  '(package-selected-packages
    '(ace-jump-mode arc-dark-theme arjen-grey-theme async avy backlight

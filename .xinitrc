@@ -19,29 +19,17 @@ test -f ~/.bashrc && source ~/.bashrc
 
 dconf dump /net/launchpad/plank/docks/ > ~/.config/plank/docks.ini
 
-#(
-#sleep 20
-#autorandr --change
-#nm-applet &
-#insync start &
-#blueman-applet &
-#udiskie --tray &
-#indicator-sound-switcher &
-#radiotray-ng &
-#caffeine &
-#pasystray &
-#gxkb &
-#copyq &
-#redshift-gtk &
-#keepassxc &
-#trayclock &
-#cbatticon &
-#mictray &
-#meteo-qt &
-##jetbrains-toolbox &
-#picom & # composite manager, plank prefers it
-#) &
+startupapps() {
+	while read LINE
+	do
+		$LINE &
+	done <~/.xapps
+}
 
+if [ "$STARTUP" ]
+then
+    ( sleep 20 ; startupapps ) &
+fi
 
 exec $WM $ARG1 $ARG2 $ARG3 $ARG4 $ARG5 $ARG6
 #
