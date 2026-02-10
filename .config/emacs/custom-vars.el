@@ -57,12 +57,14 @@
 				   dir-treeview dir-treeview-themes dired-sidebar
 				   direx dirtree dirtree-prosjekt dmenu elgrep exwm
 				   exwm fancy-battery fancy-battery filetree
-				   find-things-fast fira-code-mode fontawesome
-				   grails-mode groovy-imports groovy-mode helm-lsp
-				   hide-comnt list-utils list-utils lsp-groovy lsp-ivy
-				   lsp-java lsp-javacomp lsp-mode lsp-ui magit
-				   mark-thing-at melpa-upstream-visit neotree
-				   projectile simple-httpd slime treesit-auto vterm
-				   winner-mode-enable xah-get-thing xelb yaml-mode))
+				   find-things-fast fira-code-mode fontawesome geiser
+				   geiser-chicken grails-mode groovy-imports
+				   groovy-mode helm-lsp hide-comnt list-utils
+				   list-utils lsp-groovy lsp-ivy lsp-java lsp-javacomp
+				   lsp-mode lsp-ui magit mark-thing-at
+				   melpa-upstream-visit neotree projectile quack
+				   scheme-complete simple-httpd slime treesit-auto
+				   vterm winner-mode-enable xah-get-thing xelb
+				   yaml-mode))
  '(tab-bar-mode t)
  '(tool-bar-mode nil))

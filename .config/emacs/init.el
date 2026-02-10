@@ -752,7 +752,7 @@ function."
 
 (require 'awesome-tray)
 ;;(setq awesome-tray-info-padding-right (/ (- (frame-width) 28) 2))
-(setq awesome-tray-info-padding-right 34)
+(setq awesome-tray-info-padding-right 36)
 (setq awesome-tray-hide-mode-line nil)
 (setq awesome-tray-date-format "%a %d-%b-%G %I:%M %p")
 (setq awesome-tray-active-modules
@@ -762,6 +762,7 @@ function."
 (setq column-number-mode t)
 (setq size-indication-mode t)
 
+(setq scheme-program-name "csi -:c")
 
 (setq  exwm-config (expand-file-name "exwm.el" user-emacs-directory))
 (defun load-exwm ()
