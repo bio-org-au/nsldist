@@ -1,18 +1,20 @@
 autorandr --change
+
 nm-applet
 insync start
 blueman-applet
-udiskie --tray
 indicator-sound-switcher
-radiotray-ng
+mictray
+udiskie --tray
 caffeine
 pasystray
-gxkb
 copyq
 redshift-gtk
-keepassxc
-trayclock
+#meteo-qt
 cbatticon
-mictray
-meteo-qt
+keepassxc
+radiotray-ng
+trayclock
+gxkb
+
 picom

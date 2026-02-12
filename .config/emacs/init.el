@@ -182,8 +182,19 @@ There are two things you can do about this warning:
     (apply orig-fun args)))
 
 (advice-add 'switch-to-buffer-other-window :around #'use-least-recent-window)
-(tab-bar-mode 1)
 
+(tab-bar-mode 1)
+(defun my/tab-bar-select-or-create (tab-number)
+  "Switch to TAB-NUMBER. If it doesn't exist, create a new tab."
+  (interactive)
+  (if (>= (length (tab-bar-tabs)) tab-number)
+      (tab-bar-select-tab tab-number)
+    (tab-bar-new-tab)))
+
+(dotimes (i 9)
+  (let ((n (+ i 1)))
+    (global-set-key (kbd (format "s-<f%d>" n))
+                    `(lambda () (interactive) (my/tab-bar-select-or-create ,n)))))
 
 ;;If at any point you want to get rid of the advice, then evaluate the following:
 ;;(advice-remove 'switch-to-buffer-other-window  #'use-least-recent-window)
@@ -445,8 +456,11 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 (winner-mode 1)
 ;(tab-bar-history-mode 1)
 
+(use-package fira-code-mode
+  :hook prog-mode)
 
-(set-face-attribute 'default nil :font "Fira Code-12")
+
+(set-face-attribute 'default nil :font "Fira Code-14" :weight 'medium)
 
 ;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36#file-tabline-el-L10
 ;; (defun my/set-tab-theme ()
@@ -533,6 +547,11 @@ truncates text if needed.  Minimal width can be set with
       "Maximum width of a tab in characters."
       :type 'integer
       :group 'tab-line)
+
+	(defface my/disabled
+      '((((class color) (background dark))  :foreground "black"))
+	  "Face for tab-line arrows when they are at the scroll limit.")
+
 	
     (setq tab-line-close-button-show t
           tab-line-new-button-show t
@@ -546,9 +565,23 @@ truncates text if needed.  Minimal width can be set with
                                            'keymap tab-line-left-map
                                            'mouse-face 'tab-line-highlight
                                            'help-echo "Click to scroll left")
+          tab-line-right-button (propertize (if (char-displayable-p ?▶) " ▶ " " > ")
+                                            'keymap tab-line-right-map
+                                            'mouse-face 'tab-line-highlight
+                                            'help-echo "Click to scroll right")
+          tab-line-left-button-grey (propertize (if (char-displayable-p ?◀) " ◀ " " < ")
+                                           'keymap tab-line-left-map
+                                           'mouse-face 'shadow
+                                           'face 'my/disabled
+                                           'help-echo "No more tabs")
+          tab-line-right-button-grey (propertize (if (char-displayable-p ?▶) " ▶ " " > ")
+                                            'keymap tab-line-right-map
+											'mouse-face 'shadow
+											'face 'my/disabled
+                                            'help-echo "No more tabs")
           tab-line-close-button (propertize (if (char-displayable-p ?×) " × " " x ")
                                             'keymap tab-line-tab-close-map
-                                            'mouse-face 'tab-line-close-highlight
+                                            'mouse-face 'tab-line-highlight
                                             'help-echo "Click to close tab"))
 
     
@@ -556,7 +589,7 @@ truncates text if needed.  Minimal width can be set with
 
     (defun tab-line-close-tab (&optional e)
   "Close the selected tab.
-
+f
 If tab is presented in another window, close the tab by using
 `bury-buffer` function. Being present means existing in any tab.
 If tab is unique to all existing
@@ -659,7 +692,47 @@ function."
     (define-key-after menu [close] '(menu-item "Close" tab-line-close-tab :help "Close the tab"))
     (define-key-after menu [bury] '(menu-item "Bury" tab-line-bury-tab :help "Bury the tab"))
     (define-key-after menu [kill] '(menu-item "Kill" tab-line-kill-tab :help "Kill the tab"))
-    (popup-menu menu event))))
+    (popup-menu menu event)))
+
+(defun tab-line-format-template (tabs)
+  "Template of the format for displaying tab line for selected window.
+This is used by `tab-line-format'.
+DISABLE ARROWS DISAPPEARING AT THE END
+"
+  (let* ((separator (or tab-line-separator (if (window-system) " " "|")))
+         (hscroll (window-parameter nil 'tab-line-hscroll))
+         (strings
+          (mapcar
+           (lambda (tab)
+             (concat separator
+                     (funcall tab-line-tab-name-format-function tab tabs)))
+           tabs))
+         (hscroll-data (tab-line-auto-hscroll strings hscroll)))
+    (setq hscroll (nth 1 hscroll-data))
+    (append
+     (if (null (nth 0 hscroll-data))
+         (when hscroll
+           (setq hscroll nil)
+           (set-window-parameter nil 'tab-line-hscroll hscroll))
+       (list separator
+             (if (and (numberp hscroll) (not (zerop hscroll)))
+				 tab-line-left-button
+			   tab-line-left-button-grey)
+             (if (if (numberp hscroll)
+                     (< (truncate hscroll) (1- (length strings)))
+                   (> (length strings) 1))
+				 tab-line-right-button
+				 tab-line-right-button-grey
+			   )))
+     (if hscroll (nthcdr (truncate hscroll) strings) strings)
+     (list separator)
+     (when (and (memq tab-line-tabs-function tab-line-new-button-functions)
+                tab-line-new-button-show
+                tab-line-new-button)
+       (list tab-line-new-button)))))
+
+
+)
 
 
     ;; (dolist (mode '(ediff-mode process-menu-mode))

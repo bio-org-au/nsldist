@@ -88,6 +88,7 @@
 					  (cons (match-string 1 s) (cons (string-to-number (match-string 3 s)) (string-to-number (match-string 2 s))))
 					(if (string-match "\\([^ ]*\\) connected" s) (cons (match-string 1 s) (cons 0 0)))
 					)) cc/randr))
+  (setq exwm-workspace-number (length cc/screen-x))
   (setq cc/screen-sorted
 		(sort cc/screen-x
 			  (lambda (a b) (let ((diff-pos (- (car (cdr a)) (car (cdr b))))
@@ -245,8 +246,17 @@
                     `(,(kbd (format "s-%d" i)) .
                       (lambda ()
                         (interactive)
-                        (exwm-workspace-switch-create ,i))))
+                        (my/tab-bar-select-or-create ,i))))
                   (number-sequence 0 9))))
+;                        (exwm-workspace-switch-create ,i))))
+;(setq exwm-input-global-keys
+;	  (append exwm-input-global-keys
+;			  (mapcar (lambda (n) `(,(kbd (format "s-<f%d>" n))
+;					  . (lambda () (interactive) (my/tab-bar-select-or-create ,n))))
+;					  (number-sequence 1 10))))
+
+
+
 (exwm-input--update-global-prefix-keys) ;; not necessary on startup, but maybe later
    
 
@@ -356,12 +366,12 @@
 
 (defun cc/exwm-init ()
   (load custom-file 'noerror)
-  (mapcar #'efs/run-in-background (process-lines "cat" ".xapps"))
+;  (mapcar #'efs/run-in-background (process-lines "cat" ".xapps"))
 
+;   (exwm-workspace-switch-create 0)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
   ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   ;;  (efs/run-in-background "~/.config/polybar/launch.sh")
-;;   (exwm-workspace-switch-create 0)
 ;;   (efs/run-in-background "nm-applet")
 ;;   (efs/run-in-background "insync start")
 ;;   (efs/run-in-background "blueman-applet")
@@ -379,7 +389,7 @@
 ;;   (efs/run-in-background "mictray");
 ;;   (efs/run-in-background "meteo-qt");
 ;; ;;  (efs/run-in-background "jetbrains-toolbox")
-;;   (efs/run-in-background "picom") ; composite manager, plank prefers it
+;;   (efs/run-in-background "picom") ; composit
 ;; ;;  (efs/run-in-background "plank -n dock1")
   )
 
@@ -574,3 +584,13 @@ The DWIM behaviour of this command is as follows:
 ;;                 (not ((setenv "_JAVA_AWT_WM_NONREPARENTING" "1")
 
 
+(defun my/split-window-to-scratch (orig-fun &rest args)
+  "Because EXWM X-windows can only be in one emacs window
+   at a time, it's better that we split to scratch, rather than
+   stealing a random window from somewhere else"
+  (let ((new-window (apply orig-fun args)))
+    (with-selected-window new-window
+      (switch-to-buffer "*scratch*"))
+    new-window))
+(advice-add 'split-window-right :around #'my/split-window-to-scratch)
+(advice-add 'split-window-below :around #'my/split-window-to-scratch)

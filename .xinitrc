@@ -20,15 +20,16 @@ test -f ~/.bashrc && source ~/.bashrc
 dconf dump /net/launchpad/plank/docks/ > ~/.config/plank/docks.ini
 
 startupapps() {
-	while read LINE
+	grep -vE '^#|^ *$' ~/.xapps | while read LINE
 	do
+		sleep 1
 		$LINE &
-	done <~/.xapps
+	done
 }
 
 if [ "$STARTUP" ]
 then
-    ( sleep 20 ; startupapps ) &
+    ( sleep 10 ; startupapps ) &
 fi
 
 exec $WM $ARG1 $ARG2 $ARG3 $ARG4 $ARG5 $ARG6
