@@ -366,15 +366,15 @@
 
 (defun cc/exwm-init ()
   (load custom-file 'noerror)
+  (efs/run-in-background "autorandr --change")
   (let ((lines (process-lines "grep" "-vE" "^#|^[ ]*$" (expand-file-name "~/.xapps"))))
 	(cl-mapcar
-	 (lambda (line delay) (run-with-timer delay nil (lambda () (efs/run-in-background line))))
+	 (lambda (line delay) (run-with-timer delay nil `(lambda () (efs/run-in-background ,line))))
 	 lines
 	 (number-sequence 1 (length lines))))
-
 ;   (exwm-workspace-switch-create 0)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
-  ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
+o  ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   ;;  (efs/run-in-background "~/.config/polybar/launch.sh")
 ;;   (efs/run-in-background "nm-applet")
 ;;   (efs/run-in-background "insync start")

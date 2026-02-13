@@ -459,19 +459,85 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 (use-package fira-code-mode
   :hook prog-mode)
 
+(add-hook 'after-init-hook
+		  (lambda ()
+			(set-face-attribute 'default nil :font "Fira Code-14" :weight 'medium)))
+;;(set-frame-font "Fira Code-12" nil t)
 
-(set-face-attribute 'default nil :font "Fira Code-14" :weight 'medium)
+(setq-default prettify-symbols-alist '(("lambda" . ?λ)))
+(add-hook 'prog-mode-hook #'prettify-symbols-mode)
 
-(push '("..." . ?\u2026) prettify-symbols-alist)
+(use-package ligature
+  :load-path "path-to-ligature-repo"
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  ;; Enable all Cascadia and Fira Code ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode
+                        '(;; == === ==== => =| =>>=>=|=>==>> ==< =/=//=// =~
+                          ;; =:= =!=
+                          ("=" (rx (+ (or ">" "<" "|" "/" "~" ":" "!" "="))))
+                          ;; ;; ;;;
+                          (";" (rx (+ ";")))
+                          ;; && &&&
+                          ("&" (rx (+ "&")))
+                          ;; !! !!! !. !: !!. != !== !~
+                          ("!" (rx (+ (or "=" "!" "\." ":" "~"))))
+                          ;; ?? ??? ?:  ?=  ?.
+                          ("?" (rx (or ":" "=" "\." (+ "?"))))
+                          ;; %% %%%
+                          ("%" (rx (+ "%")))
+                          ;; |> ||> |||> ||||> |] |} || ||| |-> ||-||
+                          ;; |->>-||-<<-| |- |== ||=||
+                          ;; |==>>==<<==<=>==//==/=!==:===>
+                          ("|" (rx (+ (or ">" "<" "|" "/" ":" "!" "}" "\]"
+                                          "-" "=" ))))
+                          ;; \\ \\\ \/
+                          ("\\" (rx (or "/" (+ "\\"))))
+                          ;; ++ +++ ++++ +>
+                          ("+" (rx (or ">" (+ "+"))))
+                          ;; :: ::: :::: :> :< := :// ::=
+                          (":" (rx (or ">" "<" "=" "//" ":=" (+ ":"))))
+                          ;; // /// //// /\ /* /> /===:===!=//===>>==>==/
+                          ("/" (rx (+ (or ">"  "<" "|" "/" "\\" "\*" ":" "!"
+                                          "="))))
+                          ;; .. ... .... .= .- .? ..= ..<
+                          ("\." (rx (or "=" "-" "\?" "\.=" "\.<" (+ "\."))))
+                          ;; -- --- ---- -~ -> ->> -| -|->-->>->--<<-|
+                          ("-" (rx (+ (or ">" "<" "|" "~" "-"))))
+                          ;; *> */ *)  ** *** ****
+                          ("*" (rx (or ">" "/" ")" (+ "*"))))
+                          ;; www wwww
+                          ("w" (rx (+ "w")))
+                          ;; <> <!-- <|> <: <~ <~> <~~ <+ <* <$ </  <+> <*>
+                          ;; <$> </> <|  <||  <||| <|||| <- <-| <-<<-|-> <->>
+                          ;; <<-> <= <=> <<==<<==>=|=>==/==//=!==:=>
+                          ;; << <<< <<<<
+                          ("<" (rx (+ (or "\+" "\*" "\$" "<" ">" ":" "~"  "!"
+                                          "-"  "/" "|" "="))))
+                          ;; >: >- >>- >--|-> >>-|-> >= >== >>== >=|=:=>>
+                          ;; >> >>> >>>>
+                          (">" (rx (+ (or ">" "<" "|" "/" ":" "=" "-"))))
+                          ;; #: #= #! #( #? #[ #{ #_ #_( ## ### #####
+                          ("#" (rx (or ":" "=" "!" "(" "\?" "\[" "{" "_(" "_"
+                                       (+ "#"))))
+                          ;; ~~ ~~~ ~=  ~-  ~@ ~> ~~>
+                          ("~" (rx (or ">" "=" "-" "@" "~>" (+ "~"))))
+                          ;; __ ___ ____ _|_ __|____|_
+                          ("_" (rx (+ (or "_" "|"))))
+                          ;; Fira code: 0xFF 0x12
+                          ("0" (rx (and "x" (+ (in "A-F" "a-f" "0-9")))))
+                          ;; Fira code:
+                          "Fl"  "Tl"  "fi"  "fj"  "fl"  "ft"
+                          ;; The few not covered by the regexps.
+                          "{|"  "[|"  "]#"  "(*"  "}#"  "$>"  "^="))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
 
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (setq prettify-symbols-alist 
-                  (delete '("..." . ?…) prettify-symbols-alist))))
-
-(setq prettify-symbols-alist (delete '("..." . ?…) prettify-symbols-alist))
-(prettify-symbols-mode -1)
-(prettify-symbols-mode 1)
 
 
 ;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36#file-tabline-el-L10

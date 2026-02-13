@@ -59,7 +59,7 @@
 				   exwm fancy-battery fancy-battery filetree
 				   find-things-fast fira-code-mode fontawesome geiser
 				   geiser-chicken grails-mode groovy-imports
-				   groovy-mode helm-lsp hide-comnt list-utils
+				   groovy-mode helm-lsp hide-comnt ligature list-utils
 				   list-utils lsp-groovy lsp-ivy lsp-java lsp-javacomp
 				   lsp-mode lsp-ui magit mark-thing-at
 				   melpa-upstream-visit neotree projectile quack

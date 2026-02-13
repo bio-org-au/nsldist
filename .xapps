@@ -1,4 +1,4 @@
-autorandr --change
+#autorandr --change
 
 nm-applet
 insync start
