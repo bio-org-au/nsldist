@@ -462,6 +462,18 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 
 (set-face-attribute 'default nil :font "Fira Code-14" :weight 'medium)
 
+(push '("..." . ?\u2026) prettify-symbols-alist)
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (setq prettify-symbols-alist 
+                  (delete '("..." . ?…) prettify-symbols-alist))))
+
+(setq prettify-symbols-alist (delete '("..." . ?…) prettify-symbols-alist))
+(prettify-symbols-mode -1)
+(prettify-symbols-mode 1)
+
+
 ;; https://gist.github.com/satran/95195fc86289dcf05cc8f66c363edb36#file-tabline-el-L10
 ;; (defun my/set-tab-theme ()
 ;;   (let ((bg (face-attribute 'mode-line :background))

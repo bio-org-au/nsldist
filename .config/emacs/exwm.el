@@ -366,7 +366,11 @@
 
 (defun cc/exwm-init ()
   (load custom-file 'noerror)
-;  (mapcar #'efs/run-in-background (process-lines "cat" ".xapps"))
+  (let ((lines (process-lines "grep" "-vE" "^#|^[ ]*$" (expand-file-name "~/.xapps"))))
+	(cl-mapcar
+	 (lambda (line delay) (run-with-timer delay nil (lambda () (efs/run-in-background line))))
+	 lines
+	 (number-sequence 1 (length lines))))
 
 ;   (exwm-workspace-switch-create 0)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
