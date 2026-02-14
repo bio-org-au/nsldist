@@ -456,8 +456,9 @@ Other buffer group by `centaur-tabs-get-group-name' with project name."
 (winner-mode 1)
 ;(tab-bar-history-mode 1)
 
-(use-package fira-code-mode
-  :hook prog-mode)
+(if (display-graphic-p)
+	(use-package fira-code-mode
+	  :hook prog-mode))
 
 (add-hook 'after-init-hook
 		  (lambda ()
