@@ -374,7 +374,7 @@
 	 (number-sequence 1 (length lines))))
 ;   (exwm-workspace-switch-create 0)
   (cc/exwm-randr-screen-change) ;; make sure screen is setup before launching other
-o  ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
+  ;; (exwm-workspace-switch-create (car (car (last exwm-randr-workspace-monitor-alist))))
   ;;  (efs/run-in-background "~/.config/polybar/launch.sh")
 ;;   (efs/run-in-background "nm-applet")
 ;;   (efs/run-in-background "insync start")
