@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs';
-import {ComponentFactoryResolver, EventEmitter, Injectable, Injector, Output} from '@angular/core';
+import {ComponentFactoryResolver, EventEmitter, Injectable, Injector, NgZone, Output} from '@angular/core';
 // import * as L from 'leaflet';
 declare const L: any;
 import 'leaflet';
@@ -107,6 +107,7 @@ export class MapService {
 
     constructor(http: HttpClient,
                 private livingService: LivingService,
+                private zone: NgZone,
                 configService: ConfigService) {
         this.http = http;
         this.configService = configService;
@@ -155,25 +156,27 @@ export class MapService {
             this.map.invalidateSize();
             return;
         }
-        this.map = new L.Map('map', {
-            tap: false,
-            worldCopyJump: false,
-            // drawControl: true,
-            zoomControl: false,
-            // center: new LatLng(-28.0, 134.0),
-            // center: new LatLng(-31.22, 120.07),
-            center: new LatLng(-24.25, 133.42),
-            zoom: 5,
-            // minZoom: 16,
-            // maxZoom: 24,
-            layers: [this.baseMaps.OpenStreetMap],
-            // maxBounds: bounds,
-            maxBounds: [
-                [-8.62, 71.85],
-                [-53.82, 168.3]
-            ],
-            maxBoundsViscosity: 0.5,
-            minZoom: 3.5
+        this.zone.runOutsideAngular(() => {
+            this.map = new L.Map('map', {
+                tap: false,
+                worldCopyJump: false,
+                // drawControl: true,
+                zoomControl: false,
+                // center: new LatLng(-28.0, 134.0),
+                // center: new LatLng(-31.22, 120.07),
+                center: new LatLng(-24.25, 133.42),
+                zoom: 5,
+                // minZoom: 16,
+                // maxZoom: 24,
+                layers: [this.baseMaps.OpenStreetMap],
+                // maxBounds: bounds,
+                maxBounds: [
+                    [-8.62, 71.85],
+                    [-53.82, 168.3]
+                ],
+                maxBoundsViscosity: 0.5,
+                minZoom: 3.5
+            });
         });
 
 
@@ -489,37 +492,6 @@ export class MapService {
         this.lastZoom = zoom;
     }
 
-
-    // public addMapOverlay(geojsonName: string) {
-    //     const that = this;
-    //     if (this.overlays.has(geojsonName)) {
-    //         this.overlays.get(geojsonName).addTo(this.map);
-    //     } else {
-    //         return new Promise(function (resolve, reject) {
-    //                 that.addLayer(true, false, ConfigService.context() + '/assets/' + geojsonName + '.json', function (feature) {
-    //                     return {
-    //                         weight: 0.5, // feature.properties['stroke-width'],
-    //                         color: '#6e6e6e', // feature.properties.stroke,
-    //                         fillColor: '#cebcf5', // feature.properties.fill,
-    //                         content: feature.properties.Display_Name
-    //                     }
-    //                 }, function (feature, layer: L.GeoJSON) {
-    //                     // layer.bindPopup(feature.properties.publicDisplayName);
-    //                     layer.bindTooltip(feature.properties.publicDisplayName, {
-    //                         className: 'zoom_16',
-    //                         permanent: true,
-    //                         direction: 'center'
-    //                     });
-    //                 }, null).subscribe(layer => {
-    //                     that.overlays.set(geojsonName, layer);
-    //                     layer.addTo(that.map);
-    //                     resolve('done');
-    //                 });
-    //             }
-    //         );
-    //     }
-    // }
-
     public removeMapOverlay(geojsonName: string) {
         if (this.overlays.has(geojsonName)) {
             this.overlays.get(geojsonName).removeFrom(this.map);
@@ -668,6 +640,7 @@ export class MapService {
                     function (feature, layer: L.GeoJSON) {
                         feature.layer = layer;
                         layer.bindPopup(feature.properties.publicDisplayName);
+console.trace("f.properties" + feature.properties);
                         layer.on({
                             mouseover: function(e) {
                                 that.highlightFeature(e.target.feature);

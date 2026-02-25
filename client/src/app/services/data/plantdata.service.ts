@@ -1,4 +1,11 @@
-import {ComponentFactoryResolver, EventEmitter, Injectable, Injector, Output, Type} from '@angular/core';
+import {
+    ComponentFactoryResolver,
+    EventEmitter,
+    Injectable,
+    Injector,
+    Output,
+    Type
+} from '@angular/core';
 import {MapService} from '../map/map.service';
 import {ConfigService} from '../config/config.service';
 import * as L from 'leaflet';
@@ -197,6 +204,7 @@ export class PlantdataService {
 
 
     addPlants(group: string, plantPopupClass: Type<any>, data): L.LayerGroup {
+        console.trace("addPlants: " + group);
         const that = this;
         // if (that.jsonData[group]) {
         // We create an empty layer even when mapped is not selected, in case you start mapping stuff.
@@ -207,6 +215,7 @@ export class PlantdataService {
                 const latlng = new LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
                 const layer = that.createMarker(feature, latlng, plantPopupClass)
                 layer.feature = feature;
+                console.trace("addPlants2: " + feature.properties.catalogNumber);
                 that.plantLayer.addLayer(layer);
             });
             this.plantLayer.addTo(that.mapService.map);
@@ -287,11 +296,15 @@ export class PlantdataService {
                 feature.geometry.coordinates = [position.lng, position.lat];
                 const message = jsonData['success'] ? 'successful' : jsonData['message']
                 that.snackBar.open(message, 'Map position changed', {duration: 2000});
+console.trace("createMarker findLayers: " + feature.properties.catalogNumber);
+                // const layers: Marker = that.findLayersByAccession(feature.properties.accession, feature.group);
 
-                const layers: Marker = that.findLayersById(feature.properties.id, feature.group);
-                that.redrawIcon(layers, that.getIcon(feature));
+                // that.redrawIcon(layers, that.getIcon(feature));
             });
         });
+        console.trace("createMarker bindPopup: " + feature.properties.catalogNumber);
+        // this.cdRef.detectChanges(); // Tell Angular to check one last time
+
         marker.bindPopup(() => that.componentService.createCustomPopup(marker, feature, that.configService?.user?.canStocktake, plantPopupClass, this)).openPopup();
         marker.bindTooltip(feature.properties.label, {className: 'tt', direction: 'right'});
         return marker;
@@ -303,6 +316,8 @@ export class PlantdataService {
     // }
 
     findLayersById(id: string, group: string): Marker | undefined {
+        console.trace("findLayers: " + id);
+
         console.log('Finding accession: ' + id);
         if (this.featureLayerById[group]) {
             const layers: Marker = this.featureLayerById[group][id];
@@ -346,6 +361,9 @@ export class PlantdataService {
     }
 
     selectPlant(feature): Marker {
+        console.log("selectPlant1: " + feature.properties.id);
+        console.log("selectPlant2: " + feature.group);
+        console.log("selectPlant3: " + feature.properties.catalogNumber);
         const layers: Marker = this.findLayersById(feature.properties.id, feature.group);
         feature.selected = false;
         if (layers) {

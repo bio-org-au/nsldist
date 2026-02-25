@@ -1,4 +1,12 @@
-import {ComponentFactoryResolver, EventEmitter, Injectable, Injector, Output, Type} from '@angular/core';
+import {
+    ChangeDetectorRef,
+    ComponentFactoryResolver,
+    EventEmitter,
+    Injectable,
+    Injector,
+    Output,
+    Type
+} from '@angular/core';
 import {PlantdataService} from '../data/plantdata.service';
 import {TriggerService} from '../trigger/trigger.service';
 import * as L from 'leaflet';
@@ -16,6 +24,7 @@ export class ComponentService {
 
 
     public createCustomPopup(layer: L.Layer, feature, canStocktake: boolean, plantPopupClass: Type<any>, plantdataService: PlantdataService) {
+        console.trace("createCustomPopup: feature: " + feature.properties.catalogNumber);
         /*
         Why is plantPopupClass passed in here? Because that's the only way I could figure out to avoid
         annoying circular dependencies, which are the bane of Angular.
@@ -33,6 +42,7 @@ export class ComponentService {
         plantdataService.resetAllPlants();
         plantdataService.selectPlant(feature);
         this.triggerService.remodel.emit(plantdataService.jsonData);
+        component.changeDetectorRef.detectChanges();
         return component.location.nativeElement;
     }
 }
