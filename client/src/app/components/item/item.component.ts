@@ -2,23 +2,28 @@ import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/c
 import {PlantdataService} from '../../services/data/plantdata.service';
 import {MapService} from '../../services/map/map.service';
 import {ConfigService} from '../../services/config/config.service';
-import {DOCUMENT} from '@angular/common';
+import {DOCUMENT, NgClass} from '@angular/common';
 import {Marker} from 'leaflet';
+import {SelectableBase} from "../../shared/SelectableBase";
+import {SafePipe} from "safe-pipe";
 
 @Component({
     selector: 'mapped-item',
+    standalone: true,
+    imports: [NgClass, SafePipe],
     templateUrl: './item.component.html',
     styleUrls: ['./item.component.css']
 })
-export class ItemComponent {
+export class ItemComponent extends SelectableBase {
     @Input('item') item: any;
-    @Input() groupColor: string;
+    @Input() groupColor: string = '';
     @Output() selectedRequest = new EventEmitter<ItemComponent>();
 
     constructor(public plantdataService: PlantdataService,
                 private mapService: MapService,
                 public configService: ConfigService,
                 @Inject(DOCUMENT) public document: Document) {
+        super();
     }
 
     /*

@@ -27,7 +27,7 @@ export class SituationDirective implements Validator {
     // if (!Object.keys(this.plantdataService.sectionData).includes(section)) {
     //   return { forbiddenSection: section};
     // }
-    return undefined;
+    return null;
   }
 
 

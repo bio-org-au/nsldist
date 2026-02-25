@@ -2,12 +2,12 @@
     <nav class="navbar nav-default navbar-fixed-top" role="navigation">
         <div class="navbar-header">
             <a class="navbar-brand" href="#" scroll-to="welcome" offset="50"><span>NSL Distribution</span></a>
-            <search-status [version]="this.version" [ntnl]="ntnl" [jsonData]="this.jsonData"></search-status>
+            <search-status [version]="this.version" [ntnl]="!!ntnl" [jsonData]="this.jsonData"></search-status>
         </div>
         <div style="display:inline-block;font-size:9px;">
             <form>
             <div>
-                <ng-template [ngIf]="configService.user == null" [ngIfElse]="elseBlock">
+                <ng-template [ngIf]="configService.user == undefined" [ngIfElse]="elseBlock">
                     <input length="32" size="12" style="font-size:8px" id="user" name="user" autocomplete="username" type="text" placeholder="user name"
                            [(ngModel)]="username" (keyup.enter)="login()">
                     <input length="32" size="12" style="font-size:8px" id="password" autocomplete="current-password" name="password" type="password"
@@ -25,10 +25,10 @@
             <p style="font-size:8px;color:#ff0000;">{{message}}</p>
         </div>
     </nav>
-    <navigator [indexComponent]="this" [ntnl]="ntnl" [pushQuery]="selectedSection"></navigator>
-<!--    <as-split id="allSplit" unit="percent" direction="vertical" (dragEnd)="dragEnd('percent', $event)" #split="asSplit">-->
+    <navigator [indexComponent]="this" [ntnl]="ntnl || false" [pushQuery]="selectedSection || ''"></navigator>
+<!--    <as-split id="allSplit" unit="percent" direction="vertical" (dragEnd)="dragEnd('percent', $any($event))" #split="asSplit">-->
 <!--        <as-split-area id="panel" size="12" #area1="asSplitArea">-->
-<!--            <as-split style="height: 91%;" unit="pixel" direction="vertical" (dragEnd)="dragEnd('percent', $event)" #split="asSplit">-->
+<!--            <as-split style="height: 91%;" unit="pixel" direction="vertical" (dragEnd)="dragEnd('percent', $any($event))" #split="asSplit">-->
 <!--        <as-split-area id="nav" size="80" #area1="asSplitArea">-->
 <!--            <navigator [indexComponent]="this" [ntnl]="ntnl" [pushQuery]="selectedSection"></navigator>-->
 <!--        </as-split-area>-->
@@ -37,14 +37,16 @@
 <!--        <as-split-area size="*" #area2="asSplitArea">-->
 <!--    <div style="height:100%;width:100%;">-->
 <!--    <div>-->
-            <as-split style="height: 96%;" unit="pixel" direction="horizontal" (dragEnd)="dragEnd('percent', $event)" #split="asSplit">
+            <as-split style="height: 96%;" unit="pixel" direction="horizontal" (dragEnd)="dragEnd('percent', $any($event))" #split="asSplit">
                 <as-split-area id="nav" size="*" #area1="asSplitArea">
             <div id="map" style="height:98%;width:100%;"></div>
             <i id="location">{{location}}</i>
             <i style="color: lightgray;">version: {{configService.version}}</i>
-            <i  style="color: lightgray;" *ngIf="showInfo">
-            server endpoint: <a style="color: lightgray;" href="{{configService.apiHost()}}">{{configService.apiHost()}}</a>, server: {{config.getConfig('server')}}, environment: {{config.getEnv('env')}}
-            </i>
+            @if (showInfo) {
+               <i style="color: lightgray;">
+               server endpoint: <a style="color: lightgray;" href="{{configService.apiHost()}}">{{configService.apiHost()}}</a>, server: {{config.getConfig('server')}}, environment: {{config.getEnv('env')}}
+               </i>
+            }
                 </as-split-area>
                 <as-split-area id="res" size="300" #area2="asSplitArea">
                     <info [version]="this.version" ></info>

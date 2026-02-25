@@ -7,7 +7,6 @@ import groovy.transform.ToString
 
 import java.time.LocalDateTime
 
-@GrailsCompileStatic
 @EqualsAndHashCode(includes='authority')
 @ToString(includes='authority', includeNames=true, includePackage=false)
 class Role implements Serializable {

@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 class Feature {
     Long id
     FeatureType featureType
-    Feature belongsTo
+    Feature belongsToFeature
     String firstName
     String lastName
     String phone
@@ -31,7 +31,7 @@ class Feature {
         version defaultValue: '0'
     }
     static constraints = {
-        belongsTo nullable: true
+        belongsToFeature nullable: true
         firstName nullable: true
         lastName nullable: true
         facebook nullable: true

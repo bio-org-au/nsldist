@@ -12,9 +12,13 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {saveAs} from 'file-saver';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
+import {FormsModule, NgModel} from "@angular/forms";
+import {CommonModule, NgClass} from "@angular/common";
 
 @Component({
     selector: 'navigator',
+    standalone: true,
+    imports: [FormsModule, CommonModule, NgClass],
     templateUrl: './navigator.component.html',
     styleUrls: [
         './navigator.component.css'
@@ -22,16 +26,16 @@ import {Observable} from 'rxjs';
     providers: []
 })
 export class NavigatorComponent implements OnInit, OnChanges {
-    @Input() indexComponent: IndexComponent;
-    @Input() pushQuery: string;
+    @Input() indexComponent!: IndexComponent;
+    @Input() pushQuery: string = '';
     @Input() _direction = 'horizontal'
     @Input() ntnl = false
-    _queryString: string;
-    text: string;
+    _queryString: string = '';
+    text: string = '';
     findingPlants: boolean;
     @Input() advanced: boolean = false;
-    _section: string
-    _determination: string
+    _section: string = '';
+    _determination: string = '';
     // herbCode: string;
     // accessionNumber: string;
     // suffix: string;
@@ -50,7 +54,7 @@ export class NavigatorComponent implements OnInit, OnChanges {
     max = 1000;
 
     constructor(private searchService: SearchService,
-                private mapService: MapService,
+                public mapService: MapService,
                 private configService: ConfigService,
                 private plantdataService: PlantdataService,
                 private componentService: ComponentService,
@@ -70,7 +74,8 @@ export class NavigatorComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit(): void {
-        const that = this;
+        console.trace("Tracing navigator.ngOnInit");
+        const that: NavigatorComponent = this;
         this.mapService.disableMouseEvent('goto');
         this.mapService.disableMouseEvent('place-input');
 
@@ -94,11 +99,11 @@ export class NavigatorComponent implements OnInit, OnChanges {
             // Expression has changed after it was checked error
             // https://blog.angular-university.io/angular-debugging/
             setTimeout(() => {
-                that.section = params.section;
-                that.determination = params.determination;
-                that.indexComponent.advanced = (params.advanced === 'true');
+                that.section = params['section'];
+                that.determination = params['determination'];
+                that.indexComponent.advanced = (params['advanced'] === 'true');
                 that.advanced = that.indexComponent.advanced;
-                that.max = (params.max ? Number(params.max) : that.max);
+                that.max = (params['max'] ? Number(params['max']) : that.max);
                 if (that.section || that.determination) {
                     console.log('routing: ' + params);
                     this.findingPlants = true;
@@ -135,9 +140,9 @@ export class NavigatorComponent implements OnInit, OnChanges {
 
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log('ngOnChanges: ' + changes?.pushQuery?.currentValue);
-        if (changes?.pushQuery?.currentValue) {
-            this.queryString = changes.pushQuery.currentValue
+        console.log('ngOnChanges: ' + changes['pushQuery']?.currentValue);
+        if (changes['pushQuery']?.currentValue) {
+            this.queryString = changes['pushQuery'].currentValue;
             this.find();
         }
     }

@@ -1,7 +1,10 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {NgClass} from "@angular/common";
 
 @Component({
     selector: 'app-layout',
+    standalone: true,
+    imports: [NgClass],
     templateUrl: './layout.component.html',
     styleUrls: ['./layout.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush

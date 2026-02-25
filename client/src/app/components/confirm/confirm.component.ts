@@ -3,6 +3,7 @@ import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom
 
 @Component({
     selector: 'app-confirm',
+    standalone: true,
     templateUrl: './confirm.component.html',
     styleUrls: ['./confirm.component.css']
 })

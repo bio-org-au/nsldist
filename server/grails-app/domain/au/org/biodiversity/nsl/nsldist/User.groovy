@@ -6,7 +6,6 @@ import groovy.transform.ToString
 
 import java.time.LocalDateTime
 
-@GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
 @ToString(includes='username', includeNames=true, includePackage=false)
 class User implements Serializable {

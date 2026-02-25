@@ -4,6 +4,7 @@ import {PlantdataService} from '../../services/data/plantdata.service';
 
 @Component({
     selector: 'search-status',
+    standalone: true,
     templateUrl: './status.component.html',
     styleUrls: ['./status.component.css']
 })
@@ -12,7 +13,7 @@ The status line up the top of the screen
  */
 export class StatusComponent implements OnInit, OnChanges {
     @Input() jsonData: any = {};
-    @Input() version = 0;
+    @Input() version: number = 0;
     @Input() ntnl: boolean = false;
     description: string;
 

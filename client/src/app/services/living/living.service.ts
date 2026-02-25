@@ -16,6 +16,7 @@ export class LivingService {
     }
 
     stocktake(item_sit_id: bigint, quantity: bigint, notes: string) {
+        console.trace("stocktake");
         console.log('stocktake service');
         let ue: URLEncoder = new URLEncoder(this.config.apiHost(), '/living/stocktake/' + item_sit_id);
         ue.addArg('quantity', quantity);
@@ -26,6 +27,7 @@ export class LivingService {
     }
 
     updateNtnlStatus(ntnlId: bigint, status: string) {
+        console.trace("updateNtnl");
         console.log('updateNtnlStatus service');
         let ue: URLEncoder = new URLEncoder(this.config.apiHost(), '/living/updateNtnlStatus/' + ntnlId);
         ue.addArg('status', status);
@@ -33,19 +35,9 @@ export class LivingService {
         return obs;
     }
 
-    newNtnl(name: string, notes: string, lat, lng) {
-        console.log('stocktake service');
-
-        const ue: URLEncoder = new URLEncoder(this.config.apiHost(), '/living/newNtnl');
-        ue.addArg('name', name);
-        ue.addArg('notes', notes);
-        ue.addArg('lat', lat);
-        ue.addArg('lng', lng);
-        const obs = this.http.get(ue.make());
-        return obs;
-    }
 
     moveMarker(item_sit_id: bigint, lat, lng, oldMapActionId, oldStocktakeActionId) {
+        console.trace("moveMarker");
         console.log('moveMarker');
 
         let ue: URLEncoder = new URLEncoder(this.config.apiHost(), '/living/moveMarker/' + item_sit_id);
@@ -67,6 +59,7 @@ export class LivingService {
     }
 
     requestTag(item_sit_id: bigint) {
+        console.trace("requestTag");
         console.log('requestTag');
 
         const uri = this.config.apiHost() + '/living/requestTag/' + item_sit_id;
@@ -76,7 +69,7 @@ export class LivingService {
 
     clones(item_sit_id: bigint) {
         console.log('clones');
-
+        console.trace("clones");
         const uri = this.config.apiHost() + '/living/clones/' + item_sit_id;
         const obs = this.http.get(uri)
         return obs;

@@ -15,14 +15,17 @@ export class SearchService {
     }
 
     private makeSuggestUri(query: string) {
+        console.trace("Tracing makeSuggestUri");
         return this.config.apiHost() + '/plant/search?id=' + encodeURIComponent(query);
     }
 
     private makeSuggestAllUri() {
+        console.trace("Tracing search.makeSuggestAlUri");
         return this.config.apiHost() + '/plant/searchAll';
     }
 
     private makeFindUri(section: string, determination: string, herbCode: string, accession: string, suffix: string, max: number) {
+        console.trace("Tracing search.makeFindUri");
         let ue: URLEncoder = new URLEncoder(this.config.apiHost(), '/plant/find');
         ue.addArg('section', section);
         ue.addArg('determination', determination);

@@ -88,60 +88,6 @@ class LivingService {
 //        return ia
 //    }
 
-    def newNtnl(String name, String notes, Double lat, Double lng) {
-        String msg = ''
-        Map<String,Object> ntnlJson
-//        if (!user) {
-//            msg = "not logged in"
-//        } else if (!user.hasRole(LivingService.FAP_ROLE)) {
-//            msg = "User does not have role " + LivingService.FAP_ROLE
-//        } else {
-            def ntnl = new Feature(
-                    featureType: FeatureType.list().first(),
-                    name: name,
-                    notes: notes,
-                    latitude: lat,
-                    longitude: lng
-            )
-            if (!ntnl.validate()) {
-                ntnl.errors.allErrors.each {
-                    msg += messageSource.getMessage(it, LocaleContextHolder.getLocale()) + "  "
-                }
-            } else {
-                Feature.withTransaction {
-                    ntnl.save()
-                }
-                ntnlJson = SearchService.rowToObject(ntnl)
-            }
-//        }
-        return [message: msg, ntnl: ntnlJson]
-    }
-
-    def updateNtnlStatus(String id, String status) {
-//        NoTagNoLabel ntnl = NoTagNoLabel.get(id);
-//        String msg = ''
-//        if (!ntnl) {
-//            msg = "NTNL not found"
-////        } else if (!user) {
-////            msg = "not logged in"
-////        } else if (!user.hasRole(LivingService.FAP_ROLE)) {
-////            msg = "User does not have role " + LivingService.FAP_ROLE
-//        } else if (!NoTagNoLabel.statuses.values().find { it == status }) {
-//            msg = "Invalid NTNL status"
-//        } else {
-//            ntnl.status = status;
-//            if (!ntnl.validate()) {
-//                ntnl.errors.allErrors.each {
-//                    msg += messageSource.getMessage(it, LocaleContextHolder.getLocale()) + "  "
-//                }
-//            } else {
-//                NoTagNoLabel.withTransaction {
-//                    ntnl.save()
-//                }
-//            }
-//        }
-        return [message: msg]
-    }
 
     /**
      *

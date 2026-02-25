@@ -7,7 +7,6 @@ import org.codehaus.groovy.util.HashCodeHelper
 
 import java.time.LocalDateTime
 
-@GrailsCompileStatic
 @ToString(cache=true, includeNames=true, includePackage=false)
 class UserRole implements Serializable {
 
@@ -73,7 +72,7 @@ class UserRole implements Serializable {
 		criteriaFor(userId, roleId).count()
 	}
 
-	private static DetachedCriteria criteriaFor(long userId, long roleId) {
+	private static DetachedCriteria<UserRole> criteriaFor(long userId, long roleId) {
 		where {
 			user == User.load(userId) &&
 			role == Role.load(roleId)

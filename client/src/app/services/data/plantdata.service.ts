@@ -10,7 +10,7 @@ import * as classifyPoint from 'robust-point-in-polygon';
 import * as moment from 'moment';
 import {TriggerService} from '../trigger/trigger.service';
 import {DivIcon, LatLng, Marker} from 'leaflet';
-import {PlantPopupComponent} from '../../components/plant-popup/plant-popup.component';
+import {getMatInputUnsupportedTypeError} from "@angular/material/input";
 
 @Injectable()
 export class PlantdataService {
@@ -146,9 +146,9 @@ export class PlantdataService {
     p0Icons = {results: this.iconP0, clones: this.iconP0, section_context: this.iconSecContext}
 
 
-    plantLayer: L.LayerGroup = null;
+    plantLayer!: L.LayerGroup;
     featureLayerById = {};
-    sections: L.GeoJSON;
+    sections!: L.GeoJSON;
     // There can be multiple layers per section because some map sections
     // are not contiguous.
     namedSections: any;
@@ -182,12 +182,12 @@ export class PlantdataService {
     }
 
     addAlaData(name: string) {
-        const that = this;
+        const that: PlantdataService = this;
         const uri = ConfigService.context() + '/assets/' + name + '.json';
-        that.http.get(uri).subscribe(data => {
-            that.data = data;
-            that.addPlants(name, PlantPopupComponent, data);
-        });
+        // that.http.get(uri).subscribe(data => {
+        //     that.data = data;
+        //     that.addPlants(name, PlantPopupComponent, data);
+        // });
     }
 
     removeAlaData(name: string) {
@@ -195,24 +195,24 @@ export class PlantdataService {
     }
 
 
-    addPlants(group: string, plantPopupClass: Type<any>, data): L.LayerGroup {
-        const that = this;
-        // if (that.jsonData[group]) {
-        // We create an empty layer even when mapped is not selected, in case you start mapping stuff.
-        this.plantLayer = L.layerGroup([]);
-        // this.featureLayerById[group] = {};
-        if (data.features.length > 0) {
-            data.features?.forEach(function (feature) {
-                const latlng = new LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
-                const layer = that.createMarker(feature, latlng, plantPopupClass)
-                layer.feature = feature;
-                that.plantLayer.addLayer(layer);
-            });
-            this.plantLayer.addTo(that.mapService.map);
-        }
-        return this.plantLayer;
-        // }
-    }
+    // addPlants(group: string, plantPopupClass: Type<any>, data): L.LayerGroup {
+    //     const that = this;
+    //     // if (that.jsonData[group]) {
+    //     // We create an empty layer even when mapped is not selected, in case you start mapping stuff.
+    //     this.plantLayer = L.layerGroup([]);
+    //     // this.featureLayerById[group] = {};
+    //     if (data.features.length > 0) {
+    //         data.features?.forEach(function (feature) {
+    //             const latlng = new LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+    //             const layer = that.createMarker(feature, latlng, plantPopupClass)
+    //             layer.feature = feature;
+    //             that.plantLayer.addLayer(layer);
+    //         });
+    //         this.plantLayer.addTo(that.mapService.map);
+    //     }
+    //     return this.plantLayer;
+    //     // }
+    // }
     zoom() {
         // const layers = this.findLayersBySections(this.findAllFoundSections());
         // this.mapService.fitFeatures(layers, 21);
@@ -259,56 +259,56 @@ export class PlantdataService {
         return icons.mass;
     }
 
-    createMarker(feature, latlng, plantPopupClass: Type<any>) {
-        const that = this;
-        const marker = L.marker(latlng, {
-                icon: that.getIcon(feature),
-                opacity: 1.0,
-                draggable: that.configService?.user?.canStocktake,
-                autoPan: true
-            }
-        );
-        marker.feature = feature;
-        marker.on('dragend', function (event) {
-            const position = event.target.getLatLng();
-            that.livingService.moveMarker(feature.properties.item_sit_id, position.lat, position.lng, null, null).subscribe(jsonData => {
-                feature.properties.map_date = new Date();
-                // Conflicting standards. GeoJSON specifies [ longitude, latitude ] (aka X, Y)
-                // whereas leaflet works with [ latitude, longitude ]
-                if (!feature.geometryhistory) {
-                    feature.geometryhistory = [];
-                }
-                feature.geometryhistory.push({
-                    coordinates: feature.geometry.coordinates,
-                    map_action_id: jsonData['map_action_id'],
-                    stocktake_action_id: jsonData['stocktake_action_id']
-                });
-                feature.geometry.coordinates = [position.lng, position.lat];
-                const message = jsonData['success'] ? 'successful' : jsonData['message']
-                that.snackBar.open(message, 'Map position changed', {duration: 2000});
-
-                const layers: Marker = that.findLayersById(feature.properties.id, feature.group);
-                that.redrawIcon(layers, that.getIcon(feature));
-            });
-        });
-        marker.bindPopup(() => that.componentService.createCustomPopup(marker, feature, that.configService?.user?.canStocktake, plantPopupClass, this)).openPopup();
-        marker.bindTooltip(feature.properties.label, {className: 'tt', direction: 'right'});
-        return marker;
-    }
+    // createMarker(feature, latlng, plantPopupClass: Type<any>) {
+    //     const that = this;
+    //     const marker = L.marker(latlng, {
+    //             icon: that.getIcon(feature),
+    //             opacity: 1.0,
+    //             draggable: that.configService?.user?.canStocktake,
+    //             autoPan: true
+    //         }
+    //     );
+    //     marker.feature = feature;
+    //     marker.on('dragend', function (event) {
+    //         const position = event.target.getLatLng();
+    //         that.livingService.moveMarker(feature.properties.item_sit_id, position.lat, position.lng, null, null).subscribe(jsonData => {
+    //             feature.properties.map_date = new Date();
+    //             // Conflicting standards. GeoJSON specifies [ longitude, latitude ] (aka X, Y)
+    //             // whereas leaflet works with [ latitude, longitude ]
+    //             if (!feature.geometryhistory) {
+    //                 feature.geometryhistory = [];
+    //             }
+    //             feature.geometryhistory.push({
+    //                 coordinates: feature.geometry.coordinates,
+    //                 map_action_id: jsonData['map_action_id'],
+    //                 stocktake_action_id: jsonData['stocktake_action_id']
+    //             });
+    //             feature.geometry.coordinates = [position.lng, position.lat];
+    //             const message = jsonData['success'] ? 'successful' : jsonData['message']
+    //             that.snackBar.open(message, 'Map position changed', {duration: 2000});
+    //
+    //             const layers: Marker = that.findLayersById(feature.properties.id, feature.group);
+    //             that.redrawIcon(layers, that.getIcon(feature));
+    //         });
+    //     });
+    //     marker.bindPopup(() => that.componentService.createCustomPopup(marker, feature, that.configService?.user?.canStocktake, plantPopupClass, this)).openPopup();
+    //     marker.bindTooltip(feature.properties.label, {className: 'tt', direction: 'right'});
+    //     return marker;
+    // }
 
     // setSections(layer: any) {
     //     this.sections = layer;
     //     this.namedSections = this.sectionNames();
     // }
 
-    findLayersById(id: string, group: string): Marker {
+    findLayersById(id: string, group: string): Marker | undefined {
         console.log('Finding accession: ' + id);
         if (this.featureLayerById[group]) {
             const layers: Marker = this.featureLayerById[group][id];
             return layers;
         } else {
             console.log('ERROR: trying to find layer by accession when layer not set. ')
-            return null;
+            return undefined;
         }
     };
 
@@ -362,6 +362,7 @@ export class PlantdataService {
     }
 
     loadSectionData() {
+        console.trace('Tracing loadSectionData call'); // This outputs the full stack trace
         const uri = this.configService.apiHost() + '/assets/IBRA7.json';
         // let obs = this.getData(uri);
         const obs = this.http.get(uri);

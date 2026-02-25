@@ -7,6 +7,7 @@ import * as turf from '@turf/turf';
 import 'leaflet.locatecontrol';
 // import topojson as topojsonClient from "topojson-client"
 import {LatLng} from 'leaflet';
+import { Feature } from 'geojson';
 import {FeatureGroup} from 'leaflet';
 import * as topojson from 'topojson-client'
 import * as topojsonServer from 'topojson-server'
@@ -16,6 +17,7 @@ import {ConfigService} from '../config/config.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {LivingService} from '../living/living.service';
 import '@geoman-io/leaflet-geoman-free';
+import {MapFeature} from "../../shared/MapFeature";
 // import {
 //     Map,
 //     MapOptions,
@@ -29,6 +31,11 @@ import '@geoman-io/leaflet-geoman-free';
 // } from 'leaflet';
 
 L.PM.initialize({ optIn: false });
+
+export interface SelectedFeatureEntry {
+    publicDisplayName: string;
+    feature: MapFeature;
+}
 
 @Injectable()
 export class MapService {
@@ -78,22 +85,22 @@ export class MapService {
     @Output() selectedEvent = new EventEmitter<any>();
     @Output() geojson;
 
-    public map: L.Map;
-    public baseMaps: any;
-    private boundingLayer: L.GeoJSON;
-    private resizeableTTLayer: L.GeoJSON;
-    public lastZoom: number;
+    public map!: L.Map;
+    public baseMaps: { OpenStreetMap: MapFeature };
+    private boundingLayer!: L.GeoJSON;
+    private resizeableTTLayer!: L.GeoJSON;
+    public lastZoom: number = 1.0;
     http: HttpClient;
     configService: ConfigService;
     // These two variables aren't really used, but can be fun for debugging.
-    private autoBoundsRect;
-    private currentBoundsRect;
+    private autoBoundsRect!: L.Rectangle;
+    private currentBoundsRect!: L.Rectangle;
     // IBRA7RegionLayer: L.Layer;
     // IBRA7SubregionLayer: L.Layer;
     // IMCRALayer: L.Layer;
     private overlays = new Map<string, L.Layer>();
     private geojsons = new Map<string, {}>();
-    public featuresSelected = [];
+    public featuresSelected: SelectedFeatureEntry[] = [];
     // private info;
     // private detailsselected;
     // private arrayBounds = [];
@@ -143,7 +150,10 @@ export class MapService {
 
     makeMap() {
         const bounds = new L.LatLngBounds(new L.LatLng(-8.62, 71.85), new L.LatLng(-53.82, 168.3));
-
+        if (this.map) {
+            this.map.invalidateSize();
+            return;
+        }
         this.map = new L.Map('map', {
             // drawControl: true,
             zoomControl: false,
@@ -260,11 +270,15 @@ export class MapService {
                 }
             } else if (feature.geometry.type === 'MultiPolygon') {
                 for (const coords of feature.geometry.coordinates) {
-                    const subfeat = {
-                        'type': 'Polygon',
-                        'coordinates': coords,
+                    const subfeat: MapFeature = {
+                        'type': 'Feature',
+                        checked: true,
+                        geometry: {
+                            type: 'Polygon',
+                            coordinates: coords as any
+                        },
+                        properties: feature.properties,
                         layer: feature.layer,
-                        properties: feature.properties
                     };
                     if (!turf.booleanDisjoint(poly1, subfeat)) {
                         rtn.push(subfeat);
@@ -353,7 +367,7 @@ export class MapService {
         return a.localeCompare(b);
     }
 
-    public addLayers(feature, layer) {
+    public addLayers(feature: MapFeature, layer) {
         feature.checked = true;
         this.featuresSelected = this.featuresSelected.filter(obj => obj.publicDisplayName !== feature.properties.publicDisplayName);
         this.featuresSelected.push({
@@ -372,7 +386,7 @@ export class MapService {
     //     this.arrayBounds = this.arrayBounds.filter(bounds => bounds !== layer.getBounds());
     // }
 
-    public checkExistsLayers(feature: { properties: { publicDisplayName: any; }, checked: boolean}): boolean {
+    public checkExistsLayers(feature: MapFeature): boolean {
         return feature.checked;
         // let result = false
         // for (let i = 0; i < this.featuresSelected.length; i++) {
@@ -579,11 +593,11 @@ export class MapService {
         return observable;
     }
 
-    public setStyleLayer(layer, styleSelected) {
-        layer.setStyle(styleSelected(layer.feature));
+    public setStyleLayer(layer: L.Path & { feature: Feature}, styleSelected: (feature: Feature) => L.PathOptions) {
+        layer.setStyle(styleSelected(layer.feature as Feature));
     }
 
-    public highlightFeature(feature) {
+    public highlightFeature(feature: Feature & { layer: L.Path & {feature: Feature}} ) {
         this.setStyleLayer(feature.layer, MapService.stylelayer.highlight);
         // layer.setStyle(MapService.stylelayer.highlight(layer.feature));
         // this.info.update(layer.feature.properties);
@@ -597,7 +611,7 @@ export class MapService {
     //     }
     // }
 
-    public toggleLayers(feature) {
+    public toggleLayers(feature: MapFeature ) {
         if (this.checkExistsLayers(feature)) {
             this.removeLayers(feature, feature.layer)
             // this.removeBounds(layer)
@@ -617,7 +631,7 @@ export class MapService {
         }
     }
 
-    public addMapOverlayTopo(geojsonName: string, propertyName: string) {
+    public addMapOverlayTopo(geojsonName: string, propertyName: string) :Promise<any> | undefined {
         const that = this;
         // function style (feature) {
         //     return {
@@ -632,6 +646,7 @@ export class MapService {
         if (this.overlays.has(geojsonName)) {
             this.overlays.get(geojsonName).addTo(this.map);
             this.geojson = this.geojsons.get(geojsonName);
+            return undefined;
         } else {
             return new Promise(function (resolve, reject) {
                     that.addLayerTopo(true, false, ConfigService.context() + '/assets/' + geojsonName + '.json', propertyName, MapService.stylelayer.defecto,
@@ -641,11 +656,11 @@ export class MapService {
                         layer.on({
                             mouseover: function(e) {
                                 that.highlightFeature(e.target.feature);
-                                this.openPopup();
+                                e.target.openPopup();
                             },
                             mouseout: function(e) {
                                 that.resetHighlight(e.target.feature);
-                                this.closePopup();
+                                e.target.closePopup();
                             },
                             click: function(e) {
                                 that.toggleLayers(e.target.feature);

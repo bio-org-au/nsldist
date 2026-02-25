@@ -3,15 +3,19 @@ import {SearchService} from '../../services/search/search.service';
 import {PlantdataService} from '../../services/data/plantdata.service';
 import {Subscription} from 'rxjs';
 import {ItemComponent} from '../item/item.component';
-import {InfoSetComponent} from '../info-set/info-set.component';
 import {ConfigService} from "../../services/config/config.service";
 import {TriggerService} from "../../services/trigger/trigger.service";
 import {MapService} from '../../services/map/map.service';
+import {SelectableBase} from "../../shared/SelectableBase";
+import {FormsModule, NgModel} from "@angular/forms";
+import {CommonModule} from "@angular/common";
 // import { CommonModule } from '@angular/common';
 // import { BrowserModule } from '@angular/platform-browser';
 
-@Component({
+@Component ({
     selector: 'info',
+    standalone: true,
+    imports: [FormsModule, CommonModule],
     templateUrl: './info.component.html',
     styleUrls: ['./info.component.css'],
     animations: []
@@ -20,13 +24,12 @@ import {MapService} from '../../services/map/map.service';
 export class InfoComponent implements OnInit, OnDestroy {
     // Version is a bit of a hack to force Angular to update its tree and view.
     // There may be a better way to force this, but needs some deep thought.
-    @Input() version = 0;
-    @ViewChildren('info-set') components: QueryList<InfoSetComponent>;
-    @ViewChild('scrollBottom') private scrollBottom: ElementRef;
-    @ViewChild('scrollTop') private scrollTop: ElementRef;
-    private advancedSub: Subscription;
-    private selectedSub: Subscription;
-    selectedItem: ItemComponent;
+    @Input() version:number = 0;
+    @ViewChild('scrollBottom') private scrollBottom!: ElementRef;
+    @ViewChild('scrollTop') private scrollTop!: ElementRef;
+    private advancedSub!: Subscription;
+    private selectedSub!: Subscription;
+    selectedItem!: SelectableBase;
 
     constructor(private search: SearchService,
                 public plantdataService: PlantdataService,
@@ -50,16 +53,16 @@ export class InfoComponent implements OnInit, OnDestroy {
         return this.plantdataService.jsonData;
     }
 
-    stringify(data) {
-        console.log(data);
-    }
+    // stringify(data) {
+    //     console.log(data);
+    // }
 
     ngOnDestroy() {
         this.advancedSub.unsubscribe();
         this.selectedSub.unsubscribe();
     }
 
-    selectItem(item: ItemComponent) {
+    selectItem(item: SelectableBase) {
         console.log('Item selected ' + item);
         if (this.selectedItem) {
             this.selectedItem.unselect();
@@ -67,7 +70,7 @@ export class InfoComponent implements OnInit, OnDestroy {
         this.selectedItem = item;
     }
 
-    gotoBottom(id){
+    gotoBottom(id : string){
         this.scrollBottom.nativeElement.scrollIntoView();
         // this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
         // const element = document.getElementById('scroll-top');
@@ -75,7 +78,7 @@ export class InfoComponent implements OnInit, OnDestroy {
         // element.scrollTop = element.scrollHeight;
     }
 
-    gotoTop(id){
+    gotoTop(id : string){
         this.scrollTop.nativeElement.scrollIntoView();
         // this.scrollMe.nativeElement.scrollTop = 0;
         // const element = document.getElementById('scoll-bottom');

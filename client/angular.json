@@ -29,7 +29,7 @@
               "leaflet",
               "moment",
               "geojson-equality",
-              "turf-jsts",
+              "@turf/jsts",
               "skmeans",
               "rbush",
               "polygon-clipping",
@@ -39,7 +39,8 @@
               "eojson-rbush",
               "concaveman",
               "geojson-rbush",
-              "earcut"
+              "earcut",
+              "fast-deep-equal"
             ],
             "aot": true,
             "outputPath": "dist",
@@ -94,23 +95,23 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "nsldist:build",
+            "buildTarget": "nsldist:build",
             "port": 4400,
             "host": "localhost"
           },
           "configurations": {
             "production": {
-              "browserTarget": "nsldist:build:production"
+              "buildTarget": "nsldist:build:production"
             },
             "development": {
-              "browserTarget": "nsldist:build:development"
+              "buildTarget": "nsldist:build:development"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "nsldist:build"
+            "buildTarget": "nsldist:build"
           }
         },
         "test": {
@@ -132,13 +133,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": []
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
@@ -156,18 +156,17 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
-            "exclude": []
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "nsldist",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

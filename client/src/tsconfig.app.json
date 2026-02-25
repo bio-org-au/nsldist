@@ -1,19 +1,7 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "downlevelIteration": true,
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es2015",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
     "outDir": "../out-tsc/app",
-    "module": "esnext",
-    "baseUrl": "",
     "types": []
   },
   "files": [
@@ -21,5 +9,6 @@
     "polyfills.ts"
   ],
   "include": [
+    "src/**/*.d.ts"
   ]
 }

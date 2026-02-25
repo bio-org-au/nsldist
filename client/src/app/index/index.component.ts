@@ -1,4 +1,6 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {AngularSplitModule} from "angular-split";
+
+import {ChangeDetectorRef, Component, Input, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, Route, Router} from '@angular/router';
 import {MapService} from '../services/map/map.service';
 import {ConfigService} from '../services/config/config.service';
@@ -10,37 +12,42 @@ import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {ComponentService} from '../services/component/component.service';
 import {TriggerService} from '../services/trigger/trigger.service';
-import {PlantPopupComponent} from '../components/plant-popup/plant-popup.component';
 import {AppConfig} from '../config/app.config';
-import {NewNtnlComponent} from '../components/new-ntnl/new-ntnl.component';
 import {LeafletMouseEvent} from 'leaflet';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {LivingService} from '../services/living/living.service';
+import {FormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {NavigatorComponent} from "../components/navigator/navigator.component";
+import {InfoComponent} from "../components/info/info.component";
+import {StatusComponent} from "../components/status/status.component";
 
 @Component({
     selector: 'app-index',
+    standalone: true,
+    imports: [FormsModule, CommonModule, NavigatorComponent, InfoComponent, StatusComponent, AngularSplitModule],
     templateUrl: './index.component.html',
     styleUrls: ['./index.component.css']
 })
 export class IndexComponent implements OnInit {
     // @Input() jsonData: any;
-    @Input() advanced;
+    @Input() advanced = false;
     @Input() version = 0; // dummy used to trigger change detection
-    @Output() location = '';
-    selectedSection: string;
+    location: string = '';
+    selectedSection: string = '';
     context: string;
-    username: string;
-    password: string;
-    message: string;
-    stocktake: false;
-    treeAssessment: false;
-    ntnl: false;
-    assessment: false;
-    recentlyMapped: false;
-    recentlyMappedDate: Date
-    startupComplete: Promise<any>;
-    @Output() showInfo: boolean;
+    username: string = '';
+    password: string = '';
+    message: string = '';
+    stocktake: boolean = false;
+    treeAssessment: boolean = false;
+    ntnl: boolean =false;
+    assessment: boolean = false;
+    recentlyMapped: boolean = false;
+    recentlyMappedDate!: Date
+    startupComplete!: Promise<any>;
+    showInfo: boolean = false;
     legendSee = true
     waterIcon = L.divIcon({ html: '<i class="mapIconCls">&#xE019;</i>', iconSize: [20, 20], iconAnchor: [10, 10], className: 'mapIcon' })
 
@@ -53,7 +60,7 @@ export class IndexComponent implements OnInit {
         },
         pixel: {
             area1: 120,
-            area2: '*',
+            area2: 300,
             area3: 160,
         },
     }
@@ -69,10 +76,10 @@ export class IndexComponent implements OnInit {
                 private livingService: LivingService,
                 private route: ActivatedRoute,
                 private componentService: ComponentService,
+                private cdRef: ChangeDetectorRef,
                 public config: AppConfig) {
         this.context = ConfigService.context();
-        this.showInfo = this.config.getConfig('showInfo');
-
+//        this.showInfo = this.config.getConfig('showInfo');
     }
 
     get jsonData(): any {
@@ -83,8 +90,8 @@ export class IndexComponent implements OnInit {
         this.plantdataService.jsonData = value;
     }
 
-    dragEnd(unit, {sizes}) {
-        if (unit === 'percent') {this
+    dragEnd(unit: 'percent' | 'pixel', {sizes}: {sizes : number[]}) {
+        if (unit === 'percent') {
             this.sizes.percent.area1 = sizes[0];
             this.sizes.percent.area2 = sizes[1];
         } else if (unit === 'pixel') {
@@ -96,7 +103,8 @@ export class IndexComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const that = this;
+        const that: IndexComponent = this;
+
         // this.triggerService.remodel.subscribe( (jsonData: any) => {
         //     console.log('remodel');
         //     that.version = that.version + 1;
@@ -110,16 +118,22 @@ export class IndexComponent implements OnInit {
         //    that.sectionClick(section);
         // });
         this.mapService.makeMap();
+        setTimeout(() => {
+            this.showInfo = this.config.getConfig('showInfo') || false;
+            this.showInfo = (this.showInfo === true);
+            window.dispatchEvent(new Event('resize'));
+            this.cdRef.detectChanges(); // Tell Angular to check one last time
+        }, 0);
         this.mapService.map.addEventListener('mousemove', (event: LeafletMouseEvent) => {
             const lat = Math.round(event.latlng.lat * 100000) / 100000;
             const lng = Math.round(event.latlng.lng * 100000) / 100000;
             that.location = 'Coordinates: ' + lat.toFixed(5) + ' ' + lng.toFixed(5) + ' ';
+            this.cdRef.detectChanges();
         });
-       window.dispatchEvent(new Event('resize')); // For some reason it doesn't load tiles without this
     }
 
     login() {
-        const that = this;
+        const that: IndexComponent = this;
         const obs = this.configService.login(this.username, this.password);
         obs.subscribe(js => {
             if (js['success']) {
@@ -149,13 +163,13 @@ export class IndexComponent implements OnInit {
     }
 
     logout() {
-        const that = this;
+        const that: IndexComponent = this;
         console.log('logout ' + this.username + ' ' + this.password);
         this.configService.logout().subscribe(jsonData => {
             // TODO check if this works when the server is down.
-            that.configService.user = null;
-            that.username = null;
-            that.password = null;
+            that.configService.user = undefined;
+            that.username = '';
+            that.password = '';
             that.legendSee = true;
             this.message = jsonData['message'];
             this.mapService.zoomEndHandler();
@@ -175,6 +189,7 @@ export class IndexComponent implements OnInit {
             if (route.path === controllerName) {
                 return true;
             }
+            return false;
         });
     }
 
