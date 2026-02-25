@@ -38,7 +38,6 @@ export class ConfigService {
     }
 
     apiHost(): string {
-        console.trace("apiHost");
         return this.envconfig.getConfig("apiHost")
     }
 
@@ -47,7 +46,7 @@ export class ConfigService {
     }
 
     login(username: string, password: string) {
-        console.trace('Tracing login call'); // This outputs the full stack trace
+        // console.trace('Tracing login call'); // This outputs the full stack trace
         const uri = this.apiHost() + '/fapAuth/login';
         console.log(uri)
         const formData = new FormData();
@@ -59,7 +58,7 @@ export class ConfigService {
     }
 
     logout() {
-        console.trace('Tracing logout call'); // This outputs the full stack trace
+        // console.trace('Tracing logout call'); // This outputs the full stack trace
         const uri = this.apiHost() + '/fapAuth/logout';
         console.log(uri)
         const obs = this.http.get(uri);

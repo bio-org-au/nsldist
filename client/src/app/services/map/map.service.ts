@@ -113,10 +113,10 @@ export class MapService {
         this.baseMaps = {
             OpenStreetMap: new L.TileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="https://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
-                maxBounds: [
-                    [-8.62, 71.85],
-                    [-53.82, 168.3]
-                ]
+                // maxBounds: [
+                //     [-8.62, 71.85],
+                //     [-53.82, 168.3]
+                // ]
             })
         };
         // this.info = L.control({
@@ -149,12 +149,15 @@ export class MapService {
     }
 
     makeMap() {
-        const bounds = new L.LatLngBounds(new L.LatLng(-8.62, 71.85), new L.LatLng(-53.82, 168.3));
+        // const bounds = new L.LatLngBounds(new L.LatLng(-8.62, 71.85), new L.LatLng(-53.82, 168.3));
+
         if (this.map) {
             this.map.invalidateSize();
             return;
         }
         this.map = new L.Map('map', {
+            tap: false,
+            worldCopyJump: false,
             // drawControl: true,
             zoomControl: false,
             // center: new LatLng(-28.0, 134.0),
@@ -164,18 +167,30 @@ export class MapService {
             // minZoom: 16,
             // maxZoom: 24,
             layers: [this.baseMaps.OpenStreetMap],
-            maxBounds: bounds,
-            // maxBounds: [
-            //     [-8.62, 71.85],
-            //     [-53.82, 168.3]
-            // ]
+            // maxBounds: bounds,
+            maxBounds: [
+                [-8.62, 71.85],
+                [-53.82, 168.3]
+            ],
+            maxBoundsViscosity: 0.5,
             minZoom: 3.5
         });
+
+
+
+        const originalSetView = this.map.setView;
+        this.map.setView = function() {
+            console.warn('Map setView called by:', new Error().stack);
+            return originalSetView.apply(this, arguments);
+        };
+
+
+
         // this.map.setMinZoom( this.map.getBoundsZoom( this.map.options.maxBounds ) );
         L.Icon.Default.imagePath = '/images';
         L.control.zoom({position: 'topright'}).addTo(this.map);
         L.control.scale().addTo(this.map);
-        this.map.setMaxBounds(this.map.getBounds());
+        // this.map.setMaxBounds(this.map.getBounds());
 
         // L.control.locate({position: 'topright'}).addTo(this.map);
 

@@ -16,7 +16,6 @@ export class LivingService {
     }
 
     stocktake(item_sit_id: bigint, quantity: bigint, notes: string) {
-        console.trace("stocktake");
         console.log('stocktake service');
         let ue: URLEncoder = new URLEncoder(this.config.apiHost(), '/living/stocktake/' + item_sit_id);
         ue.addArg('quantity', quantity);
@@ -27,7 +26,6 @@ export class LivingService {
     }
 
     updateNtnlStatus(ntnlId: bigint, status: string) {
-        console.trace("updateNtnl");
         console.log('updateNtnlStatus service');
         let ue: URLEncoder = new URLEncoder(this.config.apiHost(), '/living/updateNtnlStatus/' + ntnlId);
         ue.addArg('status', status);

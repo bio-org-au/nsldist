@@ -122,13 +122,13 @@ export class IndexComponent implements OnInit {
             this.showInfo = this.config.getConfig('showInfo') || false;
             this.showInfo = (this.showInfo === true);
             window.dispatchEvent(new Event('resize'));
-            this.cdRef.detectChanges(); // Tell Angular to check one last time
+//            this.cdRef.detectChanges(); // Tell Angular to check one last time
         }, 0);
         this.mapService.map.addEventListener('mousemove', (event: LeafletMouseEvent) => {
             const lat = Math.round(event.latlng.lat * 100000) / 100000;
             const lng = Math.round(event.latlng.lng * 100000) / 100000;
             that.location = 'Coordinates: ' + lat.toFixed(5) + ' ' + lng.toFixed(5) + ' ';
-            this.cdRef.detectChanges();
+            // this.cdRef.detectChanges();
         });
     }
 

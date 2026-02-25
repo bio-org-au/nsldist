@@ -74,7 +74,7 @@ export class NavigatorComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit(): void {
-        console.trace("Tracing navigator.ngOnInit");
+        // console.trace("Tracing navigator.ngOnInit");
         const that: NavigatorComponent = this;
         this.mapService.disableMouseEvent('goto');
         this.mapService.disableMouseEvent('place-input');
