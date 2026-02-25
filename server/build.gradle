@@ -109,6 +109,10 @@ tasks.withType(Test) {
     useJUnitPlatform()
 }
 
+tasks.named('bootWarMainClassName') {
+    dependsOn tasks.named('compileGsonViews')
+}
+
 webdriverBinaries {
     chromedriver '2.45.0'
     geckodriver '0.30.0'
