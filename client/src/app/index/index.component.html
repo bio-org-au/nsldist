@@ -26,8 +26,8 @@
         </div>
     </nav>
     <navigator [indexComponent]="this" [ntnl]="ntnl || false" [pushQuery]="selectedSection || ''"></navigator>
-<!--            <as-split style="height: 96%;" unit="pixel" direction="horizontal" (dragEnd)="dragEnd('percent', $any($event))" #split="asSplit">-->
-<!--                <as-split-area id="nav" size="*" #area1="asSplitArea">-->
+            <as-split style="height: 96%;" unit="pixel" direction="horizontal" (dragEnd)="dragEnd('percent', $any($event))" #split="asSplit">
+                <as-split-area id="nav" size="*" #area1="asSplitArea">
             <div id="map" style="height:98%;width:100%;"></div>
             <i id="location">{{location}}</i>
             <i style="color: lightgray;">version: {{configService.version}}</i>
@@ -36,9 +36,9 @@
                server endpoint: <a style="color: lightgray;" href="{{configService.apiHost()}}">{{configService.apiHost()}}</a>, server: {{config.getConfig('server')}}, environment: {{config.getEnv('env')}}
                </i>
             }
-<!--                </as-split-area>-->
-<!--                <as-split-area id="res" size="300" #area2="asSplitArea">-->
+                </as-split-area>
+                <as-split-area id="res" size="300" #area2="asSplitArea">
                     <info [version]="this.version" ></info>
-<!--                </as-split-area>-->
-<!--            </as-split>-->
+                </as-split-area>
+            </as-split>
 </div>
