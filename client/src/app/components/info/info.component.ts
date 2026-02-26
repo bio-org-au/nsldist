@@ -1,4 +1,14 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    Input,
+    OnDestroy,
+    OnInit,
+    QueryList,
+    ViewChild,
+    ViewChildren
+} from '@angular/core';
 import {SearchService} from '../../services/search/search.service';
 import {PlantdataService} from '../../services/data/plantdata.service';
 import {Subscription} from 'rxjs';
@@ -35,11 +45,14 @@ export class InfoComponent implements OnInit, OnDestroy {
                 public plantdataService: PlantdataService,
                 public configService: ConfigService,
                 public mapService: MapService,
+                private cdr: ChangeDetectorRef,
                 public triggerService: TriggerService) {
     }
 
     ngOnInit() {
         this.selectedSub = this.mapService.selectedEvent.subscribe( () => {
+            this.version++;
+            this.cdr.detectChanges();
         });
         this.triggerService.scrollToTop.subscribe((zoom) => {
             this.gotoTop('infoPane');

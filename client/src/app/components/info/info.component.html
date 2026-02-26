@@ -9,19 +9,18 @@
 <!--    </ul>-->
 <!--</div>-->
 <!--<h2 *ngIf="plantDataService.jsonData.results?.plants?.features?.length == 0 && (plantDataService.jsonData.results?.ntnl?.features?.length == 0 || !plantDataService.jsonData?.criteria?.ntnl)">No results</h2>-->
-@if (mapService.geojson) {
-<div #infoPane id="infoPaneCheckboxes" class="info-pane">
+<div #infoPane id="infoPaneCheckboxes" class="info-pane" *ngIf="mapService.geojson; else elseBlock">
     <button (click)="mapService.clearSelected()" title="Clear" tooltip="Clear Selected">Clear</button>
     <button (click)="mapService.copyToClipboard()" title="Clear" tooltip="CopyToClipboard">Copy</button>
     <br/>
-    @for(f of $any(mapService.geojson.features) ; track $index) {
+    <div *ngFor="let f of mapService.geojson.features">
         <input id="regions" class="form-check-input" type="checkbox" [(ngModel)]="f.checked" (change)="mapService.resetHighlight(f)"/>
 <!--               [(ngModel)]="ala1"-->
 <!--               (change)="this.addAlaData('data1x')"/>-->
         {{f.properties.publicDisplayName}}
         <br/>
-    }
+    </div>
 </div>
-} @else {
-<span>No overlay selected</span>
-}
+<ng-template #elseBlock>No overlay selected</ng-template>
+<!--CRIT: {{plantDataService.jsonData?.criteria?.ntnl}}-->
+<!--LEN: {{plantDataService.jsonData.ntnl?.plants?.features?.length }}-->

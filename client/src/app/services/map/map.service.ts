@@ -651,19 +651,24 @@ console.trace("f.properties" + feature.properties);
                                 e.target.closePopup();
                             },
                             click: function(e) {
-                                that.toggleLayers(e.target.feature);
+                                that.zone.run(() => {
+                                    that.toggleLayers(e.target.feature);
+                                    that.selectedEvent.emit(that.geojson);
+                                });
                             }
                         });
                     }, null).subscribe(data => {
 
-
-                        // L.geoJson(data.geojson, {
-                        //     style
-                        // }).addTo(that.map);
-                        that.geojsons.set(geojsonName, data.geojson);
-                        that.overlays.set(geojsonName, data.layer);
-                        data.layer.addTo(that.map);
-                        resolve('done');
+                        // that.zone.run(() => {                        // L.geoJson(data.geojson, {
+                            //     style
+                            // }).addTo(that.map);
+                        // that.geojson = data;
+                            that.geojsons.set(geojsonName, data.geojson);
+                            that.overlays.set(geojsonName, data.layer);
+                            data.layer.addTo(that.map);
+                            resolve('done');
+                            that.selectedEvent.emit(that.geojson);
+                        // });
                     });
                 }
             );
